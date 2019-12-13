@@ -1,0 +1,57 @@
+{
+  "name": "react-template",
+  "version": "1.0.0",
+  "description": "Small personal template for react projects",
+  "main": "index.js",
+  "scripts": {
+    "start-popup": "webpack-dev-server --mode development  --progress --colors --config ./webpack.config.dev.js --open",
+    "build-popup": "webpack --config ./webpack.config.prod.js --mode production",
+    "build-content-script": "webpack --config ./content-script/webpack.config.js --mode production",
+    "build-background": "webpack --config ./background/webpack.config.js --mode production",
+    "build": "npm run build-popup && npm run build-background && npm run build-content-script",
+    "test": "test"
+  },
+  "browser":{
+    "child_process": false
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senaa12/ReactPrivateTemplate.git"
+  },
+  "keywords": [
+    "React",
+    "Webpack",
+    "Redux",
+    "Typescript",
+    "Sass",
+    "Javascript"
+  ],
+  "author": "Luka Senicic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/senaa12/ReactPrivateTemplate/issues"
+  },
+  "homepage": "https://github.com/senaa12/ReactPrivateTemplate#readme",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.2.1",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-powershell": "^4.0.0",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
+    "source-map": "^0.7.3",
+    "style-loader": "^1.0.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  }
+}

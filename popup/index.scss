@@ -1,0 +1,27 @@
+@import "./assets/style/functions.scss";
+@import "./assets/style/variables.scss";
+
+html, body { 
+    min-height: 300px; 
+    min-width: 200px;
+    border-radius: 16px;
+    width: 100%; 
+    margin: 0;
+    font-size: px-to-rem(14px); 
+}
+
+:root {
+    --blue: #{$blue};
+    --green: #{$green};
+    --yellow: #{$yellow};
+    --red: #{$red};
+    --grey: #{$grey};
+    --black: #{$black};
+    --white: #{$white};
+
+    @include color-shades($blue, blue);
+    @include color-shades($green, green);
+    @include color-shades($yellow, yellow);
+    @include color-shades($red, red);
+    @include color-shades($grey, grey);
+}
