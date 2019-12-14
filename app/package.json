@@ -4,14 +4,14 @@
   "description": "Small personal template for react projects",
   "main": "index.js",
   "scripts": {
-    "start-popup": "webpack-dev-server --mode development  --progress --colors --config ./webpack.config.dev.js --open",
-    "build-popup": "webpack --config ./webpack.config.prod.js --mode production",
+    "start-popup": "webpack-dev-server --mode development  --progress --colors --config ./popup/webpack.config.js --open",
+    "build-popup": "webpack --config ./popup/webpack.config.js --mode production",
     "build-content-script": "webpack --config ./content-script/webpack.config.js --mode production",
     "build-background": "webpack --config ./background/webpack.config.js --mode production",
     "build": "npm run build-popup && npm run build-background && npm run build-content-script",
     "test": "test"
   },
-  "browser":{
+  "browser": {
     "child_process": false
   },
   "repository": {
@@ -40,6 +40,11 @@
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
+    "@types/chrome": "0.0.91",
+    "@types/node": "^12.12.17",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.4",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.2.1",
@@ -50,6 +55,9 @@
     "sass-loader": "^8.0.0",
     "source-map": "^0.7.3",
     "style-loader": "^1.0.1",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.3",
+    "typescript-tslint-plugin": "^0.5.5",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"

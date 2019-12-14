@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "plugins": [
+            {
+                "name": "typescript-tslint-plugin",
+                "configFile": "./tslint.json",
+                "alwaysShowRuleFailuresAsWarnings": false,
+                "exclude": [ "node_modules" ]
+            }
+        ],
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "module": "ES6",
+        "jsx": "react",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": false,
+        "moduleResolution": "Node"
+    },
+    "include": [
+        "./background",
+        "./content-script",
+        "./popup"
+    ],
+    "exclude": [
+        "node_modules",
+        "./content-script/webpack.config.js",
+        "./background/webpack.config.js",
+        "./popup/webpack.config.js"
+    ],
+}

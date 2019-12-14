@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: './content-script/content-script.js',
+    entry: './content-script/src/content-script.ts',
      output: {
         path: path.resolve('public'),
         filename: 'content-script.js'
@@ -9,12 +9,10 @@ module.exports = {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.ts$/,
           exclude: /node_modules/,
-          use: {
-            loader: "babel-loader"
-          }
-        }
+          loader: "awesome-typescript-loader"
+      }
       ]
     }
 }
