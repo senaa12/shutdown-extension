@@ -42,6 +42,10 @@ const styleProdLoader = {
 const typescriptLoader = {
     test: /\.(ts|tsx)$/,
     exclude: /node_modules/,
+    include: [
+        path.resolve(__dirname, 'src'), 
+        path.resolve(__dirname, '../common')
+     ],
     loader: "awesome-typescript-loader"
 };
 
@@ -52,6 +56,9 @@ module.exports = {
         filename: '[name].js' 
     },
     resolve: {
+        alias: {
+            common: path.resolve(__dirname, '../common')
+        },
         extensions: ['.js', '.tsx', '.ts']
     },
     optimization: {

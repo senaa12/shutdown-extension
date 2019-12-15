@@ -1,13 +1,17 @@
 @import "./assets/style/functions.scss";
 @import "./assets/style/variables.scss";
 
+@import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
+
 html, body { 
-    min-height: 300px; 
-    min-width: 200px;
+    min-height: 350px; 
+    min-width: 250px;
     border-radius: 16px;
     width: 100%; 
     margin: 0;
-    font-size: px-to-rem(14px); 
+    background-color: var(--yellow-6);
+    font-family: 'Karla', sans-serif;
+    font-size: px-to-rem(16px);
 }
 
 :root {
@@ -19,9 +23,27 @@ html, body {
     --black: #{$black};
     --white: #{$white};
 
+    --hover: #{$hover-color};
+
     @include color-shades($blue, blue);
     @include color-shades($green, green);
     @include color-shades($yellow, yellow);
     @include color-shades($red, red);
     @include color-shades($grey, grey);
+}
+
+%tile {
+    width: fit-content;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    margin: 10px 15px;
+    border: solid 2px var(--yellow-80);
+    border-radius: 14px;
+    padding: 5px 10px;
+    &:hover {
+        border: solid 2px rgba($hover-color ,0.4);
+        background-color: rgba($hover-color ,0.4);
+        box-shadow: 0 0 11px rgba($hover-color, 0.8);
+        cursor: pointer;
+    }
 }

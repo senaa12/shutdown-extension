@@ -1,27 +1,29 @@
-const register = () => {
-    console.log('sena m');
+import { CallbackFunction, ContentScriptMessage, ContentScriptMessageTypeEnum, MessageSender, ResponseType } from 'common';
+
+const SubscribeToVideoEnd = (sendResponse: CallbackFunction) => {
+    const subscribed = (e: any) => {
+        // tslint:disable-next-line: no-console
+        console.log('video end');
+    };
+    const videoTag = document.getElementsByTagName('video');
+    videoTag[0].addEventListener('ended', subscribed);
+    sendResponse(ResponseType.Success);
 };
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log(request);
-    console.log(sender);
-    console.log(sendResponse);
-    chrome.runtime.sendMessage({ mess: request });
+const messageHandler = (
+    request: ContentScriptMessage,
+    sender: MessageSender,
+    sendResponse: CallbackFunction) => {
+    switch (request.type) {
+        case ContentScriptMessageTypeEnum.SubscribeToVideoEnd: {
+            SubscribeToVideoEnd(sendResponse);
+            break;
+        }
+        default:
+            throw new Error('Message not declared');
+    }
+};
 
-    // const sena = document.getElementsByTagName('video')[0];
-    // console.log(sena);
+// chrome.runtime.sendMessage({ mess: request });
 
-    // const getTime = () => {
-    //     console.log(sena.currentTime);
-    //     console.log(sena.duration);
-    // }
-
-    // setInterval(getTime, 2000)
-
-    // sena.addEventListener('pause', function(e){
-    //     console.log("pauza se desila")
-    //     console.log(e)
-    // })
-
-    // chrome.runtime.sendMessage({ mess: "sena m "});
-});
+chrome.runtime.onMessage.addListener(messageHandler);

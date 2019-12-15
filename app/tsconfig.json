@@ -15,12 +15,17 @@
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": false,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "baseUrl": "./",
+        "paths": {
+            "common": [ "./common/index" ]
+        }
     },
     "include": [
         "./background",
         "./content-script",
-        "./popup"
+        "./popup",
+        "./common"
     ],
     "exclude": [
         "node_modules",

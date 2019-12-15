@@ -6,6 +6,8 @@
         "semicolon": [ true, "always" ],
         "space-before-function-paren": [ true, "never" ],
         "quotemark": [ true, "single" ],
-        "no-console": true
+        "no-console": true,
+        "interface-name": false,
+        "only-arrow-functions": false
     }
 }
