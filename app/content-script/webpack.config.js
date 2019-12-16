@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: './content-script/src/content-script.ts',
+    entry: './content-script/src/index.ts',
      output: {
         path: path.resolve('public'),
         filename: 'content-script.js'
@@ -10,7 +10,7 @@ module.exports = {
       alias: {
         common: path.resolve(__dirname, '../common')
       },
-      extensions: [ '.ts' ]
+      extensions: [ '.ts', '.js' ]
     },
     module: {
       rules: [

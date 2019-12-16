@@ -10,7 +10,7 @@ const tile: React.FC = () => {
             type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
         };
         // tslint:disable-next-line: no-console
-        messanger.sendMessageToActiveTab(message, console.log);
+        messanger.sendMessageToActiveTab(message);
     };
 
     return(

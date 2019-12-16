@@ -3,13 +3,13 @@
 
 @import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
 
-html, body { 
+html, body, .app { 
     min-height: 350px; 
     min-width: 250px;
     border-radius: 16px;
     width: 100%; 
     margin: 0;
-    background-color: var(--yellow-6);
+    background-color: var(--my-yellow-6);
     font-family: 'Karla', sans-serif;
     font-size: px-to-rem(16px);
 }
@@ -25,11 +25,18 @@ html, body {
 
     --hover: #{$hover-color};
 
-    @include color-shades($blue, blue);
-    @include color-shades($green, green);
-    @include color-shades($yellow, yellow);
-    @include color-shades($red, red);
-    @include color-shades($grey, grey);
+    @include color-shades($blue, my-blue);
+    @include color-shades($green, my-green);
+    @include color-shades($yellow, my-yellow);
+    @include color-shades($red, my-red);
+    @include color-shades($grey, my-grey);
+}
+
+%selected-tile {
+    border: solid 2px rgba($hover-color ,0.4);
+    background-color: rgba($hover-color ,0.4);
+    box-shadow: 0 0 11px rgba($hover-color, 0.8);
+    cursor: pointer;
 }
 
 %tile {
@@ -37,13 +44,10 @@ html, body {
     max-width: 80%;
     text-overflow: ellipsis;
     margin: 10px 15px;
-    border: solid 2px var(--yellow-80);
+    border: solid 2px var(--my-yellow-80);
     border-radius: 14px;
     padding: 5px 10px;
     &:hover {
-        border: solid 2px rgba($hover-color ,0.4);
-        background-color: rgba($hover-color ,0.4);
-        box-shadow: 0 0 11px rgba($hover-color, 0.8);
-        cursor: pointer;
+        @extend %selected-tile;
     }
 }

@@ -8,6 +8,9 @@
         "quotemark": [ true, "single" ],
         "no-console": true,
         "interface-name": false,
-        "only-arrow-functions": false
+        "only-arrow-functions": false,
+        "object-literal-sort-keys": false,
+        "no-empty-interface": false,
+        "member-ordering": false
     }
 }

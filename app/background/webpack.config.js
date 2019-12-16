@@ -1,16 +1,16 @@
 const path = require("path");
 
 module.exports = {
-    entry: './background/src/background.ts',
+    entry: './background/src/index.ts',
      output: {
         path: path.resolve('public'),
         filename: 'background.js'
     },
     resolve: {
       alias: {
-        common: path.resolve(__dirname, 'common')
+        common: path.resolve(__dirname, '../common')
       },
-      extensions: [ '.ts' ]
+      extensions: [ '.ts', '.js' ]
     },
     module: {
       rules: [
