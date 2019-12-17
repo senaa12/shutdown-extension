@@ -3,7 +3,7 @@ import { ShutdownSubscriptionReducerState } from 'common/storeModels';
 
 export const shutdownSubscriptionReducerInitialState: ShutdownSubscriptionReducerState = {
     isEventSubscibed: false,
-    tabId: -1,
+    tabId: 0,
 };
 
 export default (state = shutdownSubscriptionReducerInitialState, action: Action): ShutdownSubscriptionReducerState => {

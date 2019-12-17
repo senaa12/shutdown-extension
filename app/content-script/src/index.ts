@@ -4,7 +4,7 @@ import {
     ContentScriptMessageTypeEnum,
     MessageSender } from 'common';
 import { Store } from 'webext-redux';
-import { SubscribeToVideoEnd } from './videoDetection';
+import { checkVideoAvailability, SubscribeToVideoEnd } from './videoDetection';
 
 const messageHandler = (
     request: ContentScriptMessage,
@@ -22,7 +22,12 @@ const messageHandler = (
 
 const store = new Store();
 store.ready().then(() => {
-    // TODO: tu ubaciti detekciju
+    // when tab opens check if video tab is available and save state to store
+    checkVideoAvailability();
+
+    // window.addEventListener('hashchange', console.log);
+
+    // when tab opens register message handler
     chrome.runtime.onMessage.addListener(messageHandler);
 });
 export default store;

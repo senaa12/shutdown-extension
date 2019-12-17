@@ -30,7 +30,26 @@ html, body, .app {
     @include color-shades($yellow, my-yellow);
     @include color-shades($red, my-red);
     @include color-shades($grey, my-grey);
+
+    .link {
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+
+    .tile-button {
+        @extend %tile;
+    }
+    
+    .clickable {
+        &:hover {
+            @extend %selected-tile;
+        }
+    }
+    
 }
+
 
 %selected-tile {
     border: solid 2px rgba($hover-color ,0.4);
@@ -47,7 +66,5 @@ html, body, .app {
     border: solid 2px var(--my-yellow-80);
     border-radius: 14px;
     padding: 5px 10px;
-    &:hover {
-        @extend %selected-tile;
-    }
 }
+

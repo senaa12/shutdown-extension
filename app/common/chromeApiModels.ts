@@ -10,6 +10,7 @@ export interface ContentScriptMessage {
 
 export enum ContentScriptMessageTypeEnum {
     SubscribeToVideoEnd,
+    CheckVideoAvailability,
 }
 
 // webext-redux sender type

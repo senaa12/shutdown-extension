@@ -1,36 +1,29 @@
-import * as React from 'react';
+import { RootReducerState, TabState } from 'common';
+import React from 'react';
 import { connect } from 'react-redux';
+import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
 
-import { RootReducerState, ShutdownSubscriptionReducerState } from 'common';
-import './app.scss';
-import SubscriptionMessage from './subscriptionMessage/subscriptionMessage';
-import Tile from './tile/tile';
-
-interface AppProps {
-    subscriptionProps: ShutdownSubscriptionReducerState;
+export interface AppOwnProps {
+    currentTabId?: number;
 }
 
-const mapStateToProps = (state: RootReducerState): AppProps => {
-    return {
-        subscriptionProps: state.shutdownSubscriptionReducer,
-    };
-};
+declare type AppContentProps = AppOwnProps & TabState;
 
-class App extends React.Component<AppProps, any> {
-    constructor(props: AppProps) {
+const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partial<AppContentProps> => {
+    return ownProps;
+};
+class App extends React.Component<AppContentProps, any> {
+    constructor(props: AppContentProps) {
         super(props);
     }
 
     public render() {
-        console.log(this.props.subscriptionProps);
         return(
-            <div className='app'>
-                <Tile />
-                <SubscriptionMessage />
+            <div>
+                <VideoEndShutdownComponent activeTabId={this.props.currentTabId}/>
             </div>
         );
     }
-
 }
 
 export default connect(mapStateToProps)(App);

@@ -7,3 +7,5 @@ import {wrapStore} from 'webext-redux';
 const store = createStore(rootReducer, rootReducerInitialState, applyMiddleware(logger));
 
 export default wrapStore(store);
+
+// chrome.tabs.onUpdated.addListener(console.log);
