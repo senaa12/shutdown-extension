@@ -11,6 +11,7 @@
         "only-arrow-functions": false,
         "object-literal-sort-keys": false,
         "no-empty-interface": false,
-        "member-ordering": false
+        "member-ordering": false,
+        "one-variable-per-declaration": false
     }
 }

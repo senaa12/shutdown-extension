@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
 
 import { RootReducerState } from 'common';
+import appReducer, { appReducerInitialState } from './appReducer';
 import openTabsReducer, { openTabsReducerInitialState } from './openTabsReducer';
-import shutdownSubscriptionReducer, { shutdownSubscriptionReducerInitialState } from './shutdownSubscriptionReducer';
 
 export const rootReducerInitialState: RootReducerState = {
-    shutdownSubscriptionReducer: shutdownSubscriptionReducerInitialState,
+    appReducer: appReducerInitialState,
     openTabsReducer: openTabsReducerInitialState,
 };
 
 export default combineReducers({
-    shutdownSubscriptionReducer,
+    appReducer,
     openTabsReducer,
 });

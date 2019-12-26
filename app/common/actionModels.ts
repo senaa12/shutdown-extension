@@ -8,8 +8,11 @@ export interface Action {
 
 export enum ActionTypeEnum {
     SubscribedToVideoEnd = '@App/SUBSCRIBE_TO_VIDEO_END',
+    RemoveVideoEndSubscription = '@App/REMOVE_VIDEO_SUBSCRIPTON',
 
     CheckTabVideoAvailability = '@Tabs/CHECK_VIDEO_AVAILABILITY',
+    UpdateTabInformation = '@Tabs/UPDATE_VIDEO_AVAILABILITY',
+    RemoveTab = '@Tabs/REMOVE_TAB',
 }
 
 export type CallbackFunction = (data: any) => void;

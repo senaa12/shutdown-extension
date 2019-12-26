@@ -3,15 +3,23 @@
 
 @import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
 
-html, body, .app { 
-    min-height: 350px; 
-    min-width: 250px;
+body, .app { 
+    min-height: 450px; 
+    width: 330px;
+    padding: 5px;
     border-radius: 16px;
-    width: 100%; 
     margin: 0;
     background-color: var(--my-yellow-6);
     font-family: 'Karla', sans-serif;
-    font-size: px-to-rem(16px);
+    font-size: px-to-rem(14px);
+
+    input:focus,
+    select:focus,
+    textarea:focus,
+    button:focus {
+        outline: none;
+        -webkit-appearance:none;
+    }
 }
 
 :root {
@@ -47,6 +55,10 @@ html, body, .app {
             @extend %selected-tile;
         }
     }
+
+    .disabled {
+        @extend %disabled;
+    }
     
 }
 
@@ -59,12 +71,25 @@ html, body, .app {
 }
 
 %tile {
+    font-size: px-to-rem(16px);
     width: fit-content;
     max-width: 80%;
     text-overflow: ellipsis;
     margin: 10px 15px;
+    background-color: var(--my-yellow-6);
     border: solid 2px var(--my-yellow-80);
     border-radius: 14px;
     padding: 5px 10px;
+}
+
+%disabled {
+    background-color: var(--my-yellow-6);
+    opacity: 0.7;
+    &:hover {
+        cursor: default;
+        box-shadow: none;
+        background-color: var(--my-yellow-6);
+        border: solid 2px var(--my-yellow-80);
+    }
 }
 

@@ -17,6 +17,14 @@ export default (state = openTabsReducerInitialState, action: Action): OpenTabsRe
                 tabs: newTabs,
             };
         }
+        case ActionTypeEnum.RemoveTab: {
+            // tslint:disable-next-line: prefer-const
+            let newState = { ...state.tabs };
+            delete newState[action.data.tab];
+            return {
+                tabs: newState,
+            };
+        }
         default: {
             return state;
         }

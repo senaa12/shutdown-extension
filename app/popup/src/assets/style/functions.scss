@@ -11,6 +11,7 @@
 }
 
 @mixin color-shades($color, $name) {
+    --#{$name}-1: #{rgba($color, 0.01)};
     --#{$name}-3: #{rgba($color, 0.03)};
     --#{$name}-6: #{rgba($color, 0.06)};
     --#{$name}-10: #{rgba($color, 0.1)};

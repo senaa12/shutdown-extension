@@ -1,7 +1,9 @@
-import { RootReducerState, TabState } from 'common';
+import { ContentScriptMessage, ContentScriptMessageTypeEnum, RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
-import SubscribeShutdownButton from './subscribeShutdownButton/subscribeShutdownButton';
+import messanger from '../../utilities/contentScriptMessaging';
+
+import './videoEndShutdownComponent.scss';
 
 interface Substitute {
     activeTabId?: number;
@@ -9,7 +11,8 @@ interface Substitute {
 
 interface VideoEndShutdownComponentState {
     tabTitle?: string;
-    isEventSubscribed: boolean;
+    isDisabled: boolean;
+    selectedTime: string;
 }
 
 interface VideoEndShutdownComponenStateProps {
@@ -23,7 +26,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: Substitute): Partial
         return {
             ...ownProps,
             ...state.openTabsReducer.tabs[ownProps.activeTabId],
-            subscribedTab: state.shutdownSubscriptionReducer.tabId,
+            subscribedTab: state.appReducer.tabId,
         };
     }
 
@@ -36,7 +39,8 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
         super(props);
         this.state = {
             tabTitle: '',
-            isEventSubscribed: props.subscribedTab !== undefined && props.subscribedTab > 0,
+            isDisabled: true,
+            selectedTime: '00:00:00',
         };
     }
 
@@ -51,38 +55,78 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
     private navigateToSelectedTab = () => chrome.tabs.update(this.props.subscribedTab, { active: true });
     private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.iframeSource });
 
+    private subscribe = () => {
+        const message: ContentScriptMessage = {
+            type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
+            data: {
+                selectedTime: this.state.selectedTime,
+            },
+        };
+        messanger.sendMessageToActiveTab(message);
+    }
+
+    private checkAgain = () => {
+        const message: ContentScriptMessage = {
+            type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
+        };
+        messanger.sendMessageToActiveTab(message);
+    }
+
+    private onTimeChange = (e) => {
+        this.setState({ selectedTime: e.target.value });
+    }
+
     private getMessage = () => {
-        const { isEventSubscribed } = this.state;
-        const { activeTabId, subscribedTab, documentHasVideoTag, documentHasIFrameTag } = this.props;
-        if (isEventSubscribed && activeTabId === subscribedTab) {
-                return <>After video on this web page ends, computer will shut down</>;
-            } else if (isEventSubscribed) {
-                return (
-                    <>
-                        <div>Computer will shut down after video ends at tab</div><br />
-                        <div className='link' onClick={this.navigateToSelectedTab}>{this.state.tabTitle}</div>
-                    </>
-                    );
-            } else if (documentHasVideoTag) {
-                return 'Click subscribe shut down computer after video ends';
-            } else if (documentHasIFrameTag) {
-                return (
-                    <>
-                        <div>This web page has IFrame in it, to navigate to it click</div><br />
-                        <div className='link' onClick={this.navigateToIframeSource}>{this.props.iframeSource}</div>
-                    </>
-                );
-            } else {
-                return 'This web page cannot use this extension';
-            }
+        const { activeTabId, documentHasVideoTag, documentHasIFrameTag, subscribedTab } = this.props;
+        let response;
+        let isDisabledState = true;
+        if (subscribedTab !== undefined && subscribedTab > 0 && activeTabId === subscribedTab) {
+            response = <>After video on this web page ends, computer will shut down</>;
+        } else if (subscribedTab !== undefined && subscribedTab > 0) {
+            response =
+                <>
+                    <div>Computer will shut down after video ends at tab</div><br />
+                    <div className='link' onClick={this.navigateToSelectedTab}>{this.state.tabTitle}</div>
+                </>;
+        } else if (documentHasVideoTag) {
+            isDisabledState = false;
+            response =  'Click subscribe shut down computer after video ends';
+        } else if (documentHasIFrameTag) {
+            response =
+                <>
+                    <div>
+                        This web page has IFrame in it, maybe there is video tag in it, to navigate to it click
+                    </div><br />
+                    <div className='link' onClick={this.navigateToIframeSource}>{this.props.iframeSource}</div>
+                </>;
+        } else {
+            response =  'This web page cannot use this extension';
         }
+        if (isDisabledState !== this.state.isDisabled) {
+            this.setState({ isDisabled: isDisabledState });
+        }
+        return response;
+    }
 
     public render() {
-        return(
-            <div >
-                <SubscribeShutdownButton
-                    disbled={!this.props.documentHasVideoTag && this.state.isEventSubscribed} />
-                <div>{this.getMessage()}</div>
+        return (
+            <div className='video-end-component'>
+                <div className='video-end-component__buttons'><button
+                    className={this.state.isDisabled ? 'tile-button disabled' : 'tile-button clickable'}
+                    onClick={this.subscribe}
+                    disabled={this.state.isDisabled}
+                >SUBSCRIBE</button>
+                {this.props.documentHasVideoTag &&
+                    <div className='link' onClick={this.checkAgain}>Check again</div>}</div>
+                <div className='video-end-component__message'>{this.getMessage()}</div>
+                <input
+                    type='time'
+                    step='1'
+                    className={this.state.isDisabled ? 'tile-button disabled' : 'tile-button clickable'}
+                    disabled={this.state.isDisabled}
+                    onChange={this.onTimeChange}
+                    value={this.state.selectedTime}
+                />
             </div>
         );
     }

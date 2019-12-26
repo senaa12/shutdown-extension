@@ -10,9 +10,13 @@ const messageHandler = (
     request: ContentScriptMessage,
     sender: MessageSender,
     sendResponse: CallbackFunction) => {
-    switch (request.type) {
+        switch (request.type) {
         case ContentScriptMessageTypeEnum.SubscribeToVideoEnd: {
-            SubscribeToVideoEnd();
+            SubscribeToVideoEnd(request.data.selectedTime);
+            break;
+        }
+        case ContentScriptMessageTypeEnum.CheckVideoAvailability: {
+            checkVideoAvailability();
             break;
         }
         default:
@@ -22,11 +26,6 @@ const messageHandler = (
 
 const store = new Store();
 store.ready().then(() => {
-    // when tab opens check if video tab is available and save state to store
-    checkVideoAvailability();
-
-    // window.addEventListener('hashchange', console.log);
-
     // when tab opens register message handler
     chrome.runtime.onMessage.addListener(messageHandler);
 });

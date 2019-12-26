@@ -1,9 +1,9 @@
 export interface RootReducerState {
-    shutdownSubscriptionReducer: ShutdownSubscriptionReducerState;
+    appReducer: AppReducerState;
     openTabsReducer: OpenTabsReducerState;
 }
 
-export interface ShutdownSubscriptionReducerState {
+export interface AppReducerState {
     isEventSubscibed: boolean;
     tabId: number;
 }

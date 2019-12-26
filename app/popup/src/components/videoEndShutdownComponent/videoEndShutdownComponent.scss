@@ -1,0 +1,9 @@
+.video-end-component {
+    &__buttons {
+        display: flex;
+        align-items: center;
+    }
+    &__message {
+        width: 100%;
+    }
+}
