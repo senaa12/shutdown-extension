@@ -5,6 +5,9 @@ import rootReducer, { rootReducerInitialState } from './reducers/rootReducer';
 import { ActionTypeEnum, ContentScriptMessageTypeEnum, Tab } from 'common';
 import { wrapStore } from 'webext-redux';
 
+import messageHandler from './messageHandler';
+chrome.runtime.onMessage.addListener(messageHandler);
+
 const store = createStore(rootReducer, rootReducerInitialState, applyMiddleware(logger));
 
 export default wrapStore(store);

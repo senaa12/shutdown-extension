@@ -65,11 +65,15 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
         messanger.sendMessageToActiveTab(message);
     }
 
-    private checkAgain = () => {
-        const message: ContentScriptMessage = {
-            type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
+    private renderCheckAgainButton = () => {
+        const onClick = () => {
+            const message: ContentScriptMessage = {
+                type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
+            };
+            messanger.sendMessageToActiveTab(message);
         };
-        messanger.sendMessageToActiveTab(message);
+
+        return <>{' '}<div className='link' onClick={onClick}>Check again</div></>;
     }
 
     private onTimeChange = (e) => {
@@ -95,12 +99,13 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
             response =
                 <>
                     <div>
-                        This web page has IFrame in it, maybe there is video tag in it, to navigate to it click
+                        This web page has IFrame in it, maybe there is video tag in it,
+                        to navigate to it click or{this.renderCheckAgainButton()}
                     </div><br />
                     <div className='link' onClick={this.navigateToIframeSource}>{this.props.iframeSource}</div>
                 </>;
         } else {
-            response =  'This web page cannot use this extension';
+        response =  <>This web page cannot use this extension{this.renderCheckAgainButton()}</>;
         }
         if (isDisabledState !== this.state.isDisabled) {
             this.setState({ isDisabled: isDisabledState });
@@ -111,22 +116,24 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
     public render() {
         return (
             <div className='video-end-component'>
+                <div className='video-end-component__message'>
+                    <div>{this.getMessage()}</div>
+                <input
+                    type='time'
+                    step='1'
+                    className={this.state.isDisabled ? 'time-selector tile-button disabled' : 'time-selector tile-button clickable'}
+                    disabled={this.state.isDisabled}
+                    onChange={this.onTimeChange}
+                    value={this.state.selectedTime}
+                    min='00:00:00'
+
+                />
+                </div>
                 <div className='video-end-component__buttons'><button
                     className={this.state.isDisabled ? 'tile-button disabled' : 'tile-button clickable'}
                     onClick={this.subscribe}
                     disabled={this.state.isDisabled}
-                >SUBSCRIBE</button>
-                {this.props.documentHasVideoTag &&
-                    <div className='link' onClick={this.checkAgain}>Check again</div>}</div>
-                <div className='video-end-component__message'>{this.getMessage()}</div>
-                <input
-                    type='time'
-                    step='1'
-                    className={this.state.isDisabled ? 'tile-button disabled' : 'tile-button clickable'}
-                    disabled={this.state.isDisabled}
-                    onChange={this.onTimeChange}
-                    value={this.state.selectedTime}
-                />
+                >SUBSCRIBE</button></div>
             </div>
         );
     }

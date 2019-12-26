@@ -13,6 +13,16 @@ export enum ContentScriptMessageTypeEnum {
     CheckVideoAvailability,
 }
 
+// content-script => bacground messaging
+export interface BackgroundMessage {
+    type: BackgroundMessageTypeEnum;
+    data: any;
+}
+
+export enum BackgroundMessageTypeEnum {
+    ShutdownComputer,
+}
+
 // webext-redux sender type
 export interface Sender  {
     id: string;

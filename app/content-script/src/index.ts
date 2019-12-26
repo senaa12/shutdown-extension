@@ -4,7 +4,8 @@ import {
     ContentScriptMessageTypeEnum,
     MessageSender } from 'common';
 import { Store } from 'webext-redux';
-import { checkVideoAvailability, SubscribeToVideoEnd } from './videoDetection';
+import { SubscribeToVideoEnd } from './shutdownEvent';
+import { checkVideoAvailability } from './videoDetection';
 
 const messageHandler = (
     request: ContentScriptMessage,
