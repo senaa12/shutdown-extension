@@ -1,9 +1,10 @@
 import { Action, ActionTypeEnum } from 'common';
-import { AppReducerState } from 'common/storeModels';
+import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
 export const appReducerInitialState: AppReducerState = {
     isEventSubscibed: false,
     tabId: 0,
+    selectedApplicationMode: ApplicationModeEnum.VideoPlayer,
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -21,6 +22,13 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
         }
         case ActionTypeEnum.RemoveVideoEndSubscription: {
             return appReducerInitialState;
+        }
+        case ActionTypeEnum.ChangeApplicationState: {
+            const newState = action.data;
+            return {
+                ...state,
+                selectedApplicationMode: newState,
+            };
         }
         default:
             return state;

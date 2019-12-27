@@ -6,6 +6,7 @@ export interface RootReducerState {
 export interface AppReducerState {
     isEventSubscibed: boolean;
     tabId: number;
+    selectedApplicationMode: ApplicationModeEnum;
 }
 
 export interface OpenTabsReducerState {
@@ -16,4 +17,9 @@ export interface TabState {
     documentHasVideoTag: boolean;
     documentHasIFrameTag: boolean;
     iframeSource: string;
+}
+
+export enum ApplicationModeEnum {
+    VideoPlayer,
+    Countdown,
 }

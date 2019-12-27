@@ -8,16 +8,5 @@
         flex-direction: column;
         width: 100%;
         align-items: center;
-
-
-        .time-selector {
-            font-size: px-to-rem(16px);
-
-            &::-webkit-inner-spin-button,
-            &::-webkit-outer-spin-button,
-            &::-webkit-clear-button  {
-                display: none;
-            }
-        }
     }
 }

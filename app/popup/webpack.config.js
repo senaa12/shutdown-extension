@@ -49,6 +49,12 @@ const typescriptLoader = {
     loader: "awesome-typescript-loader"
 };
 
+const svgLoader = {
+    test: /\.svg$/,
+    loader: "svg-sprite-loader",
+    include: [path.resolve(__dirname, 'src/assets/icons')]
+}
+
 module.exports = {
     entry: "./popup/src/index.tsx",
     output: {
@@ -68,7 +74,7 @@ module.exports = {
         }
     },
     module: {
-        rules: [ styleProdLoader, typescriptLoader ]
+        rules: [ styleProdLoader, typescriptLoader, svgLoader ]
     },
     plugins: [ copyWebpackPlugin, miniCssExtractPlugin, hashedModulePlugin, definePlugin(true), htmlWebpackPlugin ],
 }

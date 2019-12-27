@@ -121,12 +121,11 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
                 <input
                     type='time'
                     step='1'
-                    className={this.state.isDisabled ? 'time-selector tile-button disabled' : 'time-selector tile-button clickable'}
+                    className={this.state.isDisabled ? 'time-selector disabled' : 'time-selector'}
                     disabled={this.state.isDisabled}
                     onChange={this.onTimeChange}
                     value={this.state.selectedTime}
                     min='00:00:00'
-
                 />
                 </div>
                 <div className='video-end-component__buttons'><button

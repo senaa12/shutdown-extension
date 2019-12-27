@@ -1,0 +1,25 @@
+@import "../../index.scss";
+@import "../../assets/style/variables.scss";
+@import "../../assets/style/functions.scss";
+
+.menu-buttons-wrapper {
+    display: flex;
+    height: 130px;
+    padding: 7px;
+    width: 100%;
+
+    .custom-button {
+        flex-grow: 1;
+        height: 90px;
+        font-size: var(--normal-font-size);
+        @extend %tile;
+    }
+
+    .triggers-label {
+        top: 155px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+}

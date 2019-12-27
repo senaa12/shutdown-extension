@@ -1,0 +1,9 @@
+.action-buttons-container {
+    align-self: flex-end;
+    display: flex;
+    width: 100%;
+
+    .action-button {
+        width: 80px;
+    }
+}

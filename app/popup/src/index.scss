@@ -1,17 +1,18 @@
 @import "./assets/style/functions.scss";
 @import "./assets/style/variables.scss";
 
+/* FONT STUFF*/
 @import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
 
-body, .app { 
+body { 
     min-height: 450px; 
     width: 330px;
     padding: 5px;
     border-radius: 16px;
     margin: 0;
-    background-color: var(--my-yellow-6);
+    background-color: var(--background-color);
     font-family: 'Karla', sans-serif;
-    font-size: px-to-rem(14px);
+    font-size: var(--normal-font-size);
 
     input:focus,
     select:focus,
@@ -31,7 +32,16 @@ body, .app {
     --black: #{$black};
     --white: #{$white};
 
-    --hover: #{$hover-color};
+    --normal-font-size: #{px-to-rem(14px)};
+    --big-font-size: #{px-to-rem(16px)};
+    --title-size-font: #{px-to-rem(18px)};
+    --time-font-size: #{px-to-rem(22px)};
+
+    --background-color: var(--my-yellow-6);
+    --selected-tile-color: var(--my-yellow-20);
+    --hover-color: #{$hover-color};
+    --border-color: var(--my-yellow-80);
+    --font-color: #{$black};
 
     @include color-shades($blue, my-blue);
     @include color-shades($green, my-green);
@@ -40,10 +50,14 @@ body, .app {
     @include color-shades($grey, my-grey);
 
     .link {
+        text-decoration: underline;
         &:hover {
             cursor: pointer;
-            text-decoration: underline;
         }
+    }
+
+    .selected {
+        background-color: var(--selected-tile-color);
     }
 
     .tile-button {
@@ -59,37 +73,62 @@ body, .app {
     .disabled {
         @extend %disabled;
     }
-    
+
+    input[type=time] {
+        font-size: var(--time-font-size);
+        border: solid 1px var(--border-color);
+        border-radius: 5px;
+        padding: 5px;
+        background-color: var(--background-color);
+        font-family: 'Karla', sans-serif;
+        text-align: center;
+
+        &:focus {
+            background-color: var(--selected-tile-color);
+        }
+
+        &::-webkit-datetime-edit-minute-field:focus,
+        &::-webkit-datetime-edit-hour-field:focus,
+        &::-webkit-datetime-edit-second-field:focus {
+            background-color: var(--background-color);
+            color: var(--red);
+        }
+
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button,
+        &::-webkit-clear-button  {
+            display: none;
+        }
+    }   
 }
 
 
 %selected-tile {
     border: solid 2px rgba($hover-color ,0.4);
-    background-color: rgba($hover-color ,0.4);
-    box-shadow: 0 0 11px rgba($hover-color, 0.8);
+    box-shadow: 0 0 7px rgba($hover-color, 0.8);
     cursor: pointer;
 }
 
 %tile {
-    font-size: px-to-rem(16px);
+    font-size: var(--normal-font-size);
     width: fit-content;
     max-width: 80%;
     text-overflow: ellipsis;
     margin: 10px 15px;
-    background-color: var(--my-yellow-6);
-    border: solid 2px var(--my-yellow-80);
+    background-color: var(--background-color);
+    border: solid 2px var(--border-color);
     border-radius: 14px;
     padding: 5px 10px;
 }
 
 %disabled {
-    background-color: var(--my-yellow-6);
+    background-color: var(--background-color);
     opacity: 0.7;
     &:hover {
         cursor: default;
         box-shadow: none;
-        background-color: var(--my-yellow-6);
-        border: solid 2px var(--my-yellow-80);
+        background-color: var(--background-color);
+        border: solid 1px var(--border-color);
     }
 }
 

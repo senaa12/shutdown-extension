@@ -1,0 +1,10 @@
+.header {
+    display: flex;
+    justify-content: center;
+
+    .title {
+        margin-right: 5px;
+        font-size: var(--title-size-font);
+        align-self: center;
+    }
+}
