@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from '../icon/icon';
-import { IconEnum } from '../icon/iconEnum';
+import { IconEnum, IconSize } from '../icon/iconEnum';
 
 import './buttonComponent.scss';
 
@@ -10,6 +10,8 @@ export interface CustomButtonProps {
     onClick(): void;
     icon: IconEnum;
     className: string;
+    tooltip?: string;
+    iconSize?: IconSize;
 }
 
 const buttonComponent = (props: CustomButtonProps) => {
@@ -17,15 +19,18 @@ const buttonComponent = (props: CustomButtonProps) => {
     className += props.isSelected ? ' selected' : '';
     return(
         <div
+            title={props.tooltip}
             className={className}
             onClick={props.onClick}
         >
             <div>
                 <Icon
+                    className={'button-icon'}
                     iconName={props.icon}
+                    iconSize={props.iconSize}
                 />
             </div>
-            <div>{props.label}</div>
+            <div className={'label'}>{props.label}</div>
         </div>
     );
 };

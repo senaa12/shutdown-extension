@@ -4,6 +4,8 @@ export enum IconEnum {
     Logo = 'extension-logo',
     PowerButton = 'power-button',
     Cancel = 'cancel',
+    ScanNow = 'scan',
+    OpenDocs = 'docs',
 }
 
 export enum IconSize {

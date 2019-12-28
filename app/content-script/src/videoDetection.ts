@@ -9,10 +9,13 @@ export const checkVideoAvailability = () => {
         type: ActionTypeEnum.CheckTabVideoAvailability,
     };
     if (videoTag.length) {
-        action.data =  {
+        videoTag[0].onloadedmetadata = () => {
+            action.data =  {
                 documentHasVideoTag: true,
+                videoDuration: videoTag[0].duration,
             } as TabState;
-        store.dispatch(action);
+            store.dispatch(action);
+        };
         return;
     }
 

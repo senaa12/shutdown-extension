@@ -5,10 +5,9 @@
 @import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
 
 body { 
-    min-height: 450px; 
-    width: 330px;
-    padding: 5px;
-    border-radius: 16px;
+    min-height: 330px; 
+    width: 400px;
+    padding: 10px 5px;
     margin: 0;
     background-color: var(--background-color);
     font-family: 'Karla', sans-serif;
@@ -32,10 +31,12 @@ body {
     --black: #{$black};
     --white: #{$white};
 
-    --normal-font-size: #{px-to-rem(14px)};
-    --big-font-size: #{px-to-rem(16px)};
+
+    --small-font-size: #{px-to-rem(10px)};
+    --normal-font-size: #{px-to-rem(12px)};
+    --big-font-size: #{px-to-rem(14px)};
     --title-size-font: #{px-to-rem(18px)};
-    --time-font-size: #{px-to-rem(22px)};
+    --time-font-size: #{px-to-rem(25px)};
 
     --background-color: var(--my-yellow-6);
     --selected-tile-color: var(--my-yellow-20);
@@ -73,39 +74,12 @@ body {
     .disabled {
         @extend %disabled;
     }
-
-    input[type=time] {
-        font-size: var(--time-font-size);
-        border: solid 1px var(--border-color);
-        border-radius: 5px;
-        padding: 5px;
-        background-color: var(--background-color);
-        font-family: 'Karla', sans-serif;
-        text-align: center;
-
-        &:focus {
-            background-color: var(--selected-tile-color);
-        }
-
-        &::-webkit-datetime-edit-minute-field:focus,
-        &::-webkit-datetime-edit-hour-field:focus,
-        &::-webkit-datetime-edit-second-field:focus {
-            background-color: var(--background-color);
-            color: var(--red);
-        }
-
-        &::-webkit-inner-spin-button,
-        &::-webkit-outer-spin-button,
-        &::-webkit-clear-button  {
-            display: none;
-        }
-    }   
 }
 
 
 %selected-tile {
     border: solid 2px rgba($hover-color ,0.4);
-    box-shadow: 0 0 7px rgba($hover-color, 0.8);
+    box-shadow: 0 0 5px rgba($hover-color, 0.8);
     cursor: pointer;
 }
 
@@ -122,13 +96,10 @@ body {
 }
 
 %disabled {
-    background-color: var(--background-color);
     opacity: 0.7;
     &:hover {
         cursor: default;
         box-shadow: none;
-        background-color: var(--background-color);
-        border: solid 1px var(--border-color);
     }
 }
 

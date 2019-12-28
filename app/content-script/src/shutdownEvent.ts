@@ -1,5 +1,12 @@
-import { Action, ActionTypeEnum, BackgroundMessageTypeEnum } from 'common';
+import { Action, ActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
 import store from '.';
+
+export const removeSubscription = () => {
+    const event = store.getState().appReducer.event;
+    clearInterval(event);
+
+    store.dispatch({ type: ActionTypeEnum.RemoveVideoEndSubscription });
+};
 
 export const checkVideoForShutdown = (selectedTime: number) => {
     const videoTag = document.getElementsByTagName('video')[0];
@@ -22,23 +29,13 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         if (videoTag.currentTime + seconds > videoTag.duration) {
             throw new Error('not valid time');
         }
-        setInterval(() => checkVideoForShutdown(seconds), 1000);
+        const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
+        action.data = { success: true, event: func };
+        store.dispatch(action);
     } catch {
         action.data = { success: false };
         store.dispatch(action);
         return;
     }
-
-    action.data = { success: true };
-    store.dispatch(action);
     return;
-};
-
-const calculateSeconds = (selectedTime: string) => {
-    const values =  selectedTime.split(':');
-    let numberOfSeconds = 0;
-    numberOfSeconds += parseInt(values[0]) * 60 * 60;
-    numberOfSeconds += parseInt(values[1]) * 60;
-    numberOfSeconds += values[2] ? parseInt(values[2]) : 0;
-    return numberOfSeconds;
 };

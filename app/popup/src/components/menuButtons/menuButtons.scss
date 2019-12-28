@@ -4,19 +4,19 @@
 
 .menu-buttons-wrapper {
     display: flex;
-    height: 130px;
+    height: 110px;
     padding: 7px;
     width: 100%;
 
     .custom-button {
         flex-grow: 1;
-        height: 90px;
+        height: 60px;
         font-size: var(--normal-font-size);
         @extend %tile;
     }
 
     .triggers-label {
-        top: 155px;
+        top: 135px;
         position: absolute;
         left: 0;
         right: 0;

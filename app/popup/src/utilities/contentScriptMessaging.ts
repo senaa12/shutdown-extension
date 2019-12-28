@@ -8,6 +8,10 @@ class ContentScriptMessaging {
             }
         });
     }
+
+    public sendMessageToTab(tabID: number, message: ContentScriptMessage, onReponse?: CallbackFunction) {
+        chrome.tabs.sendMessage(tabID, message, onReponse);
+    }
 }
 
 const messanger = new ContentScriptMessaging();

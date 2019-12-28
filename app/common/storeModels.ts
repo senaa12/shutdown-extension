@@ -7,6 +7,8 @@ export interface AppReducerState {
     isEventSubscibed: boolean;
     tabId: number;
     selectedApplicationMode: ApplicationModeEnum;
+    selectedTime: string;
+    event: undefined | any;
 }
 
 export interface OpenTabsReducerState {
@@ -15,6 +17,7 @@ export interface OpenTabsReducerState {
 
 export interface TabState {
     documentHasVideoTag: boolean;
+    videoDuration: number;
     documentHasIFrameTag: boolean;
     iframeSource: string;
 }

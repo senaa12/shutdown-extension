@@ -1,13 +1,12 @@
-import { ContentScriptMessage, ContentScriptMessageTypeEnum, RootReducerState, TabState } from 'common';
+import { ContentScriptMessage, ContentScriptMessageTypeEnum, convertSecondsToTimeFormat, RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import messanger from '../../utilities/contentScriptMessaging';
 
+import { Dispatch } from 'redux';
+import { changeTimeSelected } from '../../actions/actions';
+import InputTimeComponent from '../reusableComponents/inputTimeComponent';
 import './videoEndShutdownComponent.scss';
-
-interface Substitute {
-    activeTabId?: number;
-}
 
 interface VideoEndShutdownComponentState {
     tabTitle?: string;
@@ -15,22 +14,35 @@ interface VideoEndShutdownComponentState {
     selectedTime: string;
 }
 
-interface VideoEndShutdownComponenStateProps {
-    subscribedTab: number;
+interface ActiveTabID {
+    activeTabId?: number;
 }
 
-declare type VideoEndShutdownComponentProps = Substitute & TabState & VideoEndShutdownComponenStateProps;
+interface VideoEndShutdownComponenStateProps {
+    subscribedTab: number;
+    selectedTime: string;
+    timeChange(newTime: string): void;
+}
 
-const mapStateToProps = (state: RootReducerState, ownProps: Substitute): Partial<VideoEndShutdownComponentProps> => {
+declare type VideoEndShutdownComponentProps = ActiveTabID & TabState & VideoEndShutdownComponenStateProps;
+
+const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabID): Partial<VideoEndShutdownComponentProps> => {
     if (ownProps.activeTabId) {
         return {
             ...ownProps,
             ...state.openTabsReducer.tabs[ownProps.activeTabId],
             subscribedTab: state.appReducer.tabId,
+            selectedTime: state.appReducer.selectedTime,
         };
     }
 
     return ownProps;
+};
+
+const dispatchStateToProps = (dispatch: Dispatch): Partial<VideoEndShutdownComponentProps> => {
+    return {
+        timeChange: (newTime: string) => dispatch(changeTimeSelected(newTime)),
+    };
 };
 
 // tslint:disable-next-line: max-line-length
@@ -55,31 +67,6 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
     private navigateToSelectedTab = () => chrome.tabs.update(this.props.subscribedTab, { active: true });
     private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.iframeSource });
 
-    private subscribe = () => {
-        const message: ContentScriptMessage = {
-            type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
-            data: {
-                selectedTime: this.state.selectedTime,
-            },
-        };
-        messanger.sendMessageToActiveTab(message);
-    }
-
-    private renderCheckAgainButton = () => {
-        const onClick = () => {
-            const message: ContentScriptMessage = {
-                type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
-            };
-            messanger.sendMessageToActiveTab(message);
-        };
-
-        return <>{' '}<div className='link' onClick={onClick}>Check again</div></>;
-    }
-
-    private onTimeChange = (e) => {
-        this.setState({ selectedTime: e.target.value });
-    }
-
     private getMessage = () => {
         const { activeTabId, documentHasVideoTag, documentHasIFrameTag, subscribedTab } = this.props;
         let response;
@@ -100,12 +87,12 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
                 <>
                     <div>
                         This web page has IFrame in it, maybe there is video tag in it,
-                        to navigate to it click or{this.renderCheckAgainButton()}
+                        to navigate to it click or
                     </div><br />
                     <div className='link' onClick={this.navigateToIframeSource}>{this.props.iframeSource}</div>
                 </>;
         } else {
-        response =  <>This web page cannot use this extension{this.renderCheckAgainButton()}</>;
+            response =  <>This web page cannot use this extension</>;
         }
         if (isDisabledState !== this.state.isDisabled) {
             this.setState({ isDisabled: isDisabledState });
@@ -118,24 +105,15 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
             <div className='video-end-component'>
                 <div className='video-end-component__message'>
                     <div>{this.getMessage()}</div>
-                <input
-                    type='time'
-                    step='1'
-                    className={this.state.isDisabled ? 'time-selector disabled' : 'time-selector'}
-                    disabled={this.state.isDisabled}
-                    onChange={this.onTimeChange}
-                    value={this.state.selectedTime}
-                    min='00:00:00'
+                <InputTimeComponent
+                    onChange={this.props.timeChange}
+                    value={this.props.selectedTime}
+                    isDisabled={this.state.isDisabled}
                 />
                 </div>
-                <div className='video-end-component__buttons'><button
-                    className={this.state.isDisabled ? 'tile-button disabled' : 'tile-button clickable'}
-                    onClick={this.subscribe}
-                    disabled={this.state.isDisabled}
-                >SUBSCRIBE</button></div>
             </div>
         );
     }
 }
 
-export default connect(mapStateToProps)(VideoEndShutdownComponent);
+export default connect(mapStateToProps, dispatchStateToProps)(VideoEndShutdownComponent);

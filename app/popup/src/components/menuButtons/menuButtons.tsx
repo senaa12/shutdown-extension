@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { changeAppState } from '../../actions/actions';
-import ButtonComponent from '../buttonComponent/buttonComponent';
-import { IconEnum } from '../icon/iconEnum';
+import { IconEnum, IconSize } from '../icon/iconEnum';
+import ButtonComponent from '../reusableComponents/buttonComponent';
 import './menuButtons.scss';
 
 export interface MenuButtonsProps {
@@ -38,6 +38,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
                     onClick={() => this.props.changeSelectedMode(ApplicationModeEnum.VideoPlayer)}
                     icon={IconEnum.VideoPlayer}
                     className={'custom-button clickable'}
+                    iconSize={IconSize.Normal}
                 />
                 <ButtonComponent
                     isSelected={this.props.selectedMode === ApplicationModeEnum.Countdown}
