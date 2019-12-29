@@ -1,7 +1,6 @@
-import { ContentScriptMessage, ContentScriptMessageTypeEnum, convertSecondsToTimeFormat, RootReducerState, TabState } from 'common';
+import { convertSecondsToTimeFormat, RootReducerState, TabState, videoPlayerStrings } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
-import messanger from '../../utilities/contentScriptMessaging';
 
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
@@ -67,32 +66,40 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
     private navigateToSelectedTab = () => chrome.tabs.update(this.props.subscribedTab, { active: true });
     private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.iframeSource });
 
-    private getMessage = () => {
+    private renderContent = () => {
         const { activeTabId, documentHasVideoTag, documentHasIFrameTag, subscribedTab } = this.props;
         let response;
         let isDisabledState = true;
-        if (subscribedTab !== undefined && subscribedTab > 0 && activeTabId === subscribedTab) {
-            response = <>After video on this web page ends, computer will shut down</>;
-        } else if (subscribedTab !== undefined && subscribedTab > 0) {
-            response =
-                <>
-                    <div>Computer will shut down after video ends at tab</div><br />
-                    <div className='link' onClick={this.navigateToSelectedTab}>{this.state.tabTitle}</div>
-                </>;
+
+        // shutdown event is subscribed
+        if (subscribedTab !== undefined && subscribedTab > 0) {
+            // shutdown is monitored on this tab
+            if (activeTabId === subscribedTab) {
+                response = videoPlayerStrings.shutdownSubscribed.thisTab('');
+            } else {
+                // tslint:disable-next-line: max-line-length
+                response = videoPlayerStrings.shutdownSubscribed.otherTab(this.navigateToSelectedTab, this.state.tabTitle);
+            }
         } else if (documentHasVideoTag) {
             isDisabledState = false;
-            response =  'Click subscribe shut down computer after video ends';
-        } else if (documentHasIFrameTag) {
             response =
-                <>
-                    <div>
-                        This web page has IFrame in it, maybe there is video tag in it,
-                        to navigate to it click or
-                    </div><br />
-                    <div className='link' onClick={this.navigateToIframeSource}>{this.props.iframeSource}</div>
-                </>;
+            <>
+                <div>{videoPlayerStrings.videoAvailable}</div>
+                <InputTimeComponent
+                    onChange={this.props.timeChange}
+                    value={this.props.selectedTime}
+                    isDisabled={this.state.isDisabled}
+                    maxValue={convertSecondsToTimeFormat(this.props.videoDuration, true)}
+                    labelPosition={'BOTTOM'}
+                    labelClassname={'small-label'}
+                    label={`Video will end at ${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`}
+                />
+            </>;
+        } else if (documentHasIFrameTag) {
+            response = videoPlayerStrings.iframeAvailable(this.navigateToIframeSource);
+
         } else {
-            response =  <>This web page cannot use this extension</>;
+            response =  videoPlayerStrings.notAvailable;
         }
         if (isDisabledState !== this.state.isDisabled) {
             this.setState({ isDisabled: isDisabledState });
@@ -103,14 +110,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
     public render() {
         return (
             <div className='video-end-component'>
-                <div className='video-end-component__message'>
-                    <div>{this.getMessage()}</div>
-                <InputTimeComponent
-                    onChange={this.props.timeChange}
-                    value={this.props.selectedTime}
-                    isDisabled={this.state.isDisabled}
-                />
-                </div>
+                {this.renderContent()}
             </div>
         );
     }

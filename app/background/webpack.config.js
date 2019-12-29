@@ -10,12 +10,12 @@ module.exports = {
       alias: {
         common: path.resolve(__dirname, '../common')
       },
-      extensions: [ '.ts', '.js' ]
+      extensions: [ '.ts', '.js', '.tsx' ]
     },
     module: {
       rules: [
         {
-          test: /\.ts$/,
+          test: /\.(ts|tsx)$/,
           exclude: /node_modules/,
           include: [
              path.resolve(__dirname, 'src'), 

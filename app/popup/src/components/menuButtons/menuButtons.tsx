@@ -47,7 +47,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
                     icon={IconEnum.Countdown}
                     className={'custom-button clickable'}
                 />
-                <div className={'triggers-label'}>{'Triggers'}</div>
+                <div className={'triggers-label'}>{'Choose Trigger'}</div>
             </div>
         );
     }

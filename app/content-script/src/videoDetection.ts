@@ -1,9 +1,11 @@
 import { Action,
     ActionTypeEnum,
+    CallbackFunction,
+    scanActionResultString,
     TabState} from 'common';
 import store from '.';
 
-export const checkVideoAvailability = () => {
+export const checkVideoAvailability = (data: any, sendResponse?: CallbackFunction) => {
     const videoTag = document.getElementsByTagName('video');
     const action: Action = {
         type: ActionTypeEnum.CheckTabVideoAvailability,
@@ -13,26 +15,39 @@ export const checkVideoAvailability = () => {
             action.data =  {
                 documentHasVideoTag: true,
                 videoDuration: videoTag[0].duration,
-            } as TabState;
+
+            };
             store.dispatch(action);
         };
+        if (sendResponse) {
+            sendResponse('video');
+        }
         return;
     }
 
     // maybe video tag does not exist but IFrame exists on page
     const iframe = document.getElementsByTagName('iframe');
     if (iframe.length) {
-        action.data =  {
+        // iframe[0].onloadedmetadata = () => {
+            action.data =  {
                 documentHasIFrameTag: true,
                 iframeSource: iframe[0].src,
-            } as TabState;
-        store.dispatch(action);
-        return;
+            } ;
+            store.dispatch(action);
+            if (sendResponse) {
+                sendResponse('iframe');
+            }
+        // };
+            return;
     }
 
     action.data =  {
             documentHasVideoTag: false,
             documentHasIFrameTag: false,
-        } as TabState;
+            actionResultMessage: data.returnMessage && scanActionResultString.noResult,
+        };
     store.dispatch(action);
+    if (sendResponse) {
+        sendResponse('none');
+    }
 };

@@ -17,4 +17,4 @@ export enum ActionTypeEnum {
     RemoveTab = '@Tabs/REMOVE_TAB',
 }
 
-export type CallbackFunction = (data: any) => void;
+export type CallbackFunction = (data?: any) => void;

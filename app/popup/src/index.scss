@@ -51,7 +51,9 @@ body {
     @include color-shades($grey, my-grey);
 
     .link {
+        margin: 5px;
         text-decoration: underline;
+        text-overflow: ellipsis;
         &:hover {
             cursor: pointer;
         }

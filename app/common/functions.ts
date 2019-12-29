@@ -7,21 +7,20 @@ export const calculateSeconds = (selectedTime: string) => {
     return numberOfSeconds;
 };
 
-export const convertSecondsToTimeFormat = (totalSeconds?: number) => {
+export const convertSecondsToTimeFormat = (totalSeconds?: number, fullTime: boolean = false) => {
     if (!totalSeconds) {
-        return null;
+        return undefined;
     }
 
     const hours   = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
-    const seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+    const seconds = Math.trunc(totalSeconds - (hours * 3600) - (minutes * 60));
 
-    let hoursString, minutesString, secondsString;
-    if (hours   < 10) {hoursString   = '0' + hours.toString(); }
-    if (minutes < 10) {minutesString = '0' + minutes.toString(); }
-    if (seconds < 10) {secondsString = '0' + seconds.toString(); }
+    const hoursString = hours < 10 ? '0' + hours.toString() : hours.toString();
+    const minutesString = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+    const secondsString = seconds < 10 ? '0' + seconds.toString() : seconds.toString();
 
-    if (hours > 0) {
+    if (hours > 0 || fullTime) {
         return hoursString + ':' + minutesString + ':' + secondsString;
     } else if (minutes > 0) {
         return minutesString + ':' + secondsString;
