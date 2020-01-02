@@ -21,7 +21,7 @@ const messageHandler = (
             break;
         }
         case ContentScriptMessageTypeEnum.CheckVideoAvailability: {
-            checkVideoAvailability(request.data, sendResponse);
+            checkVideoAvailability(request.data);
             break;
         }
         default:

@@ -1,0 +1,18 @@
+.tooltip-base {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity .3s ease-out;
+
+    .content {
+        background-color: var(--hover-color);
+        padding: 4px;
+        border-radius: 4px;
+    }
+
+    .tooltip-arrow {
+        position: relative;
+        bottom: 4px;
+        fill: var(--hover-color);
+    }
+}

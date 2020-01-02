@@ -1,4 +1,4 @@
-import { Action, ActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+import { Action, ActionResultEnum, ActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
 import store from '.';
 
 export const removeSubscription = () => {
@@ -22,6 +22,10 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
     const action: Action = {
         type: ActionTypeEnum.SubscribedToVideoEnd,
     };
+    const resultAction: Action = {
+        type: ActionTypeEnum.TriggerTooltip,
+        data: ActionResultEnum.Shutdown,
+    };
 
     try {
         const videoTag = document.getElementsByTagName('video')[0];
@@ -32,9 +36,11 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
         action.data = { success: true, event: func };
         store.dispatch(action);
+        store.dispatch(resultAction);
     } catch {
         action.data = { success: false };
         store.dispatch(action);
+        store.dispatch(resultAction);
         return;
     }
     return;

@@ -9,6 +9,7 @@ export interface AppReducerState {
     selectedApplicationMode: ApplicationModeEnum;
     selectedTime: string;
     event: undefined | any;
+    openActionResultTooltip: ActionResultEnum;
 }
 
 export interface OpenTabsReducerState {
@@ -25,4 +26,11 @@ export interface TabState {
 export enum ApplicationModeEnum {
     VideoPlayer,
     Countdown,
+}
+
+export enum ActionResultEnum {
+    None,
+    Scan,
+    Canceled,
+    Shutdown,
 }

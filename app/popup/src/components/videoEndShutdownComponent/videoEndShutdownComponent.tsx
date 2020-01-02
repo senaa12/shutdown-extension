@@ -75,7 +75,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
         if (subscribedTab !== undefined && subscribedTab > 0) {
             // shutdown is monitored on this tab
             if (activeTabId === subscribedTab) {
-                response = videoPlayerStrings.shutdownSubscribed.thisTab('');
+                response = videoPlayerStrings.shutdownSubscribed.thisTab(`${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`);
             } else {
                 // tslint:disable-next-line: max-line-length
                 response = videoPlayerStrings.shutdownSubscribed.otherTab(this.navigateToSelectedTab, this.state.tabTitle);

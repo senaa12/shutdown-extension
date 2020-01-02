@@ -6,6 +6,7 @@ export enum IconEnum {
     Cancel = 'cancel',
     ScanNow = 'scan',
     OpenDocs = 'docs',
+    Arrow = 'drop-down-arrow',
 }
 
 export enum IconSize {

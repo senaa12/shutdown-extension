@@ -2,7 +2,7 @@ import {applyMiddleware, createStore} from 'redux';
 import logger from 'redux-logger';
 import rootReducer, { rootReducerInitialState } from './reducers/rootReducer';
 
-import { ActionTypeEnum, ContentScriptMessageTypeEnum, Tab } from 'common';
+import { ActionResultEnum, ActionTypeEnum, ContentScriptMessageTypeEnum, Tab } from 'common';
 import { wrapStore } from 'webext-redux';
 
 import messageHandler from './messageHandler';
@@ -28,6 +28,7 @@ chrome.tabs.onRemoved.addListener((tabID: number, removeInfo: chrome.tabs.TabRem
     const subscribedTabID: number = store.getState().appReducer.tabId;
     if (subscribedTabID === tabID) {
         store.dispatch({ type: ActionTypeEnum.RemoveVideoEndSubscription });
+        store.dispatch({ type: ActionTypeEnum.TriggerTooltip, data: ActionResultEnum.Canceled });
     }
 
     store.dispatch({

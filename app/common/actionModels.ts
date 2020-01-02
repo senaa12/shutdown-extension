@@ -11,6 +11,7 @@ export enum ActionTypeEnum {
     RemoveVideoEndSubscription = '@App/REMOVE_VIDEO_SUBSCRIPTON',
     ChangeApplicationState = '@App/CHANGE_APP_STATE',
     ChangeSelectedTime = '@App/CHANGE_SELECTED_TIME',
+    TriggerTooltip = '@App/TRIGGER_TOOLTIP',
 
     CheckTabVideoAvailability = '@Tabs/CHECK_VIDEO_AVAILABILITY',
     UpdateTabInformation = '@Tabs/UPDATE_VIDEO_AVAILABILITY',

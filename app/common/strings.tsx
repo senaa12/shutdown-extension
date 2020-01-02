@@ -11,7 +11,9 @@ export const videoPlayerStrings = {
     </>),
     shutdownSubscribed: {
         thisTab: (timer: string) => (<>
-            Computer will shutdown when video gets to {timer}
+            Computer will shutdown when video gets to
+            <br />
+            <div style={{ margin: '10px', fontWeight: 550, fontSize: '20px'}}>{timer}</div>
         </>),
         otherTab: (onClick: CallbackFunction, tabTitle?: string) => (<>
             Shutdown is already scheduled when video ends at tab:
@@ -19,8 +21,4 @@ export const videoPlayerStrings = {
             <div className='link' onClick={onClick}>{tabTitle}</div>
         </>),
     },
-};
-
-export const scanActionResultString = {
-    noResult: 'No tags found.',
 };

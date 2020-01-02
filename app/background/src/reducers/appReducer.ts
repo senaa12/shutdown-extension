@@ -1,5 +1,5 @@
 import { Action, ActionTypeEnum } from 'common';
-import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
+import { ActionResultEnum, ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
 export const appReducerInitialState: AppReducerState = {
     isEventSubscibed: false,
@@ -7,6 +7,7 @@ export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: ApplicationModeEnum.VideoPlayer,
     selectedTime: '00:00:00',
     event: undefined,
+    openActionResultTooltip: ActionResultEnum.None,
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -41,6 +42,12 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 selectedTime: action.data,
+            };
+        }
+        case ActionTypeEnum.TriggerTooltip: {
+            return {
+                ...state,
+                openActionResultTooltip: action.data,
             };
         }
         default:
