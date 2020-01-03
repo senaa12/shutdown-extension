@@ -7,7 +7,8 @@ export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: ApplicationModeEnum.VideoPlayer,
     selectedTime: '00:00:00',
     event: undefined,
-    openActionResultTooltip: ActionResultEnum.None,
+    actionResultTooltip: ActionResultEnum.None,
+    actionResultTooltipMessage: '',
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -47,7 +48,8 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
         case ActionTypeEnum.TriggerTooltip: {
             return {
                 ...state,
-                openActionResultTooltip: action.data,
+                actionResultTooltip: action.data.type,
+                actionResultTooltipMessage: action.data?.message ?? state.actionResultTooltipMessage,
             };
         }
         default:

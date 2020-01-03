@@ -28,7 +28,13 @@ chrome.tabs.onRemoved.addListener((tabID: number, removeInfo: chrome.tabs.TabRem
     const subscribedTabID: number = store.getState().appReducer.tabId;
     if (subscribedTabID === tabID) {
         store.dispatch({ type: ActionTypeEnum.RemoveVideoEndSubscription });
-        store.dispatch({ type: ActionTypeEnum.TriggerTooltip, data: ActionResultEnum.Canceled });
+        store.dispatch({
+            type: ActionTypeEnum.TriggerTooltip,
+            data: {
+                type: ActionResultEnum.Canceled,
+                message: 'Tab Closed and Shutdown is Canceled',
+            },
+        });
     }
 
     store.dispatch({

@@ -8,13 +8,16 @@ import store from '.';
 export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFunction) => {
     const videoTag = document.getElementsByTagName('video');
     const currentState: TabState = getCurrentTabState(data?.tabID);
+    const shouldSendResponseToPopup: boolean = data?.tabID !== undefined;
 
     const action: Action = {
         type: ActionTypeEnum.CheckTabVideoAvailability,
     };
     const resultAction: Action = {
         type: ActionTypeEnum.TriggerTooltip,
-        data: ActionResultEnum.Scan,
+        data: {
+            type: ActionResultEnum.Scan,
+        },
     };
 
     if (videoTag.length) {
@@ -22,15 +25,27 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             if (!videoTag[0].onloadedmetadata) {
                 videoTag[0].onloadedmetadata = () => checkVideoAvailability({});
             }
-            store.dispatch(resultAction);
+
+            action.data =  {
+                documentHasVideoTag: false,
+                documentHasIFrameTag: false,
+            } as TabState;
+            store.dispatch(action);
+
         } else {
             action.data =  {
                 documentHasVideoTag: true,
                 videoDuration: videoTag[0].duration,
-            };
+            } as TabState;
             store.dispatch(action);
+        }
 
-            if (currentState && currentState.documentHasVideoTag) {
+        if (shouldSendResponseToPopup) {
+            if (videoTag[0].duration && !currentState.documentHasVideoTag) {
+                resultAction.data.message = 'Video forund!';
+                store.dispatch(resultAction);
+            } else {
+                resultAction.data.message = 'no changes';
                 store.dispatch(resultAction);
             }
         }
@@ -44,15 +59,27 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             if (!iframe[0].onloadedmetadata) {
                 iframe[0].onloadedmetadata = () => checkVideoAvailability({});
             }
-            store.dispatch(resultAction);
+
+            action.data =  {
+                documentHasVideoTag: false,
+                documentHasIFrameTag: false,
+            } as TabState;
+            store.dispatch(action);
+
         } else {
             action.data =  {
                 documentHasIFrameTag: true,
                 iframeSource: iframe[0].src,
-            } ;
-
+            } as TabState;
             store.dispatch(action);
-            if (currentState && currentState.iframeSource && currentState.iframeSource === iframe[0].src) {
+        }
+
+        if (shouldSendResponseToPopup) {
+            if (iframe[0].src && !currentState.iframeSource) {
+                resultAction.data.message = 'Iframe found';
+                store.dispatch(resultAction);
+            } else {
+                resultAction.data.message = 'no changes';
                 store.dispatch(resultAction);
             }
         }
@@ -62,9 +89,10 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     action.data =  {
             documentHasVideoTag: false,
             documentHasIFrameTag: false,
-        };
+        } as TabState;
     store.dispatch(action);
-    if (currentState && !currentState.documentHasIFrameTag && !currentState.documentHasVideoTag) {
+    if (shouldSendResponseToPopup && !currentState.documentHasIFrameTag && !currentState.documentHasVideoTag) {
+        resultAction.data.message = 'no changes';
         store.dispatch(resultAction);
     }
 };

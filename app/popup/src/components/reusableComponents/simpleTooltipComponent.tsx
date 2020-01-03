@@ -16,8 +16,8 @@ export interface TooltipComponentProps {
 type PropsWithChildren<P> = P & { children: React.ReactNode };
 
 const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>) => {
+    const [ forceRerender, disableRerender ] = useState(false);
     const [isOpen, setIsOpen] = useState<boolean>(props.isOpen !== undefined ? props.isOpen : false);
-    const className = useMemo(() => 'content ' + props.tooltipClassname, [props.tooltipClassname]);
 
     // default trigger is hover
     useEffect(() => {
@@ -34,10 +34,14 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             if (props.isOpen) {
                 setIsOpen(true);
             } else {
-                setTimeout(() => setIsOpen(false), 300);
+                setTimeout(() => setIsOpen(false), 2300);
             }
         }
     }, [props.isOpen]);
+
+    useEffect(() => {
+        if (forceRerender) { disableRerender(false); }
+    }, [forceRerender]);
 
     // position calculation
     const tooltipRef = useRef(null);
@@ -50,6 +54,9 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
         };
 
         if (!tooltipRef.current || !parentPosition) {
+            // first render
+            if (isOpen && !forceRerender) { disableRerender(true); }
+
             return hidden;
         }
 
@@ -73,8 +80,8 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
     return (
     <>
         <div id={props.id}>{props.children}</div>
-        <div id={props.id + ' content'} ref={tooltipRef} style={calculatePosition()} className={'tooltip-base'}>
-            <div className={className}>{props.content}</div>
+        <div id={props.id + ' content'} ref={tooltipRef} style={calculatePosition()} className={props.tooltipClassname + ' tooltip-base'}>
+            <div className={'content'}>{props.content}</div>
             <Icon iconName={IconEnum.Arrow} iconSize={IconSize.Smallest} className={'tooltip-arrow'} />
         </div>
     </>);

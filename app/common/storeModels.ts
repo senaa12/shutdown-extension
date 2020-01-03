@@ -9,7 +9,8 @@ export interface AppReducerState {
     selectedApplicationMode: ApplicationModeEnum;
     selectedTime: string;
     event: undefined | any;
-    openActionResultTooltip: ActionResultEnum;
+    actionResultTooltip: ActionResultEnum;
+    actionResultTooltipMessage: React.ReactNode;
 }
 
 export interface OpenTabsReducerState {

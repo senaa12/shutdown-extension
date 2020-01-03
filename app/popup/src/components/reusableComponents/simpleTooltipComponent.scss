@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     transition: opacity .3s ease-out;
+    text-align: center;
 
     .content {
         background-color: var(--hover-color);

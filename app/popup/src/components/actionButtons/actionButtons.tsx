@@ -1,5 +1,5 @@
-import { ActionResultEnum, ActionTypeEnum,
-    ApplicationModeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum, RootReducerState, TabState } from 'common';
+import { ActionResultEnum, ApplicationModeEnum, ContentScriptMessage,
+        ContentScriptMessageTypeEnum, RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -9,7 +9,7 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 import { Dispatch } from 'redux';
 import { triggerActionResultTooltip } from '../../actions/actions';
 import messanger from '../../utilities/contentScriptMessaging';
-import app, { AppOwnProps } from '../app';
+import { AppOwnProps } from '../app';
 import './actionButtons.scss';
 
 export interface ActionButtonCustomProps {
@@ -19,6 +19,8 @@ export interface ActionButtonCustomProps {
     tabID: number;
     currentTabID: number;
     selectedTime: string;
+
+    actionResultTooltipContent: React.ReactNode;
     actionResultTooltip: ActionResultEnum;
     triggerActionResultTooltip(newState: ActionResultEnum): void;
 }
@@ -35,15 +37,17 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
         tabID: state.appReducer.tabId,
         isShutdownButtonDisabled: !(tabState?.documentHasVideoTag && !state.appReducer.isEventSubscibed),
         currentTabID: ownProps.currentTabId,
-        actionResultTooltip: state.appReducer.openActionResultTooltip,
+        actionResultTooltip: state.appReducer.actionResultTooltip,
         selectedTime: state.appReducer.selectedTime,
+        actionResultTooltipContent: state.appReducer.actionResultTooltipMessage,
         ...tabState,
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): Partial<ActionButtonProps> => {
     return {
-        triggerActionResultTooltip : (newState: ActionResultEnum) => dispatch(triggerActionResultTooltip(newState)),
+        triggerActionResultTooltip: (newState: ActionResultEnum, mess?: React.ReactNode) =>
+            dispatch(triggerActionResultTooltip(newState, mess)),
     };
 };
 
@@ -54,9 +58,17 @@ class ActionButtons extends React.Component<ActionButtonProps> {
 
     private baseClassName = 'action-button ';
 
+    public componentDidMount() {
+        this.checkToHideTooltip();
+    }
+
     public componentDidUpdate() {
+        this.checkToHideTooltip();
+    }
+
+    private checkToHideTooltip = () => {
         if (this.props.actionResultTooltip) {
-            setTimeout(() => this.props.triggerActionResultTooltip(ActionResultEnum.None), 2000);
+            this.props.triggerActionResultTooltip(ActionResultEnum.None);
         }
     }
 
@@ -75,10 +87,11 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         const onClick = this.props.isShutdownButtonDisabled ? () => {} : shutdown;
         return(
             <SimpleTooltipComponent
-                content={this.props.isEventSubscribed ? 'Complete' : 'Error' }
+                content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Shutdown}
                 id={'shutdown-button'}
                 trigger={'manual'}
+                tooltipClassname={'action-tooltips ' + (this.props.isEventSubscribed ? 'sucess-tooltip' : '')}
             >
                 <ButtonComponent
                         isSelected={false}
@@ -93,27 +106,29 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     }
 
     private renderScanNowButton = () => {
+        const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isEventSubscribed);
         if (this.props.appMode === ApplicationModeEnum.Countdown) {
             return null;
         }
 
         const onClick = () => {
-            const message: ContentScriptMessage = {
-                type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
-                data: { tabID: this.props.currentTabID },
-            };
+            if (!scanDisabled) {
+                const message: ContentScriptMessage = {
+                    type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
+                    data: { tabID: this.props.currentTabID },
+                };
 
-            messanger.sendMessageToActiveTab(message);
+                messanger.sendMessageToActiveTab(message);
+            }
         };
-
-        const className = this.baseClassName +
-            (!(this.props.isShutdownButtonDisabled && !this.props.isEventSubscribed) ? 'disabled' : 'clickable' );
+        const className = this.baseClassName + (scanDisabled ? 'disabled' : 'clickable' );
         return(
             <SimpleTooltipComponent
-                content={'No Changes'}
+                content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Scan}
                 id={'scan-button'}
                 trigger={'manual'}
+                tooltipClassname={'action-tooltips'}
             >
                 <ButtonComponent
                     isSelected={false}
@@ -129,18 +144,21 @@ class ActionButtons extends React.Component<ActionButtonProps> {
 
     private renderClearButton = () => {
         const onClick = () => {
-            const message: ContentScriptMessage = {
-                type: ContentScriptMessageTypeEnum.RemoveSubscription,
-            };
-            messanger.sendMessageToTab(this.props.tabID, message);
+            if (this.props.isEventSubscribed) {
+                const message: ContentScriptMessage = {
+                    type: ContentScriptMessageTypeEnum.RemoveSubscription,
+                };
+                messanger.sendMessageToTab(this.props.tabID, message);
+            }
         };
         const className = this.baseClassName + (this.props.isEventSubscribed ? 'clickable' : 'disabled');
         return (
             <SimpleTooltipComponent
-                content={'Shutdown Canceled'}
+                content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Canceled}
                 id={'cancel-button'}
                 trigger={'manual'}
+                tooltipClassname={'action-tooltips cancel'}
             >
                 <ButtonComponent
                     isSelected={false}

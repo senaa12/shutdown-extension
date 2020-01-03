@@ -6,6 +6,15 @@ export const removeSubscription = () => {
     clearInterval(event);
 
     store.dispatch({ type: ActionTypeEnum.RemoveVideoEndSubscription });
+
+    const resultAction: Action = {
+        type: ActionTypeEnum.TriggerTooltip,
+        data: {
+            type: ActionResultEnum.Canceled,
+            message: 'cancel',
+        },
+    };
+    store.dispatch(resultAction);
 };
 
 export const checkVideoForShutdown = (selectedTime: number) => {
@@ -24,7 +33,9 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
     };
     const resultAction: Action = {
         type: ActionTypeEnum.TriggerTooltip,
-        data: ActionResultEnum.Shutdown,
+        data: {
+            type: ActionResultEnum.Shutdown,
+        },
     };
 
     try {
@@ -36,12 +47,18 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
         action.data = { success: true, event: func };
         store.dispatch(action);
+
+        resultAction.data.message = 'Complete';
         store.dispatch(resultAction);
-    } catch {
+    } catch (e) {
+        // tslint:disable-next-line: no-console
+        console.error(e);
+
         action.data = { success: false };
         store.dispatch(action);
+
+        resultAction.data.message = 'Failed';
         store.dispatch(resultAction);
-        return;
     }
     return;
 };

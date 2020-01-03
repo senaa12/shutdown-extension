@@ -8,3 +8,18 @@
         font-size: var(--small-font-size);
     }
 }
+
+.action-tooltips {
+    max-width: 82px;
+}
+
+.action-tooltips.cancel {
+    max-width: 130px;
+}
+
+.sucess-tooltip {
+    color: var(--white);
+    font-weight: 500;
+    .content { background-color: var(--green); }
+    .tooltip-arrow { fill: var(--green); }
+}
