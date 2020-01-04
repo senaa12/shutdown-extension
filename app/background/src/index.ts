@@ -2,7 +2,7 @@ import {applyMiddleware, createStore} from 'redux';
 import logger from 'redux-logger';
 import rootReducer, { rootReducerInitialState } from './reducers/rootReducer';
 
-import { ActionResultEnum, ActionTypeEnum, ContentScriptMessageTypeEnum, Tab } from 'common';
+import { ActionResultEnum, actionResultsStrings, ActionTypeEnum, ContentScriptMessageTypeEnum, Tab } from 'common';
 import { wrapStore } from 'webext-redux';
 
 import messageHandler from './messageHandler';
@@ -32,7 +32,7 @@ chrome.tabs.onRemoved.addListener((tabID: number, removeInfo: chrome.tabs.TabRem
             type: ActionTypeEnum.TriggerTooltip,
             data: {
                 type: ActionResultEnum.Canceled,
-                message: 'Tab Closed and Shutdown is Canceled',
+                message: actionResultsStrings.cancel.canceledInBackground,
             },
         });
     }

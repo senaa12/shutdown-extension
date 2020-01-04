@@ -23,3 +23,10 @@
     .content { background-color: var(--green); }
     .tooltip-arrow { fill: var(--green); }
 }
+
+.error-tooltip {
+    color: var(--white);
+    font-weight: 500;
+    .content { background-color: var(--red); }
+    .tooltip-arrow { fill: var(--red); }
+}

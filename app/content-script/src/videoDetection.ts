@@ -1,5 +1,6 @@
 import { Action,
     ActionResultEnum,
+    actionResultsStrings,
     ActionTypeEnum,
     CallbackFunction,
     TabState} from 'common';
@@ -42,10 +43,10 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
         if (shouldSendResponseToPopup) {
             if (videoTag[0].duration && !currentState.documentHasVideoTag) {
-                resultAction.data.message = 'Video forund!';
+                resultAction.data.message = actionResultsStrings.scanNow.videoFound;
                 store.dispatch(resultAction);
             } else {
-                resultAction.data.message = 'no changes';
+                resultAction.data.message = actionResultsStrings.scanNow.noChanges;
                 store.dispatch(resultAction);
             }
         }
@@ -76,10 +77,10 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
         if (shouldSendResponseToPopup) {
             if (iframe[0].src && !currentState.iframeSource) {
-                resultAction.data.message = 'Iframe found';
+                resultAction.data.message = actionResultsStrings.scanNow.iFrameFound;
                 store.dispatch(resultAction);
             } else {
-                resultAction.data.message = 'no changes';
+                resultAction.data.message = actionResultsStrings.scanNow.noChanges;
                 store.dispatch(resultAction);
             }
         }
@@ -91,8 +92,8 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             documentHasIFrameTag: false,
         } as TabState;
     store.dispatch(action);
-    if (shouldSendResponseToPopup && !currentState.documentHasIFrameTag && !currentState.documentHasVideoTag) {
-        resultAction.data.message = 'no changes';
+    if (shouldSendResponseToPopup) {
+        resultAction.data.message = actionResultsStrings.scanNow.noChanges;
         store.dispatch(resultAction);
     }
 };

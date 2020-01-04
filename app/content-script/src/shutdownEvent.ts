@@ -1,6 +1,8 @@
-import { Action, ActionResultEnum, ActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+import { Action, ActionResultEnum, actionResultsStrings,
+    ActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
 import store from '.';
 
+// remove
 export const removeSubscription = () => {
     const event = store.getState().appReducer.event;
     clearInterval(event);
@@ -11,19 +13,21 @@ export const removeSubscription = () => {
         type: ActionTypeEnum.TriggerTooltip,
         data: {
             type: ActionResultEnum.Canceled,
-            message: 'cancel',
+            message: actionResultsStrings.cancel.canceled,
         },
     };
     store.dispatch(resultAction);
 };
 
+// setters
 export const checkVideoForShutdown = (selectedTime: number) => {
     const videoTag = document.getElementsByTagName('video')[0];
-    if (videoTag.currentTime + selectedTime > videoTag.duration) {
+    if (videoTag.currentTime > selectedTime) {
         const message = {
             type: BackgroundMessageTypeEnum.ShutdownComputer,
         };
-        chrome.runtime.sendMessage(message);
+        chrome.runtime.sendMessage(message, (mess: string) => alert(mess));
+        removeSubscription();
     }
 };
 
@@ -41,14 +45,14 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
     try {
         const videoTag = document.getElementsByTagName('video')[0];
         const seconds = calculateSeconds(selectedTime);
-        if (videoTag.currentTime + seconds > videoTag.duration) {
+        if (videoTag.currentTime > seconds) {
             throw new Error('not valid time');
         }
         const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
         action.data = { success: true, event: func };
         store.dispatch(action);
 
-        resultAction.data.message = 'Complete';
+        resultAction.data.message = actionResultsStrings.shutdown.success;
         store.dispatch(resultAction);
     } catch (e) {
         // tslint:disable-next-line: no-console
@@ -57,7 +61,7 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         action.data = { success: false };
         store.dispatch(action);
 
-        resultAction.data.message = 'Failed';
+        resultAction.data.message = actionResultsStrings.shutdown.failed;
         store.dispatch(resultAction);
     }
     return;

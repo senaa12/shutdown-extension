@@ -22,3 +22,19 @@ export const videoPlayerStrings = {
         </>),
     },
 };
+
+export const actionResultsStrings = {
+    scanNow: {
+        noChanges: 'No Changes',
+        iFrameFound: 'IFrame ound',
+        videoFound: 'Video Found!',
+    },
+    shutdown: {
+        success: 'Success',
+        failed: 'Failed',
+    },
+    cancel: {
+        canceledInBackground: 'Tab was Closed and Shutdown is canceled',
+        canceled: 'Canceled',
+    },
+};

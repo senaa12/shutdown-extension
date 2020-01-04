@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -9,7 +9,6 @@ export interface TooltipComponentProps {
     tooltipClassname?: string;
     isOpen?: boolean;
     trigger?: 'hover' | 'manual';
-    id: string;
     tooltipStyle?: React.CSSProperties;
 }
 
@@ -17,16 +16,23 @@ type PropsWithChildren<P> = P & { children: React.ReactNode };
 
 const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>) => {
     const [ forceRerender, disableRerender ] = useState(false);
+
     const [isOpen, setIsOpen] = useState<boolean>(props.isOpen !== undefined ? props.isOpen : false);
+    const [transitionInProgress, setTransitionInProgress] = useState(false);
+    const setTransitionToFalse = useCallback(() => setTransitionInProgress(false), []);
+    const hideTooltip = useCallback(() => { setTransitionInProgress(true); setIsOpen(false); }, []);
+
+    const parentRef = useRef(null);
+    const tooltipRef = useRef(null);
 
     // default trigger is hover
     useEffect(() => {
-        if ((!props.trigger || props.trigger === 'hover') && tooltipRef.current) {
-            document.getElementById(props.id)?.addEventListener('mouseover', () => setIsOpen(true));
-            document.getElementById(props.id)?.addEventListener('mouseleave',
-                () => setTimeout(() => setIsOpen(false), 100));
+        if ((!props.trigger || props.trigger === 'hover') && parentRef.current) {
+            (parentRef.current as unknown as HTMLElement).addEventListener('mouseover', () => setIsOpen(true));
+            (parentRef.current as unknown as HTMLElement).addEventListener('mouseleave',
+                () => setTimeout(hideTooltip, 100));
         }
-    }, [props.trigger] );
+    }, [props.trigger, parentRef.current] );
 
     // maual triggering
     useEffect(() => {
@@ -34,32 +40,32 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             if (props.isOpen) {
                 setIsOpen(true);
             } else {
-                setTimeout(() => setIsOpen(false), 2300);
+                setTimeout(hideTooltip, 2300);
             }
         }
     }, [props.isOpen]);
 
+    // first render
     useEffect(() => {
         if (forceRerender) { disableRerender(false); }
     }, [forceRerender]);
 
     // position calculation
-    const tooltipRef = useRef(null);
     const calculatePosition = (): React.CSSProperties => {
-        const parentPosition = document.getElementById(props.id)?.getBoundingClientRect();
         const hidden: React.CSSProperties = {
             opacity: 0,
             position: 'absolute',
             pointerEvents: 'none',
         };
 
-        if (!tooltipRef.current || !parentPosition) {
+        if (!tooltipRef.current || !parentRef.current) {
             // first render
             if (isOpen && !forceRerender) { disableRerender(true); }
 
             return hidden;
         }
 
+        const parentPosition = (parentRef.current as unknown as HTMLElement).getBoundingClientRect();
         const renderedTooltiop = (tooltipRef.current as unknown as HTMLElement).getBoundingClientRect();
         if (!isOpen) {
             return {
@@ -79,11 +85,18 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
 
     return (
     <>
-        <div id={props.id}>{props.children}</div>
-        <div id={props.id + ' content'} ref={tooltipRef} style={calculatePosition()} className={props.tooltipClassname + ' tooltip-base'}>
-            <div className={'content'}>{props.content}</div>
-            <Icon iconName={IconEnum.Arrow} iconSize={IconSize.Smallest} className={'tooltip-arrow'} />
-        </div>
+        <div ref={parentRef}>{props.children}</div>
+        {(isOpen || transitionInProgress) &&
+            <div
+                ref={tooltipRef}
+                style={calculatePosition()}
+                onTransitionEnd={setTransitionToFalse}
+                className={props.tooltipClassname + ' tooltip-base'}
+            >
+                    <div className={'content'}>{props.content}</div>
+                    <Icon iconName={IconEnum.Arrow} iconSize={IconSize.Smallest} className={'tooltip-arrow'} />
+            </div>
+        }
     </>);
 };
 

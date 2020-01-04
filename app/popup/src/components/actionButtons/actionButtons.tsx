@@ -89,9 +89,8 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Shutdown}
-                id={'shutdown-button'}
                 trigger={'manual'}
-                tooltipClassname={'action-tooltips ' + (this.props.isEventSubscribed ? 'sucess-tooltip' : '')}
+                tooltipClassname={'action-tooltips ' + (this.props.isEventSubscribed ? 'sucess-tooltip' : 'error-tooltip')}
             >
                 <ButtonComponent
                         isSelected={false}
@@ -126,7 +125,6 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Scan}
-                id={'scan-button'}
                 trigger={'manual'}
                 tooltipClassname={'action-tooltips'}
             >
@@ -156,9 +154,8 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Canceled}
-                id={'cancel-button'}
                 trigger={'manual'}
-                tooltipClassname={'action-tooltips cancel'}
+                tooltipClassname={'action-tooltips cancel error-tooltip'}
             >
                 <ButtonComponent
                     isSelected={false}

@@ -1,4 +1,5 @@
 import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
+import { shutdownFunction } from './messageHandlers/shutdown';
 
 const messageHandler = (
     request: BackgroundMessage,
@@ -6,10 +7,8 @@ const messageHandler = (
     sendResponse: CallbackFunction) => {
         switch (request.type) {
             case BackgroundMessageTypeEnum.ShutdownComputer: {
-                // const port = chrome.runtime.connectNative('sena.test.app');
-                // port.postMessage({ text: 'sena,m'});
-                // port.onMessage.addListener((resp) => { console.log(resp) })
-                return;
+                shutdownFunction(sendResponse);
+                break;
             }
             default: {
                 throw new Error('message handler not defined');
