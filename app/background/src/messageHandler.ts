@@ -1,5 +1,5 @@
 import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
-import nativeCommunicationService from './nativeCommunicationService';
+import nativeCommunicationService from './nativeCommunicationService/nativeCommunicationService';
 
 const messageHandler = (
     request: BackgroundMessage,

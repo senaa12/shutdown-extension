@@ -23,6 +23,18 @@ export const videoPlayerStrings = {
     },
 };
 
+export const title = 'AUTO-SHUTDOWN EXTENSION';
+
+export const links = {
+    docs: 'http://www.google.hr',
+};
+
+export const hostNotActive = () => (
+    <>
+        NOT AVAILABLE
+    </>
+);
+
 export const actionResultsStrings = {
     scanNow: {
         noChanges: 'No Changes',

@@ -25,8 +25,8 @@ int main(){
 
 
         // Now we can output our message
-        if (msg == "{\"text\":\"#STOP#\"}"){
-            message = "{\"text\":\"EXITING...\"}";
+        if (msg == "{\"text\":\"#PING#\"}"){
+            message = "{\"isActive\":\"true\"}";
             
             sendMessage(message);
             break;

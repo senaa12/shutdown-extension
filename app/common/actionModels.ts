@@ -12,6 +12,7 @@ export enum ActionTypeEnum {
     ChangeApplicationState = '@App/CHANGE_APP_STATE',
     ChangeSelectedTime = '@App/CHANGE_SELECTED_TIME',
     TriggerTooltip = '@App/TRIGGER_TOOLTIP',
+    IsHostActiveCheck = '@App/IS_HOST_ACTIVE',
 
     CheckTabVideoAvailability = '@Tabs/CHECK_VIDEO_AVAILABILITY',
     UpdateTabInformation = '@Tabs/UPDATE_VIDEO_AVAILABILITY',

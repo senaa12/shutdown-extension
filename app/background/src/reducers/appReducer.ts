@@ -9,6 +9,7 @@ export const appReducerInitialState: AppReducerState = {
     event: undefined,
     actionResultTooltip: ActionResultEnum.None,
     actionResultTooltipMessage: '',
+    isHostAppActive: false,
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -50,6 +51,12 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
                 ...state,
                 actionResultTooltip: action.data.type,
                 actionResultTooltipMessage: action.data?.message ?? state.actionResultTooltipMessage,
+            };
+        }
+        case ActionTypeEnum.IsHostActiveCheck: {
+            return {
+                ...state,
+                isHostAppActive: action.data,
             };
         }
         default:

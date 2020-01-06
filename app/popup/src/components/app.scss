@@ -8,5 +8,12 @@
         flex-grow: 1;
         width: 100%;
         padding: 5px;
+
+        .inactive-host-message {
+            display: flex;
+            justify-content: center;
+            height: 100%;
+            align-items: center;
+        }
     }
 }

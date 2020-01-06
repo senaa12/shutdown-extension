@@ -26,7 +26,9 @@ export const checkVideoForShutdown = (selectedTime: number) => {
         const message = {
             type: BackgroundMessageTypeEnum.ShutdownComputer,
         };
-        chrome.runtime.sendMessage(message, (mess: string) => alert(mess));
+        chrome.runtime.sendMessage(message,
+            // ,(mess: string) => alert(mess)
+            );
         removeSubscription();
     }
 };

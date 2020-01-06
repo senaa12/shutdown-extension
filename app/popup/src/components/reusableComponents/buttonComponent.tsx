@@ -12,16 +12,19 @@ export interface CustomButtonProps {
     className: string;
     tooltip?: string;
     iconSize?: IconSize;
+    disabled?: boolean;
 }
 
 const buttonComponent = (props: CustomButtonProps) => {
     let className = 'button-base ' + props.className;
     className += props.isSelected ? ' selected' : '';
+    className += props.disabled ? ' disabled' : '';
     return(
         <div
             title={props.tooltip}
             className={className}
-            onClick={props.onClick}
+            // tslint:disable-next-line: no-empty
+            onClick={!props.disabled ? props.onClick : () => {}}
         >
             <div>
                 <Icon

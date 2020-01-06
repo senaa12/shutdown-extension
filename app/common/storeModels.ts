@@ -4,6 +4,7 @@ export interface RootReducerState {
 }
 
 export interface AppReducerState {
+    isHostAppActive: boolean;
     isEventSubscibed: boolean;
     tabId: number;
     selectedApplicationMode: ApplicationModeEnum;

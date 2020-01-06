@@ -9,12 +9,14 @@ import './menuButtons.scss';
 
 export interface MenuButtonsProps {
     selectedMode: ApplicationModeEnum;
+    isHostAppActive: boolean;
     changeSelectedMode(newMode: ApplicationModeEnum): void;
 }
 
 const mapStateToProps = (state: RootReducerState, ownProps: any): Partial<MenuButtonsProps> => {
     return {
         selectedMode: state.appReducer.selectedApplicationMode,
+        isHostAppActive: state.appReducer.isHostAppActive,
     };
 };
 
@@ -30,22 +32,25 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
     }
 
     public render() {
+        const { selectedMode, isHostAppActive, changeSelectedMode } = this.props;
         return(
             <div className='menu-buttons-wrapper'>
                 <ButtonComponent
-                    isSelected={this.props.selectedMode === ApplicationModeEnum.VideoPlayer}
+                    isSelected={isHostAppActive && selectedMode === ApplicationModeEnum.VideoPlayer}
                     label={'Video Player'}
-                    onClick={() => this.props.changeSelectedMode(ApplicationModeEnum.VideoPlayer)}
+                    onClick={() => changeSelectedMode(ApplicationModeEnum.VideoPlayer)}
                     icon={IconEnum.VideoPlayer}
                     className={'custom-button clickable'}
                     iconSize={IconSize.Normal}
+                    disabled={!isHostAppActive}
                 />
                 <ButtonComponent
-                    isSelected={this.props.selectedMode === ApplicationModeEnum.Countdown}
+                    isSelected={isHostAppActive && selectedMode === ApplicationModeEnum.Countdown}
                     label={'Countdown'}
-                    onClick={() => this.props.changeSelectedMode(ApplicationModeEnum.Countdown)}
+                    onClick={() => changeSelectedMode(ApplicationModeEnum.Countdown)}
                     icon={IconEnum.Countdown}
                     className={'custom-button clickable'}
+                    disabled={!isHostAppActive}
                 />
                 <div className={'triggers-label'}>{'Choose Trigger'}</div>
             </div>

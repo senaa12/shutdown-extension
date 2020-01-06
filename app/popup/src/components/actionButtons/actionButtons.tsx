@@ -1,5 +1,5 @@
 import { ActionResultEnum, ApplicationModeEnum, ContentScriptMessage,
-        ContentScriptMessageTypeEnum, RootReducerState, TabState } from 'common';
+        ContentScriptMessageTypeEnum, links, RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -19,6 +19,7 @@ export interface ActionButtonCustomProps {
     tabID: number;
     currentTabID: number;
     selectedTime: string;
+    isHostAppActive: boolean;
 
     actionResultTooltipContent: React.ReactNode;
     actionResultTooltip: ActionResultEnum;
@@ -40,6 +41,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
         actionResultTooltip: state.appReducer.actionResultTooltip,
         selectedTime: state.appReducer.selectedTime,
         actionResultTooltipContent: state.appReducer.actionResultTooltipMessage,
+        isHostAppActive: state.appReducer.isHostAppActive,
         ...tabState,
     };
 };
@@ -99,6 +101,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                         onClick={onClick}
                         icon={IconEnum.PowerButton}
                         iconSize={IconSize.Smallest}
+                        disabled={!this.props.isHostAppActive}
             />
             </SimpleTooltipComponent>
         );
@@ -135,6 +138,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     onClick={onClick}
                     icon={IconEnum.ScanNow}
                     iconSize={IconSize.Smallest}
+                    disabled={!this.props.isHostAppActive}
                 />
             </SimpleTooltipComponent>
         );
@@ -164,13 +168,14 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     onClick={onClick}
                     icon={IconEnum.Cancel}
                     iconSize={IconSize.Smallest}
+                    disabled={!this.props.isHostAppActive}
                 />
             </SimpleTooltipComponent>
         );
     }
 
     private renderDocsButton = () => {
-        const onClick = () => {};
+        const onClick = () => chrome.tabs.create({ url: `${links.docs}` });
         return (
                 <ButtonComponent
                     isSelected={false}
