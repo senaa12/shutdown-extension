@@ -24,6 +24,10 @@ const messageHandler = (
             checkVideoAvailability(request.data);
             break;
         }
+        case ContentScriptMessageTypeEnum.TriggerAlert: {
+            alert(request.data);
+            break;
+        }
         default:
             throw new Error('Handler for message is not defined!');
     }

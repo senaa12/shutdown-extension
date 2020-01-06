@@ -1,22 +1,20 @@
 echo Setting up
 @echo off
 
-MKDIR C:\\sena
+MKDIR %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host
 
-REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\sena.test.app" /ve /t REG_SZ /d "C:\\sena\\sena.test.app.json" /f
+REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\shutdown.extension.host" /ve /t REG_SZ /d "%LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json" /f
 
-@echo { > C:\sena\sena.test.app.json
-@echo   "name": "sena.test.app", >> C:\sena\sena.test.app.json
-@echo   "description": "Netflix Autoplay Host App", >> C:\sena\sena.test.app.json
-@echo   "path": "C:\\sena\\execution.bat", >> C:\sena\sena.test.app.json
-@echo   "type": "stdio", >> C:\sena\sena.test.app.json
-@echo   "allowed_origins": [ >> C:\sena\sena.test.app.json
-@echo     "chrome-extension://cmjdonahhpghnpcocbmkfhplfgjccjfe/" >> C:\sena\sena.test.app.json
-@echo   ] >> C:\sena\sena.test.app.json
-@echo } >> C:\sena\sena.test.app.json
+@echo { > %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo   "name": "shutdown.extension.host", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo   "description": "Chrome Shutdown-Extension host app.", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo   "path": "shutdown.extension.host.exe", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo   "type": "stdio", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo   "allowed_origins": [ >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo     "chrome-extension://cmjdonahhpghnpcocbmkfhplfgjccjfe/" >>%LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo   ] >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
+@echo } >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
 
-@echo @echo off >> C:\sena\shutdown.bat
-@echo pause >> C:\sena\shutdown.bat
-
+copy shutdown.extension.host.exe %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host
 echo Setup Complete
 pause

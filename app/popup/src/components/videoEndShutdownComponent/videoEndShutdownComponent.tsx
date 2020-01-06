@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
 import InputTimeComponent from '../reusableComponents/inputTimeComponent';
+import LoadingComponent from '../reusableComponents/loadingComponent';
 import './videoEndShutdownComponent.scss';
 
 interface VideoEndShutdownComponentState {
@@ -67,7 +68,11 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
     private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.iframeSource });
 
     private renderContent = () => {
-        const { activeTabId, documentHasVideoTag, documentHasIFrameTag, subscribedTab } = this.props;
+        const { activeTabId,
+            documentHasVideoTag,
+            documentHasIFrameTag,
+            subscribedTab,
+            waitingForFirstLoad } = this.props;
         let response;
         let isDisabledState = true;
 
@@ -97,7 +102,8 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
             </>;
         } else if (documentHasIFrameTag) {
             response = videoPlayerStrings.iframeAvailable(this.navigateToIframeSource);
-
+        } else if (waitingForFirstLoad) {
+            response = <LoadingComponent />;
         } else {
             response =  videoPlayerStrings.notAvailable;
         }

@@ -26,7 +26,7 @@ export const videoPlayerStrings = {
 export const actionResultsStrings = {
     scanNow: {
         noChanges: 'No Changes',
-        iFrameFound: 'IFrame ound',
+        iFrameFound: 'New IFrame found',
         videoFound: 'Video Found!',
     },
     shutdown: {

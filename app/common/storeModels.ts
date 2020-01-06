@@ -22,6 +22,7 @@ export interface TabState {
     videoDuration: number;
     documentHasIFrameTag: boolean;
     iframeSource: string;
+    waitingForFirstLoad: boolean;
 }
 
 export enum ApplicationModeEnum {

@@ -12,6 +12,7 @@ export enum ContentScriptMessageTypeEnum {
     SubscribeToVideoEnd,
     RemoveSubscription,
     CheckVideoAvailability,
+    TriggerAlert,
 }
 
 // content-script => bacground messaging

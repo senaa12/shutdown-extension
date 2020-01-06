@@ -9,7 +9,7 @@ import store from '.';
 export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFunction) => {
     const videoTag = document.getElementsByTagName('video');
     const currentState: TabState = getCurrentTabState(data?.tabID);
-    const shouldSendResponseToPopup: boolean = data?.tabID !== undefined;
+    const shouldSendResponseToPopup: boolean = !!data?.showResponse;
 
     const action: Action = {
         type: ActionTypeEnum.CheckTabVideoAvailability,
@@ -28,8 +28,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             }
 
             action.data =  {
-                documentHasVideoTag: false,
-                documentHasIFrameTag: false,
+                waitingForFirstLoad: true,
             } as TabState;
             store.dispatch(action);
 
@@ -42,7 +41,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         }
 
         if (shouldSendResponseToPopup) {
-            if (videoTag[0].duration && !currentState.documentHasVideoTag) {
+            if (videoTag[0].duration && !currentState?.documentHasVideoTag) {
                 resultAction.data.message = actionResultsStrings.scanNow.videoFound;
                 store.dispatch(resultAction);
             } else {
@@ -54,16 +53,15 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     }
 
     // maybe video tag does not exist but IFrame exists on page
-    const iframe = document.getElementsByTagName('iframe');
+    const iframe = Array.from(document.getElementsByTagName('iframe')).filter((ifr) => ifr.src);
     if (iframe.length) {
-        if (!iframe[0].src) {
-            if (!iframe[0].onloadedmetadata) {
-                iframe[0].onloadedmetadata = () => checkVideoAvailability({});
+        if (iframe[0].src === currentState?.iframeSource || !iframe[0].src) {
+            if (!iframe[0].onload) {
+                iframe[0].onload = () => checkVideoAvailability({ showResponse: true });
             }
 
             action.data =  {
-                documentHasVideoTag: false,
-                documentHasIFrameTag: false,
+                waitingForFirstLoad: true,
             } as TabState;
             store.dispatch(action);
 
@@ -76,7 +74,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         }
 
         if (shouldSendResponseToPopup) {
-            if (iframe[0].src && !currentState.iframeSource) {
+            if (iframe[0].src && (!currentState?.iframeSource || iframe[0].src !== currentState?.iframeSource)) {
                 resultAction.data.message = actionResultsStrings.scanNow.iFrameFound;
                 store.dispatch(resultAction);
             } else {

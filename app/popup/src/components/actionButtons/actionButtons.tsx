@@ -114,7 +114,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             if (!scanDisabled) {
                 const message: ContentScriptMessage = {
                     type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
-                    data: { tabID: this.props.currentTabID },
+                    data: { tabID: this.props.currentTabID, showResponse: true },
                 };
 
                 messanger.sendMessageToActiveTab(message);
