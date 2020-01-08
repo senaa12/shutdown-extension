@@ -3,6 +3,7 @@ import logger from 'redux-logger';
 import rootReducer, { rootReducerInitialState } from './reducers/rootReducer';
 
 import { wrapStore } from 'webext-redux';
+import { connecToNativeApp } from './utilities/nativeCommunication';
 import { onRemoved, onUpdated } from './utilities/tabsManipulation';
 
 import messageHandler from './messageHandler';
@@ -14,3 +15,5 @@ export default wrapStore(store);
 
 chrome.tabs.onUpdated.addListener(onUpdated);
 chrome.tabs.onRemoved.addListener(onRemoved);
+
+connecToNativeApp();

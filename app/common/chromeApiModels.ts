@@ -13,6 +13,7 @@ export enum ContentScriptMessageTypeEnum {
     RemoveSubscription,
     CheckVideoAvailability,
     TriggerAlert,
+    CheckNativeApp,
 }
 
 // content-script => bacground messaging
@@ -23,6 +24,7 @@ export interface BackgroundMessage {
 
 export enum BackgroundMessageTypeEnum {
     ShutdownComputer,
+    CheckNativeApp,
 }
 
 // webext-redux sender type

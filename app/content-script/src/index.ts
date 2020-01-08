@@ -4,7 +4,7 @@ import {
     ContentScriptMessageTypeEnum,
     MessageSender } from 'common';
 import { Store } from 'webext-redux';
-import { removeSubscription, SubscribeToVideoEnd } from './shutdownEvent';
+import { checkNativeApp, removeSubscription, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 
 const messageHandler = (
@@ -26,6 +26,10 @@ const messageHandler = (
         }
         case ContentScriptMessageTypeEnum.TriggerAlert: {
             alert(request.data);
+            break;
+        }
+        case ContentScriptMessageTypeEnum.CheckNativeApp: {
+            checkNativeApp();
             break;
         }
         default:

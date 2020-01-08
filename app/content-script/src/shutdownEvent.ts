@@ -68,3 +68,11 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
     }
     return;
 };
+
+export const checkNativeApp = () => {
+    const message = {
+        type: BackgroundMessageTypeEnum.CheckNativeApp,
+    };
+
+    chrome.runtime.sendMessage(message);
+};

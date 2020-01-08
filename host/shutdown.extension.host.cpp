@@ -4,7 +4,7 @@
 void sendMessage(std::string);
 
 int main(){
-    while (1){
+    //while (1){
         unsigned int length = 0;
 
         //read the first four bytes (=> Length)
@@ -29,7 +29,6 @@ int main(){
             message = "{\"isActive\":\"true\"}";
             
             sendMessage(message);
-            break;
         }
         else if (msg == "{\"text\":\"#SHUTDOWN#\"}") {
         	system("c:\\windows\\system32\\shutdown /s /t 1 /f \n\n");
@@ -39,7 +38,7 @@ int main(){
 			message = "{\"text\":\"You need to define reciever.\"}";
 			sendMessage(message);	
 		}
-    }
+    //}
 
     return 0;
 }

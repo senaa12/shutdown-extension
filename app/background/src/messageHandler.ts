@@ -1,5 +1,5 @@
 import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
-import nativeCommunicationService from './nativeCommunicationService/nativeCommunicationService';
+import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 
 const messageHandler = (
     request: BackgroundMessage,
@@ -7,7 +7,11 @@ const messageHandler = (
     sendResponse: CallbackFunction) => {
         switch (request.type) {
             case BackgroundMessageTypeEnum.ShutdownComputer: {
-                nativeCommunicationService.shutdownCommand(sendResponse);
+                shutdownCommand(sendResponse);
+                break;
+            }
+            case BackgroundMessageTypeEnum.CheckNativeApp: {
+                connecToNativeApp();
                 break;
             }
             default: {
