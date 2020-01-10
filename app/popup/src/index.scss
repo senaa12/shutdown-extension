@@ -13,6 +13,12 @@ body {
     font-family: 'Karla', sans-serif;
     font-size: var(--normal-font-size);
 
+    // disable selection
+    -webkit-user-select: none;
+    -moz-user-select: none;   
+    -ms-user-select: none;    
+    user-select: none;     
+
     input:focus,
     select:focus,
     textarea:focus,

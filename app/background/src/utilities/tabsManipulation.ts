@@ -1,13 +1,14 @@
-import { ActionResultEnum, actionResultsStrings, ActionTypeEnum, ContentScriptMessageTypeEnum, Tab } from 'common';
+import { ActionResultActionTypeEnum, ActionResultEnum, actionResultsStrings,
+    AppActionTypeEnum, ContentScriptMessageTypeEnum, Tab, TabsActionTypeEnum } from 'common';
 import { store } from '..';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
     console.log('removed');
-    const subscribedTabID: number = store.getState().appReducer.tabId;
+    const subscribedTabID: number = store.getState().appReducer.isShutdownEventScheduled;
     if (subscribedTabID === tabID) {
-        store.dispatch({ type: ActionTypeEnum.RemoveVideoEndSubscription });
+        store.dispatch({ type: AppActionTypeEnum.RemoveVideoEndSubscription });
         store.dispatch({
-            type: ActionTypeEnum.TriggerTooltip,
+            type: ActionResultActionTypeEnum.TriggerTooltip,
             data: {
                 type: ActionResultEnum.Canceled,
                 message: actionResultsStrings.cancel.canceledInBackground,
@@ -16,7 +17,7 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
     }
 
     store.dispatch({
-        type: ActionTypeEnum.RemoveTab,
+        type: TabsActionTypeEnum.RemoveTab,
         data: {
             tab: tabID,
         },

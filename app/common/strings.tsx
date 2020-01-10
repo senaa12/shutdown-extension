@@ -23,6 +23,10 @@ export const videoPlayerStrings = {
     },
 };
 
+export const countdownStrings = {
+    description: 'this is countdown component',
+};
+
 export const title = 'AUTO-SHUTDOWN EXTENSION';
 export const nativeAppTitle = 'shutdown.extension.host';
 
@@ -30,6 +34,7 @@ export const links = {
     docs: 'http://www.google.hr',
 };
 
+// https://codepen.io/tobiasglaus/pen/oZJdZY
 export const hostNotActive = () => (
     <>
         NOT AVAILABLE

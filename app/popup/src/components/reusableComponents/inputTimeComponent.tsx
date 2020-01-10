@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { calculateSeconds } from 'common';
 import './inputTimeComponent.scss';
+import TimeInput from './timeInput';
 
 export interface InputTimeComponentProps {
     value: string;
@@ -14,22 +14,6 @@ export interface InputTimeComponentProps {
 }
 
 const inputTimeComponent = (props: InputTimeComponentProps) => {
-    const [ time, changeTime ] = React.useState(props.value);
-
-    const onChange = (e) => {
-        if (props.maxValue && calculateSeconds(props.maxValue) < calculateSeconds(e.target.value)) {
-            changeTime(props.maxValue);
-        } else {
-            changeTime(e.target.value);
-        }
-    };
-
-    React.useEffect(() => {
-        if (props.onChange) {
-            props.onChange(time.length < 7 ? time + ':00' : time);
-        }
-    }, [time]);
-
     const wrapperClassname = React.useMemo(() => (
         'input-time-holder ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
     ), []);
@@ -41,13 +25,11 @@ const inputTimeComponent = (props: InputTimeComponentProps) => {
     return (
         <div className={wrapperClassname}>
             {props.label && <div className={labelClassname}>{props.label}</div>}
-            <input
-                type={'time'}
-                step={'1'}
-                className={props.isDisabled ? 'time-selector disabled' : 'time-selector'}
-                disabled={props.isDisabled}
-                onChange={onChange}
-                value={time}
+            <TimeInput
+                value={props.value}
+                onChange={props.onChange}
+                fontSize={30}
+                maxValue={props.maxValue}
             />
         </div>
     );

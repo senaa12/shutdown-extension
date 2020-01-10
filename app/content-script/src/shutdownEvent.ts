@@ -1,5 +1,5 @@
-import { Action, ActionResultEnum, actionResultsStrings,
-    ActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+import { Action, ActionResultActionTypeEnum, ActionResultEnum,
+    actionResultsStrings, AppActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
 import store from '.';
 
 // remove
@@ -7,10 +7,10 @@ export const removeSubscription = () => {
     const event = store.getState().appReducer.event;
     clearInterval(event);
 
-    store.dispatch({ type: ActionTypeEnum.RemoveVideoEndSubscription });
+    store.dispatch({ type: AppActionTypeEnum.RemoveVideoEndSubscription });
 
     const resultAction: Action = {
-        type: ActionTypeEnum.TriggerTooltip,
+        type: ActionResultActionTypeEnum.TriggerTooltip,
         data: {
             type: ActionResultEnum.Canceled,
             message: actionResultsStrings.cancel.canceled,
@@ -35,10 +35,10 @@ export const checkVideoForShutdown = (selectedTime: number) => {
 
 export const SubscribeToVideoEnd = (selectedTime: string) => {
     const action: Action = {
-        type: ActionTypeEnum.SubscribedToVideoEnd,
+        type: AppActionTypeEnum.SubscribedToVideoEnd,
     };
     const resultAction: Action = {
-        type: ActionTypeEnum.TriggerTooltip,
+        type: ActionResultActionTypeEnum.TriggerTooltip,
         data: {
             type: ActionResultEnum.Shutdown,
         },

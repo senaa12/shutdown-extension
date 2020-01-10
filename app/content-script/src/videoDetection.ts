@@ -1,8 +1,9 @@
 import { Action,
+    ActionResultActionTypeEnum,
     ActionResultEnum,
     actionResultsStrings,
-    ActionTypeEnum,
     CallbackFunction,
+    TabsActionTypeEnum,
     TabState} from 'common';
 import store from '.';
 
@@ -12,10 +13,10 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     const shouldSendResponseToPopup: boolean = !!data?.showResponse;
 
     const action: Action = {
-        type: ActionTypeEnum.CheckTabVideoAvailability,
+        type: TabsActionTypeEnum.CheckTabVideoAvailability,
     };
     const resultAction: Action = {
-        type: ActionTypeEnum.TriggerTooltip,
+        type: ActionResultActionTypeEnum.TriggerTooltip,
         data: {
             type: ActionResultEnum.Scan,
         },
@@ -97,5 +98,5 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 };
 
 const getCurrentTabState = (tabID: number) => {
-    return tabID ? store.getState().openTabsReducer.tabs[tabID] : undefined;
+    return tabID ? store.getState().openTabsReducer[tabID] : undefined;
 };

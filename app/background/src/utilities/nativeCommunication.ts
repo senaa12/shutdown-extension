@@ -1,11 +1,11 @@
-import { ActionTypeEnum, nativeAppTitle } from 'common';
+import { AppActionTypeEnum, nativeAppTitle } from 'common';
 import { store } from '../';
 
 export const connecToNativeApp = () => {
     const response = (resp: any) => {
         const isHostActive = !!resp?.isActive;
         store.dispatch({
-            type: ActionTypeEnum.IsHostActiveCheck,
+            type: AppActionTypeEnum.IsHostActiveCheck,
             data: isHostActive,
         });
     };

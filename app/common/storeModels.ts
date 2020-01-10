@@ -1,21 +1,27 @@
 export interface RootReducerState {
     appReducer: AppReducerState;
     openTabsReducer: OpenTabsReducerState;
+    actionsResultReducer: ActionsResultState;
 }
 
 export interface AppReducerState {
-    isHostAppActive: boolean;
-    isEventSubscibed: boolean;
-    tabId: number;
     selectedApplicationMode: ApplicationModeEnum;
-    selectedTime: string;
-    event: undefined | any;
+    isHostAppActive: boolean;
+    // tslint:disable-next-line: max-line-length
+    /** -1 represents if countdown is scheduled, 0 if no event is scheduled, and >0 represents tabID from scheduled event */
+    isShutdownEventScheduled: number;
+    /** shutdown function */
+    shutdownEvent: any;
+    inputSelectedTime: string;
+}
+
+export interface ActionsResultState {
     actionResultTooltip: ActionResultEnum;
     actionResultTooltipMessage: React.ReactNode;
 }
 
 export interface OpenTabsReducerState {
-    tabs: { [key: number]: TabState };
+    [key: number]: TabState;
 }
 
 export interface TabState {

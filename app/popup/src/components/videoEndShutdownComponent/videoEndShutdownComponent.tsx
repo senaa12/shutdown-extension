@@ -30,9 +30,9 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabID): Partia
     if (ownProps.activeTabId) {
         return {
             ...ownProps,
-            ...state.openTabsReducer.tabs[ownProps.activeTabId],
-            subscribedTab: state.appReducer.tabId,
-            selectedTime: state.appReducer.selectedTime,
+            ...state.openTabsReducer[ownProps.activeTabId],
+            subscribedTab: state.appReducer.isShutdownEventScheduled,
+            selectedTime: state.appReducer.inputSelectedTime,
         };
     }
 
@@ -77,7 +77,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
         let isDisabledState = true;
 
         // shutdown event is subscribed
-        if (subscribedTab !== undefined && subscribedTab > 0) {
+        if (subscribedTab > 0) {
             // shutdown is monitored on this tab
             if (activeTabId === subscribedTab) {
                 response = videoPlayerStrings.shutdownSubscribed.thisTab(`${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`);

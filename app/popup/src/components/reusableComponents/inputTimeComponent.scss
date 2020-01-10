@@ -6,34 +6,6 @@
         margin-right: 5px;
         font-size: var(--normal-font-size);
     }
-
-    .time-selector {
-        font-size: var(--time-font-size);
-        border: solid 1px var(--border-color);
-        border-radius: 8px;
-        padding: 5px;
-        background-color: var(--background-color);
-        font-family: 'Karla', sans-serif;
-        text-align: center;
-        margin: 5px;
-    
-        &:focus {
-            background-color: var(--selected-tile-color);
-        }
-    
-        &::-webkit-datetime-edit-minute-field:focus,
-        &::-webkit-datetime-edit-hour-field:focus,
-        &::-webkit-datetime-edit-second-field:focus {
-            background-color: var(--background-color);
-            color: var(--red);
-        }
-    
-        &::-webkit-inner-spin-button,
-        &::-webkit-outer-spin-button,
-        &::-webkit-clear-button  {
-            display: none;
-        }
-    }
 }
 
 .flex-column-reverse {

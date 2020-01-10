@@ -4,11 +4,7 @@ import { IconEnum, IconSize } from '../icon/iconEnum';
 
 import './header.scss';
 
-export interface HeaderProps {
-
-}
-
-const header = (props: HeaderProps) => {
+const header = () => {
     return(
         <div className='header'>
             <div className='title'>SHUTDOWN EXTENSION</div>

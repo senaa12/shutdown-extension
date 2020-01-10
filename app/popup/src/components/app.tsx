@@ -2,6 +2,7 @@ import { ApplicationModeEnum, hostNotActive, RootReducerState, TabState } from '
 import React from 'react';
 import { connect } from 'react-redux';
 import ActionButtons from './actionButtons/actionButtons';
+import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
 import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
@@ -39,9 +40,9 @@ class App extends React.Component<AppContentProps, any> {
                 <div className='app-content'>
                     {this.props.isHostAppActive ?
                             (this.props.selectedAppMode === ApplicationModeEnum.VideoPlayer ?
-                                <VideoEndShutdownComponent activeTabId={this.props.currentTabId}/> :
-                                <div>countdown</div> ) :
-                            <div className='inactive-host-message'>{hostNotActive()}</div>}
+                                <VideoEndShutdownComponent activeTabId={this.props.currentTabId}/>
+                                : <CountdownComponent /> )
+                            : <div className='inactive-host-message'>{hostNotActive()}</div>}
                 </div>
                 <ActionButtons currentTabId={this.props.currentTabId} />
             </>

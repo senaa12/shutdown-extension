@@ -1,28 +1,23 @@
-import { Action, ActionTypeEnum, OpenTabsReducerState, TabState } from 'common';
+import { Action, OpenTabsReducerState, TabsActionTypeEnum, TabState } from 'common';
 
-export const openTabsReducerInitialState: OpenTabsReducerState = {
-    tabs: {},
-};
+export const openTabsReducerInitialState: OpenTabsReducerState = {};
 
 export default (state = openTabsReducerInitialState, action: Action): OpenTabsReducerState => {
     switch (action.type) {
-        case ActionTypeEnum.CheckTabVideoAvailability: {
+        case TabsActionTypeEnum.CheckTabVideoAvailability: {
             const data: TabState = action.data;
             const sender: number = action._sender?.tab.id  ? action._sender.tab.id : -1;
-            const newTabs = {
-                ...state.tabs,
+            return {
+                ...state,
                 [sender]: { ...data },
             };
-            return {
-                tabs: newTabs,
-            };
         }
-        case ActionTypeEnum.RemoveTab: {
+        case TabsActionTypeEnum.RemoveTab: {
             // tslint:disable-next-line: prefer-const
-            let newState = { ...state.tabs };
+            let newState = { ...state };
             delete newState[action.data.tab];
             return {
-                tabs: newState,
+                ...newState,
             };
         }
         default: {

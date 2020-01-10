@@ -1,17 +1,17 @@
-import { Action, ActionResultEnum, ActionTypeEnum, ApplicationModeEnum } from 'common';
+import { Action, ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum, ApplicationModeEnum } from 'common';
 
 export const changeAppState = (newState: ApplicationModeEnum): Action => ({
-        type: ActionTypeEnum.ChangeApplicationState,
+        type: AppActionTypeEnum.ChangeApplicationState,
         data: newState,
 });
 
 export const changeTimeSelected = (newTime: string): Action =>  ({
-    type: ActionTypeEnum.ChangeSelectedTime,
+    type: AppActionTypeEnum.ChangeSelectedTime,
     data: newTime,
 });
 
 export const triggerActionResultTooltip = (newState: ActionResultEnum, mess?: React.ReactNode) => ({
-    type: ActionTypeEnum.TriggerTooltip,
+    type: ActionResultActionTypeEnum.TriggerTooltip,
     data: {
         type: newState,
         message: mess,

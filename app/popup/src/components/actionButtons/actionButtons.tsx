@@ -14,9 +14,8 @@ import './actionButtons.scss';
 
 export interface ActionButtonCustomProps {
     appMode: ApplicationModeEnum;
-    isEventSubscribed: boolean;
+    isShutdownEventScheduled: number;
     isShutdownButtonDisabled: boolean;
-    tabID: number;
     currentTabID: number;
     selectedTime: string;
     isHostAppActive: boolean;
@@ -30,17 +29,16 @@ declare type ActionButtonProps = ActionButtonCustomProps & TabState;
 
 const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partial<ActionButtonProps> => {
     const tabState: (TabState | undefined) =
-        ownProps.currentTabId ? state.openTabsReducer.tabs[ownProps.currentTabId] : undefined;
+        ownProps.currentTabId ? state.openTabsReducer[ownProps.currentTabId] : undefined;
 
     return {
         appMode: state.appReducer.selectedApplicationMode,
-        isEventSubscribed: state.appReducer.isEventSubscibed,
-        tabID: state.appReducer.tabId,
-        isShutdownButtonDisabled: !(tabState?.documentHasVideoTag && !state.appReducer.isEventSubscibed),
+        isShutdownEventScheduled: state.appReducer.isShutdownEventScheduled,
+        isShutdownButtonDisabled: !(tabState?.documentHasVideoTag && !state.appReducer.isShutdownEventScheduled),
         currentTabID: ownProps.currentTabId,
-        actionResultTooltip: state.appReducer.actionResultTooltip,
-        selectedTime: state.appReducer.selectedTime,
-        actionResultTooltipContent: state.appReducer.actionResultTooltipMessage,
+        actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
+        selectedTime: state.appReducer.inputSelectedTime,
+        actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         isHostAppActive: state.appReducer.isHostAppActive,
         ...tabState,
     };
@@ -92,7 +90,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                 content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Shutdown}
                 trigger={'manual'}
-                tooltipClassname={'action-tooltips ' + (this.props.isEventSubscribed ? 'sucess-tooltip' : 'error-tooltip')}
+                tooltipClassname={'action-tooltips ' + (this.props.isShutdownEventScheduled ? 'sucess-tooltip' : 'error-tooltip')}
             >
                 <ButtonComponent
                         isSelected={false}
@@ -108,7 +106,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     }
 
     private renderScanNowButton = () => {
-        const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isEventSubscribed);
+        const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isShutdownEventScheduled);
         if (this.props.appMode === ApplicationModeEnum.Countdown) {
             return null;
         }
@@ -146,14 +144,14 @@ class ActionButtons extends React.Component<ActionButtonProps> {
 
     private renderClearButton = () => {
         const onClick = () => {
-            if (this.props.isEventSubscribed) {
+            if (this.props.isShutdownEventScheduled) {
                 const message: ContentScriptMessage = {
                     type: ContentScriptMessageTypeEnum.RemoveSubscription,
                 };
-                messanger.sendMessageToTab(this.props.tabID, message);
+                messanger.sendMessageToTab(this.props.isShutdownEventScheduled, message);
             }
         };
-        const className = this.baseClassName + (this.props.isEventSubscribed ? 'clickable' : 'disabled');
+        const className = this.baseClassName + (this.props.isShutdownEventScheduled ? 'clickable' : 'disabled');
         return (
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
