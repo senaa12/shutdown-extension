@@ -37,11 +37,10 @@ body {
     --black: #{$black};
     --white: #{$white};
 
-
     --small-font-size: #{px-to-rem(10px)};
     --normal-font-size: #{px-to-rem(12px)};
     --big-font-size: #{px-to-rem(14px)};
-    --title-size-font: #{px-to-rem(18px)};
+    --title-font-size: #{px-to-rem(18px)};
     --time-font-size: #{px-to-rem(25px)};
 
     --background-color: var(--my-yellow-6);

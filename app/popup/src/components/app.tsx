@@ -5,6 +5,8 @@ import ActionButtons from './actionButtons/actionButtons';
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
+import IfElseDisplayTransitionWrapper from './transitionWrappers/ifElseDisplayTransitionWrapper';
+import UnmountChildrenAnimation from './transitionWrappers/unmountChildrenAnimation';
 import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
 
 import './app.scss';
@@ -27,7 +29,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
         isHostAppActive: state.appReducer.isHostAppActive,
     };
 };
-class App extends React.Component<AppContentProps, any> {
+class App extends React.Component<AppContentProps> {
     constructor(props: AppContentProps) {
         super(props);
     }
@@ -35,14 +37,17 @@ class App extends React.Component<AppContentProps, any> {
     public render() {
         return(
             <>
+                <UnmountChildrenAnimation shouldShowChildren={!this.props.isHostAppActive}>
+                    {hostNotActive()}
+                </UnmountChildrenAnimation>
                 <Header />
                 <MenuButtons />
                 <div className='app-content'>
-                    {this.props.isHostAppActive ?
-                            (this.props.selectedAppMode === ApplicationModeEnum.VideoPlayer ?
-                                <VideoEndShutdownComponent activeTabId={this.props.currentTabId}/>
-                                : <CountdownComponent /> )
-                            : <div className='inactive-host-message'>{hostNotActive()}</div>}
+                    <IfElseDisplayTransitionWrapper
+                        shouldShowIfComponent={this.props.selectedAppMode === ApplicationModeEnum.VideoPlayer}
+                        ifComponent={<VideoEndShutdownComponent activeTabId={this.props.currentTabId}/>}
+                        elseComponent={<CountdownComponent />}
+                    />
                 </div>
                 <ActionButtons currentTabId={this.props.currentTabId} />
             </>

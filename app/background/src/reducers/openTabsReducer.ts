@@ -12,6 +12,17 @@ export default (state = openTabsReducerInitialState, action: Action): OpenTabsRe
                 [sender]: { ...data },
             };
         }
+        case TabsActionTypeEnum.SetWaitingForFirstLoad: {
+            const loadState = {
+                ...state[action.data.tabID],
+                waitingForFirstLoad: action.data.waitingToFirstLoad,
+            } as TabState;
+
+            return {
+                ...state,
+                [action.data.tabID]: { ...loadState },
+            };
+        }
         case TabsActionTypeEnum.RemoveTab: {
             // tslint:disable-next-line: prefer-const
             let newState = { ...state };

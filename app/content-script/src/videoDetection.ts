@@ -2,7 +2,9 @@ import { Action,
     ActionResultActionTypeEnum,
     ActionResultEnum,
     actionResultsStrings,
+    AppActionTypeEnum,
     CallbackFunction,
+    convertSecondsToTimeFormat,
     TabsActionTypeEnum,
     TabState} from 'common';
 import store from '.';
@@ -22,18 +24,22 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         },
     };
 
+    console.log('doso si tu');
+    console.log(data);
+    console.log(currentState);
+    console.log('videotag');
+    console.log(videoTag);
     if (videoTag.length) {
+        console.log(videoTag[0].duration);
         if (!videoTag[0].duration) {
-            if (!videoTag[0].onloadedmetadata) {
-                videoTag[0].onloadedmetadata = () => checkVideoAvailability({});
-            }
-
-            action.data =  {
-                waitingForFirstLoad: true,
-            } as TabState;
-            store.dispatch(action);
+            videoTag[0].onloadedmetadata = () => checkVideoAvailability({ ...data });
 
         } else {
+            store.dispatch({
+                type: AppActionTypeEnum.ChangeSelectedTime,
+                data: convertSecondsToTimeFormat(videoTag[0].duration, true),
+            });
+
             action.data =  {
                 documentHasVideoTag: true,
                 videoDuration: videoTag[0].duration,
@@ -54,28 +60,24 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     }
 
     // maybe video tag does not exist but IFrame exists on page
-    const iframe = Array.from(document.getElementsByTagName('iframe')).filter((ifr) => ifr.src);
+    const iframe = Array.from(document.getElementsByTagName('iframe'));
+    console.log('iframe');
+    console.log(iframe);
     if (iframe.length) {
-        if (iframe[0].src === currentState?.iframeSource || !iframe[0].src) {
-            if (!iframe[0].onload) {
-                iframe[0].onload = () => checkVideoAvailability({ showResponse: true });
-            }
-
-            action.data =  {
-                waitingForFirstLoad: true,
-            } as TabState;
-            store.dispatch(action);
-
+        const withSrc = iframe.filter((ifr) => ifr.src);
+        console.log(withSrc);
+        if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
+            withSrc[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {
             action.data =  {
                 documentHasIFrameTag: true,
-                iframeSource: iframe[0].src,
+                iframeSource: withSrc[0].src,
             } as TabState;
             store.dispatch(action);
         }
 
         if (shouldSendResponseToPopup) {
-            if (iframe[0].src && (!currentState?.iframeSource || iframe[0].src !== currentState?.iframeSource)) {
+            if (withSrc[0].src && (!currentState?.iframeSource || withSrc[0].src !== currentState?.iframeSource)) {
                 resultAction.data.message = actionResultsStrings.scanNow.iFrameFound;
                 store.dispatch(resultAction);
             } else {
@@ -86,15 +88,29 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         return;
     }
 
-    action.data =  {
+    if (!currentState?.waitingForFirstLoad) {
+        action.data =  {
             documentHasVideoTag: false,
             documentHasIFrameTag: false,
         } as TabState;
-    store.dispatch(action);
-    if (shouldSendResponseToPopup) {
-        resultAction.data.message = actionResultsStrings.scanNow.noChanges;
-        store.dispatch(resultAction);
+        store.dispatch(action);
+
+        if (shouldSendResponseToPopup) {
+            resultAction.data.message = actionResultsStrings.scanNow.noChanges;
+            store.dispatch(resultAction);
+        }
+    } else {
+        store.dispatch({
+            type: TabsActionTypeEnum.SetWaitingForFirstLoad,
+            data: {
+                tabID: data.tabID,
+                waitingToFirstLoad: false,
+            },
+        });
+
+        setTimeout(() => checkVideoAvailability({ showResponse: true }), 500);
     }
+
 };
 
 const getCurrentTabState = (tabID: number) => {

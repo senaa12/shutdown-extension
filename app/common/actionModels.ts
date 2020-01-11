@@ -22,6 +22,7 @@ export enum TabsActionTypeEnum {
     CheckTabVideoAvailability = '@Tabs/CHECK_VIDEO_AVAILABILITY',
     UpdateTabInformation = '@Tabs/UPDATE_VIDEO_AVAILABILITY',
     RemoveTab = '@Tabs/REMOVE_TAB',
+    SetWaitingForFirstLoad = '@Tabs/WAITING_FOR_FIRST_LOAD',
 }
 
 export declare type ActionTypeEnum = TabsActionTypeEnum | ActionResultActionTypeEnum | AppActionTypeEnum;

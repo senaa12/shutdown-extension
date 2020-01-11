@@ -1,0 +1,52 @@
+.wrapper{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index: 10;
+    font-size: var(--title-font-size);
+    font-weight: 600;
+  
+    .triangle{
+      position:absolute;
+      z-index:1;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:linear-gradient(to top, #957a23 0%,   #e0b734 100%);
+      transition:all .8s cubic-bezier(0.645, 0.045, 0.355, 1);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      pointer-events:none;
+      
+      &.left{
+        clip-path: polygon(0 0, 0% 100%, 100% 100%);
+      }
+      
+      &.right{
+        clip-path: polygon(100% 0, 0 0, 100% 100%);
+      }
+    }
+    
+    &.open{
+      
+      .triangle{
+        
+        &.left{
+          clip-path: polygon(0 0, 0 100%, 0 100%);
+        }
+        
+        &.right{
+          clip-path: polygon(100% 0, 100% 0, 100% 100%);
+        }
+      }  
+    }
+  }
+  

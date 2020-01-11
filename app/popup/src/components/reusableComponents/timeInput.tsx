@@ -19,6 +19,9 @@ const timeInput = (props: TimeInputProps) => {
     const inputRef = React.useRef(null);
     const [ value, setValue ] = React.useState(props.value);
 
+    // used for correction on backspace
+    const [ onSelectVal, setOnSelectVal ] = React.useState<undefined | number>(undefined);
+
     const minValue = React.useMemo(() => props.minValue ? props.minValue : ('00:00:00'), []);
     const maxValue = React.useMemo(() => props.maxValue ? props.maxValue : ('99:99:99'), []);
     const width = React.useMemo(() =>
@@ -44,48 +47,46 @@ const timeInput = (props: TimeInputProps) => {
             (inputRef.current as unknown as HTMLInputElement).selectionEnd = select - 1;
         } else if (e.key === 'Backspace') {
             e.preventDefault();
+            setOnSelectVal(select);
+
             const newVal = value.substr(0, select) + '0' + value.substr(select + 1);
             setValue(newVal);
-            (inputRef.current as unknown as HTMLInputElement).selectionStart = select - 1;
-            (inputRef.current as unknown as HTMLInputElement).selectionEnd = select - 1;
         }
     };
 
     const onChange = (e) => {
         e.preventDefault();
+        const time = calculateSeconds(e.target.value);
 
-        const proccesInput = (oldValues: string, newValues: string) => {
-            const old = oldValues.split(':');
-            const newV = newValues.split(':');
+        if (!isNaN(time)) {
+            const valueToSet = convertSecondsToTimeFormat(
+                Math.max(calculateSeconds(minValue), Math.min(time, calculateSeconds(maxValue)),
+            ), true) ?? minValue;
 
-            const proccesed = newV.map((s, index) => {
-                let returnVal;
-                if (isNaN(Number(s)) || s === old[index]) {
-                    returnVal = old[index];
-                } else {
-                    returnVal = Number(s).toString();
-                    if (returnVal.length === 1) {
-                        returnVal = '0' + returnVal;
-                    }
-                }
-                if (index < 2) { returnVal += ':'; }
-                return returnVal;
-            }).join('');
-
-            return convertSecondsToTimeFormat(
-                Math.max(calculateSeconds(minValue), Math.min(calculateSeconds(proccesed), calculateSeconds(maxValue)),
-                ), true);
-        };
-        setValue(proccesInput(value, e.target.value) ?? minValue);
-
-        if (props.onChange) {
-            props.onChange(value);
+            setValue(valueToSet);
+            if (props.onChange) {
+                props.onChange(valueToSet);
+            }
         }
     };
 
     const onSelect = (e) => {
-        const select = e.currentTarget.selectionStart;
-        if (select === 2 || select === 5) {
+        e.preventDefault();
+        const select = onSelectVal ?? e.currentTarget.selectionStart;
+        // backspace control
+        if (onSelectVal) {
+            if (select === 3 || select === 6) {
+                (inputRef.current as unknown as HTMLInputElement).selectionStart = select - 1;
+                (inputRef.current as unknown as HTMLInputElement).selectionEnd = select - 1;
+            } else if (select === 0) {
+                (inputRef.current as unknown as HTMLInputElement).selectionStart = 0;
+                (inputRef.current as unknown as HTMLInputElement).selectionEnd = 1;
+            } else {
+                (inputRef.current as unknown as HTMLInputElement).selectionStart = select;
+                (inputRef.current as unknown as HTMLInputElement).selectionEnd = select + 1;
+            }
+            setOnSelectVal(undefined);
+        } else if (select === 2 || select === 5) {
             // ako je kod ":" u ispisu broja
             (inputRef.current as unknown as HTMLInputElement).selectionStart = select + 1;
             (inputRef.current as unknown as HTMLInputElement).selectionEnd = select + 2;

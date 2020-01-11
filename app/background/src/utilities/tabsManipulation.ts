@@ -24,16 +24,22 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
     });
 };
 
-export const onUpdated = (tabID: number, changeInfo: chrome.tabs.UpdateProperties, tab: Tab) => {
+export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdateProperties, tab: Tab) => {
     // tslint:disable-next-line: no-string-literal
-    if (changeInfo.url || (changeInfo['status'] && changeInfo['status'] === 'complete')) {
-        chrome.tabs.query({ url: tab.url }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id ? tabs[0].id : 0, {
+    if (changeInfo['status'] && changeInfo['status'] === 'complete') {
+        store.dispatch({
+            type: TabsActionTypeEnum.SetWaitingForFirstLoad,
+            data: {
+                tabID: tabId,
+                waitingForFirstLoad: true,
+            },
+        });
+
+        chrome.tabs.sendMessage(tabId, {
                 type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
                 data: {
-                    tabID: tabs[0].id,
+                    tabID: tabId,
                 },
-            });
         });
     }
 };

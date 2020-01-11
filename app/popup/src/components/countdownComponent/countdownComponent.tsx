@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
-import InputTimeComponent from '../reusableComponents/inputTimeComponent';
+import TimeInput from '../reusableComponents/timeInput';
+
 import './countdownComponent.scss';
 
 export interface CountdownComponentProps {
@@ -32,29 +33,16 @@ class CountdownComponent extends React.Component<CountdownComponentProps> {
         super(props);
     }
 
-    private renderInputTimeComponent = () => {
-        if (this.props.isShutdownScheduled) {
-            return(
-                <InputTimeComponent
-                    isDisabled={true}
-                    value={this.props.inputSelectedTime}
-                />
-            );
-        } else {
-            return (
-                <InputTimeComponent
-                    value={this.props.inputSelectedTime}
-                    onChange={this.props.changeInputTime}
-                />
-            );
-        }
-    }
-
     public render() {
         return (
             <div className='countdown-component'>
                 <>{countdownStrings.description}</>
-                {this.renderInputTimeComponent()}
+                <TimeInput
+                    disabled={!!this.props.isShutdownScheduled}
+                    value={this.props.inputSelectedTime}
+                    onChange={this.props.changeInputTime}
+                    fontSize={30}
+                />
             </div>
         );
     }

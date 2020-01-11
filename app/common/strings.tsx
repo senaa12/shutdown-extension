@@ -34,7 +34,6 @@ export const links = {
     docs: 'http://www.google.hr',
 };
 
-// https://codepen.io/tobiasglaus/pen/oZJdZY
 export const hostNotActive = () => (
     <>
         NOT AVAILABLE
