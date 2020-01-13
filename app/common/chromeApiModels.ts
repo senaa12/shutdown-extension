@@ -10,7 +10,9 @@ export interface ContentScriptMessage {
 
 export enum ContentScriptMessageTypeEnum {
     SubscribeToVideoEnd,
-    RemoveSubscription,
+    CountdownToShutdown,
+    RemoveVideoScheduledShutdown,
+    RemoveCountdownToShutdown,
     CheckVideoAvailability,
     TriggerAlert,
     CheckNativeApp,
@@ -25,6 +27,8 @@ export interface BackgroundMessage {
 export enum BackgroundMessageTypeEnum {
     ShutdownComputer,
     CheckNativeApp,
+    CountdownToShutdown,
+    RemoveCountdownToShutdown,
 }
 
 // webext-redux sender type

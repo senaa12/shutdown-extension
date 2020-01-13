@@ -1,6 +1,8 @@
 .input-time-holder {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    margin: 5px;       
 
     .label {
         margin-right: 5px;

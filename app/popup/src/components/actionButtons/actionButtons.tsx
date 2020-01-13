@@ -30,11 +30,13 @@ declare type ActionButtonProps = ActionButtonCustomProps & TabState;
 const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partial<ActionButtonProps> => {
     const tabState: (TabState | undefined) =
         ownProps.currentTabId ? state.openTabsReducer[ownProps.currentTabId] : undefined;
-
+    const isShutdownDisabled = state.appReducer.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
+        !(tabState?.documentHasVideoTag && !state.appReducer.isShutdownEventScheduled) :
+        !!state.appReducer.isShutdownEventScheduled;
     return {
         appMode: state.appReducer.selectedApplicationMode,
         isShutdownEventScheduled: state.appReducer.isShutdownEventScheduled,
-        isShutdownButtonDisabled: !(tabState?.documentHasVideoTag && !state.appReducer.isShutdownEventScheduled),
+        isShutdownButtonDisabled: isShutdownDisabled,
         currentTabID: ownProps.currentTabId,
         actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
         selectedTime: state.appReducer.inputSelectedTime,
@@ -82,9 +84,16 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             };
             messanger.sendMessageToActiveTab(message);
         };
+        const countdown = () => {
+            const message: ContentScriptMessage = {
+                type: ContentScriptMessageTypeEnum.CountdownToShutdown,
+            };
+            messanger.sendMessageToActiveTab(message);
+        };
 
         const className = this.baseClassName + (this.props.isShutdownButtonDisabled ? 'disabled' : 'clickable');
-        const onClick = this.props.isShutdownButtonDisabled ? () => {} : shutdown;
+        const onClick = this.props.isShutdownButtonDisabled ? () => {} :
+            this.props.appMode === ApplicationModeEnum.VideoPlayer ? shutdown : countdown;
         return(
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
@@ -145,10 +154,17 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     private renderClearButton = () => {
         const onClick = () => {
             if (this.props.isShutdownEventScheduled) {
-                const message: ContentScriptMessage = {
-                    type: ContentScriptMessageTypeEnum.RemoveSubscription,
-                };
-                messanger.sendMessageToTab(this.props.isShutdownEventScheduled, message);
+                if (this.props.appMode === ApplicationModeEnum.VideoPlayer) {
+                    const message: ContentScriptMessage = {
+                        type: ContentScriptMessageTypeEnum.RemoveVideoScheduledShutdown,
+                    };
+                    messanger.sendMessageToTab(this.props.isShutdownEventScheduled, message);
+                } else {
+                    const message: ContentScriptMessage = {
+                        type: ContentScriptMessageTypeEnum.RemoveCountdownToShutdown,
+                    };
+                    messanger.sendMessageToActiveTab(message);
+                }
             }
         };
         const className = this.baseClassName + (this.props.isShutdownEventScheduled ? 'clickable' : 'disabled');

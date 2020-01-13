@@ -95,6 +95,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
                     value={this.props.selectedTime}
                     isDisabled={this.state.isDisabled}
                     maxValue={convertSecondsToTimeFormat(this.props.videoDuration, true)}
+                    fontSize={30}
                     labelPosition={'BOTTOM'}
                     labelClassname={'small-label'}
                     label={`Video will end at ${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`}

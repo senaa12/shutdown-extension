@@ -23,8 +23,9 @@ export const videoPlayerStrings = {
     },
 };
 
-export const countdownStrings = {
-    description: 'this is countdown component',
+export const countdownComponentStrings = {
+    notScheduledDesciption: 'Select time to shutdown your computer',
+    scheduledString: (time: string) => <>Computer will shutdown in: <b>{time}</b></>,
 };
 
 export const title = 'AUTO-SHUTDOWN EXTENSION';
@@ -49,6 +50,7 @@ export const actionResultsStrings = {
     shutdown: {
         success: 'Success',
         failed: 'Failed',
+        failedCountdown: 'Not supported less than 10 seconds',
     },
     cancel: {
         canceledInBackground: 'Tab was Closed and Shutdown is canceled',

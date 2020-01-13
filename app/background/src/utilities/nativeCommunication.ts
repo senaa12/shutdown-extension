@@ -18,7 +18,7 @@ export const connecToNativeApp = () => {
     );
 };
 
-export const shutdownCommand = (sendResponse: any) => {
+export const shutdownCommand = (sendResponse?: any) => {
     const message = { text: '#SHUTDOWN#'};
 
     chrome.runtime.sendNativeMessage(

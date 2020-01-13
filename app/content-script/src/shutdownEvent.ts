@@ -3,11 +3,11 @@ import { Action, ActionResultActionTypeEnum, ActionResultEnum,
 import store from '.';
 
 // remove
-export const removeSubscription = () => {
-    const event = store.getState().appReducer.event;
+export const removeVideoScheduledShutdown = () => {
+    const event = store.getState().appReducer.shutdownEvent;
     clearInterval(event);
 
-    store.dispatch({ type: AppActionTypeEnum.RemoveVideoEndSubscription });
+    store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
 
     const resultAction: Action = {
         type: ActionResultActionTypeEnum.TriggerTooltip,
@@ -29,13 +29,13 @@ export const checkVideoForShutdown = (selectedTime: number) => {
         chrome.runtime.sendMessage(message,
             // ,(mess: string) => alert(mess)
             );
-        removeSubscription();
+        removeVideoScheduledShutdown();
     }
 };
 
 export const SubscribeToVideoEnd = (selectedTime: string) => {
     const action: Action = {
-        type: AppActionTypeEnum.SubscribedToVideoEnd,
+        type: AppActionTypeEnum.ScheduleShutdown,
     };
     const resultAction: Action = {
         type: ActionResultActionTypeEnum.TriggerTooltip,
@@ -67,6 +67,22 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         store.dispatch(resultAction);
     }
     return;
+};
+
+export const removeCountdownToShutdow = () => {
+    const message = {
+        type: BackgroundMessageTypeEnum.RemoveCountdownToShutdown,
+    };
+
+    chrome.runtime.sendMessage(message);
+};
+
+export const countdownToShutdown = () => {
+    const message = {
+        type: BackgroundMessageTypeEnum.CountdownToShutdown,
+    };
+
+    chrome.runtime.sendMessage(message);
 };
 
 export const checkNativeApp = () => {

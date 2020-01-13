@@ -6,7 +6,7 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
     console.log('removed');
     const subscribedTabID: number = store.getState().appReducer.isShutdownEventScheduled;
     if (subscribedTabID === tabID) {
-        store.dispatch({ type: AppActionTypeEnum.RemoveVideoEndSubscription });
+        store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
         store.dispatch({
             type: ActionResultActionTypeEnum.TriggerTooltip,
             data: {

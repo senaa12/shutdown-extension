@@ -4,7 +4,8 @@ import {
     ContentScriptMessageTypeEnum,
     MessageSender } from 'common';
 import { Store } from 'webext-redux';
-import { checkNativeApp, removeSubscription, SubscribeToVideoEnd } from './shutdownEvent';
+import { checkNativeApp, countdownToShutdown, removeCountdownToShutdow,
+    removeVideoScheduledShutdown, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 
 const messageHandler = (
@@ -16,8 +17,8 @@ const messageHandler = (
             SubscribeToVideoEnd(request.data.selectedTime);
             break;
         }
-        case ContentScriptMessageTypeEnum.RemoveSubscription: {
-            removeSubscription();
+        case ContentScriptMessageTypeEnum.RemoveVideoScheduledShutdown: {
+            removeVideoScheduledShutdown();
             break;
         }
         case ContentScriptMessageTypeEnum.CheckVideoAvailability: {
@@ -30,6 +31,14 @@ const messageHandler = (
         }
         case ContentScriptMessageTypeEnum.CheckNativeApp: {
             checkNativeApp();
+            break;
+        }
+        case ContentScriptMessageTypeEnum.CountdownToShutdown: {
+            countdownToShutdown();
+            break;
+        }
+        case ContentScriptMessageTypeEnum.RemoveCountdownToShutdown: {
+            removeCountdownToShutdow();
             break;
         }
         default:

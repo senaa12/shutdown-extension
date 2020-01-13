@@ -22,15 +22,20 @@ const timeInput = (props: TimeInputProps) => {
     // used for correction on backspace
     const [ onSelectVal, setOnSelectVal ] = React.useState<undefined | number>(undefined);
 
-    const minValue = React.useMemo(() => props.minValue ? props.minValue : ('00:00:00'), []);
-    const maxValue = React.useMemo(() => props.maxValue ? props.maxValue : ('99:99:99'), []);
+    const minValue = React.useMemo(() => props.minValue ? props.minValue : ('00:00:00'), [props.minValue]);
+    const maxValue = React.useMemo(() => props.maxValue ? props.maxValue : ('99:99:99'), [props.maxValue]);
     const width = React.useMemo(() =>
     ({
         fontSize: props.fontSize ?? 16,
         width: props.fontSize ? props.fontSize * 4.8 : 16 * 4.8,
     } as React.CSSProperties), [props.fontSize]);
 
-    const prevetDefault = (e) => { e.preventDefault(); };
+    const prevetDefault = (e) => {
+        if (props.disabled) {
+            return;
+        }
+        e.preventDefault();
+    };
 
     React.useEffect(() => {
         if (!props.onChange) {
@@ -40,6 +45,10 @@ const timeInput = (props: TimeInputProps) => {
     }, [props.value]);
 
     const detectArrows = (e) => {
+        if (props.disabled) {
+            return;
+        }
+
         const select = e.currentTarget.selectionStart;
         if (e.key === 'ArrowLeft' && select !== 0) {
             // jedino back ne radi dobro
@@ -55,6 +64,10 @@ const timeInput = (props: TimeInputProps) => {
     };
 
     const onChange = (e) => {
+        if (props.disabled) {
+            return;
+        }
+
         e.preventDefault();
         const time = calculateSeconds(e.target.value);
 
@@ -71,6 +84,10 @@ const timeInput = (props: TimeInputProps) => {
     };
 
     const onSelect = (e) => {
+        if (props.disabled) {
+            return;
+        }
+
         e.preventDefault();
         const select = onSelectVal ?? e.currentTarget.selectionStart;
         // backspace control

@@ -1,4 +1,5 @@
 import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
+import { countdownShutdownEvent, removeCountdownShutdownEvent } from './utilities/countdownShutdown';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 
 const messageHandler = (
@@ -12,6 +13,14 @@ const messageHandler = (
             }
             case BackgroundMessageTypeEnum.CheckNativeApp: {
                 connecToNativeApp();
+                break;
+            }
+            case BackgroundMessageTypeEnum.CountdownToShutdown: {
+                countdownShutdownEvent();
+                break;
+            }
+            case BackgroundMessageTypeEnum.RemoveCountdownToShutdown: {
+                removeCountdownShutdownEvent();
                 break;
             }
             default: {

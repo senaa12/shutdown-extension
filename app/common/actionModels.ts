@@ -7,8 +7,8 @@ export interface Action {
 }
 
 export enum AppActionTypeEnum {
-    SubscribedToVideoEnd = '@App/SUBSCRIBE_TO_VIDEO_END',
-    RemoveVideoEndSubscription = '@App/REMOVE_VIDEO_SUBSCRIPTON',
+    ScheduleShutdown = '@App/SCHEDULE_SHUTDOWN',
+    RemoveScheduledShutdown = '@App/REMOVE_SCHEDULED_SHUTDOWN',
     ChangeApplicationState = '@App/CHANGE_APP_STATE',
     ChangeSelectedTime = '@App/CHANGE_SELECTED_TIME',
     IsHostActiveCheck = '@App/IS_HOST_ACTIVE',

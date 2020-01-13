@@ -9,18 +9,19 @@ export interface InputTimeComponentProps {
     isDisabled?: boolean;
     maxValue?: string;
     label?: React.ReactNode;
+    fontSize?: number;
     labelClassname?: string;
-    labelPosition?: 'LEFT' | 'BOTTOM';
+    labelPosition?: 'TOP' | 'BOTTOM';
 }
 
 const inputTimeComponent = (props: InputTimeComponentProps) => {
     const wrapperClassname = React.useMemo(() => (
         'input-time-holder ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
-    ), []);
+    ), [props.labelPosition]);
 
     const labelClassname = React.useMemo(() => (
         'label ' + (props.labelClassname ? props.labelClassname : '')
-    ), []);
+    ), [props.labelClassname]);
 
     return (
         <div className={wrapperClassname}>
@@ -28,8 +29,9 @@ const inputTimeComponent = (props: InputTimeComponentProps) => {
             <TimeInput
                 value={props.value}
                 onChange={props.onChange}
-                fontSize={30}
+                fontSize={props.fontSize}
                 maxValue={props.maxValue}
+                disabled={props.isDisabled}
             />
         </div>
     );

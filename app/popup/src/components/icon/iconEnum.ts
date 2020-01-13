@@ -7,6 +7,7 @@ export enum IconEnum {
     ScanNow = 'scan',
     OpenDocs = 'docs',
     Arrow = 'drop-down-arrow',
+    AlarmClock = 'alarm-clock',
 }
 
 export enum IconSize {

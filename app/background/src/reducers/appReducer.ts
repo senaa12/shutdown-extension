@@ -11,7 +11,7 @@ export const appReducerInitialState: AppReducerState = {
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
     switch (action.type) {
-        case AppActionTypeEnum.SubscribedToVideoEnd: {
+        case AppActionTypeEnum.ScheduleShutdown: {
             if (!action.data?.success) {
                 return state;
             }
@@ -19,13 +19,15 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 shutdownEvent: action.data.event,
-                isShutdownEventScheduled:  action._sender?.tab.id ? action._sender.tab.id : 0,
+                isShutdownEventScheduled:  state.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
+                    (action._sender?.tab.id ? action._sender.tab.id : 0) : -1,
             };
         }
-        case AppActionTypeEnum.RemoveVideoEndSubscription: {
+        case AppActionTypeEnum.RemoveScheduledShutdown: {
             return {
-                selectedApplicationMode: state.selectedApplicationMode,
                 ...appReducerInitialState,
+                selectedApplicationMode: state.selectedApplicationMode,
+                isHostAppActive: state.isHostAppActive,
             };
         }
         case AppActionTypeEnum.ChangeApplicationState: {
