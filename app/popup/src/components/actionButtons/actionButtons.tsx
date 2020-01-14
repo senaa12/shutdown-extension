@@ -115,11 +115,11 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     }
 
     private renderScanNowButton = () => {
-        const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isShutdownEventScheduled);
         if (this.props.appMode === ApplicationModeEnum.Countdown) {
             return null;
         }
 
+        const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isShutdownEventScheduled);
         const onClick = () => {
             if (!scanDisabled) {
                 const message: ContentScriptMessage = {
@@ -145,7 +145,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     onClick={onClick}
                     icon={IconEnum.ScanNow}
                     iconSize={IconSize.Smallest}
-                    disabled={!this.props.isHostAppActive}
+                    disabled={scanDisabled}
                 />
             </SimpleTooltipComponent>
         );

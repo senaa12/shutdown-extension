@@ -76,8 +76,9 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
         let response;
         let isDisabledState = true;
 
-        // shutdown event is subscribed
-        if (subscribedTab > 0) {
+        if (waitingForFirstLoad) {
+            response = <LoadingComponent />;
+        } else if (subscribedTab > 0) {
             // shutdown is monitored on this tab
             if (activeTabId === subscribedTab) {
                 response = videoPlayerStrings.shutdownSubscribed.thisTab(`${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`);
@@ -103,8 +104,6 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
             </>;
         } else if (documentHasIFrameTag) {
             response = videoPlayerStrings.iframeAvailable(this.navigateToIframeSource);
-        } else if (waitingForFirstLoad) {
-            response = <LoadingComponent />;
         } else {
             response =  videoPlayerStrings.notAvailable;
         }

@@ -1,11 +1,11 @@
 import { ApplicationModeEnum, hostNotActive, RootReducerState, TabState } from 'common';
 import React from 'react';
+import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
 import ActionButtons from './actionButtons/actionButtons';
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
-import IfElseDisplayTransitionWrapper from './transitionWrappers/ifElseDisplayTransitionWrapper';
 import UnmountChildrenAnimation from './transitionWrappers/unmountChildrenAnimation';
 import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
 
@@ -34,6 +34,20 @@ class App extends React.Component<AppContentProps> {
         super(props);
     }
 
+    public renderAppContent = () => {
+        switch (this.props.selectedAppMode) {
+            case ApplicationModeEnum.VideoPlayer: {
+                return <VideoEndShutdownComponent key={'first'} activeTabId={this.props.currentTabId}/>;
+            }
+            case ApplicationModeEnum.Countdown: {
+                return <CountdownComponent key={'second'} />;
+            }
+            default: {
+                return <div key={'third'}>assaffa</div>;
+            }
+        }
+    }
+
     public render() {
         return(
             <>
@@ -43,11 +57,11 @@ class App extends React.Component<AppContentProps> {
                 <Header />
                 <MenuButtons />
                 <div className='app-content'>
-                    <IfElseDisplayTransitionWrapper
-                        shouldShowIfComponent={this.props.selectedAppMode === ApplicationModeEnum.VideoPlayer}
-                        ifComponent={<VideoEndShutdownComponent activeTabId={this.props.currentTabId}/>}
-                        elseComponent={<CountdownComponent />}
-                    />
+                    <ReactCSSTransitionReplace
+                        transitionName='cross-fade'
+                    >
+                        {this.renderAppContent()}
+                    </ReactCSSTransitionReplace>
                 </div>
                 <ActionButtons currentTabId={this.props.currentTabId} />
             </>

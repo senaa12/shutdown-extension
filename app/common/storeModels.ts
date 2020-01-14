@@ -35,6 +35,7 @@ export interface TabState {
 export enum ApplicationModeEnum {
     VideoPlayer,
     Countdown,
+    Timer,
 }
 
 export enum ActionResultEnum {

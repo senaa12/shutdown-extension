@@ -15,7 +15,7 @@ export default (state = openTabsReducerInitialState, action: Action): OpenTabsRe
         case TabsActionTypeEnum.SetWaitingForFirstLoad: {
             const loadState = {
                 ...state[action.data.tabID],
-                waitingForFirstLoad: action.data.waitingToFirstLoad,
+                waitingForFirstLoad: action.data.waitingForFirstLoad,
             } as TabState;
 
             return {

@@ -34,14 +34,13 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
 
     public render() {
         const { selectedMode, changeSelectedMode, isShutdownScheduled } = this.props;
-        const isVideoButtonDisabled = selectedMode === ApplicationModeEnum.Countdown && isShutdownScheduled;
-        const isCountdownDisabled = selectedMode === ApplicationModeEnum.VideoPlayer && isShutdownScheduled;
+
         return(
             <div className='menu-buttons-wrapper'>
                 <ButtonComponent
                     isSelected={selectedMode === ApplicationModeEnum.VideoPlayer}
                     label={'Video Player'}
-                    onClick={!isVideoButtonDisabled ?
+                    onClick={!isShutdownScheduled ?
                         () => changeSelectedMode(ApplicationModeEnum.VideoPlayer) : () => {}}
                     icon={IconEnum.VideoPlayer}
                     className={'custom-button clickable'}
@@ -51,16 +50,17 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
                 <ButtonComponent
                     isSelected={selectedMode === ApplicationModeEnum.Countdown}
                     label={'Countdown'}
-                    onClick={!isCountdownDisabled ?
+                    onClick={!isShutdownScheduled ?
                         () => changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
                     icon={IconEnum.Countdown}
                     className={'custom-button clickable'}
                     disabled={isShutdownScheduled}
                 />
                 <ButtonComponent
-                    isSelected={false}
+                    isSelected={selectedMode === ApplicationModeEnum.Timer}
                     label={'Clock'}
-                    onClick={() => {}}
+                    onClick={!isShutdownScheduled ?
+                        () => changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
                     icon={IconEnum.AlarmClock}
                     className={'custom-button clickable'}
                     iconSize={IconSize.Normal}

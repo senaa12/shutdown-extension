@@ -31,9 +31,11 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     console.log(videoTag);
     if (videoTag.length) {
         console.log(videoTag[0].duration);
-        if (!videoTag[0].duration) {
+        if (!videoTag[0].duration || isNaN(videoTag[0].duration)) {
             videoTag[0].onloadedmetadata = () => checkVideoAvailability({ ...data });
 
+        } else if (videoTag[0].duration.toString() === 'Infinity')  {
+            setTimeout(() => checkVideoAvailability({ ...data }), 700);
         } else {
             store.dispatch({
                 type: AppActionTypeEnum.ChangeSelectedTime,
@@ -42,7 +44,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
             action.data =  {
                 documentHasVideoTag: true,
-                videoDuration: videoTag[0].duration,
+                videoDuration: Math.round(videoTag[0].duration),
             } as TabState;
             store.dispatch(action);
         }
