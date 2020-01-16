@@ -1,5 +1,5 @@
-import { ActionResultEnum, ApplicationModeEnum, ContentScriptMessage,
-        ContentScriptMessageTypeEnum, links, RootReducerState, TabState } from 'common';
+import { ActionResultEnum, ApplicationModeEnum, BackgroundMessage,
+        BackgroundMessageTypeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum, links, RootReducerState, TabState, videoPlayerPremiumInfo } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -8,7 +8,8 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 
 import { Dispatch } from 'redux';
 import { triggerActionResultTooltip } from '../../actions/actions';
-import messanger from '../../utilities/contentScriptMessaging';
+import appProperties from '../../utilities/appProperties';
+import communicationManager from '../../utilities/communicationManager';
 import { AppOwnProps } from '../app';
 import './actionButtons.scss';
 
@@ -76,30 +77,46 @@ class ActionButtons extends React.Component<ActionButtonProps> {
 
     private renderShutdownButton = () => {
         const shutdown = () => {
-            const message: ContentScriptMessage = {
-                type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
-                data: {
-                    selectedTime: this.props.selectedTime,
-                },
-            };
-            messanger.sendMessageToActiveTab(message);
-        };
-        const countdown = () => {
-            const message: ContentScriptMessage = {
-                type: ContentScriptMessageTypeEnum.CountdownToShutdown,
-            };
-            messanger.sendMessageToActiveTab(message);
+            switch (this.props.appMode) {
+                case ApplicationModeEnum.VideoPlayer: {
+                    const message: ContentScriptMessage = {
+                        type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
+                        data: {
+                            selectedTime: this.props.selectedTime,
+                        },
+                    };
+                    communicationManager.sendMessageToActiveTab(message);
+                    break;
+                }
+                case ApplicationModeEnum.Countdown: {
+                    const message: BackgroundMessage = {
+                        type: BackgroundMessageTypeEnum.CountdownToShutdown,
+                    };
+                    communicationManager.sendMessageToBackgroundPage(message);
+                    break;
+                }
+                default: {
+                    const message: BackgroundMessage = {
+                        type: BackgroundMessageTypeEnum.TimerShutdown,
+                    };
+                    communicationManager.sendMessageToBackgroundPage(message);
+                }
+            }
         };
 
         const className = this.baseClassName + (this.props.isShutdownButtonDisabled ? 'disabled' : 'clickable');
-        const onClick = this.props.isShutdownButtonDisabled ? () => {} :
-            this.props.appMode === ApplicationModeEnum.VideoPlayer ? shutdown : countdown;
+        // tslint:disable-next-line: no-empty
+        const onClick = this.props.isShutdownButtonDisabled ? () => {} : shutdown;
         return(
             <SimpleTooltipComponent
-                content={this.props.actionResultTooltipContent}
+                content={appProperties.PremiumAppMode() ?
+                    this.props.actionResultTooltipContent :
+                    videoPlayerPremiumInfo}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Shutdown}
-                trigger={'manual'}
-                tooltipClassname={'action-tooltips ' + (this.props.isShutdownEventScheduled ? 'sucess-tooltip' : 'error-tooltip')}
+                trigger={appProperties.PremiumAppMode() ? 'manual' : 'hover'}
+                tooltipClassname={appProperties.PremiumAppMode() ?
+                    'action-tooltips ' + (this.props.isShutdownEventScheduled ? 'sucess-tooltip' : 'error-tooltip') :
+                    'video-player-tooltip'}
             >
                 <ButtonComponent
                         isSelected={false}
@@ -115,7 +132,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     }
 
     private renderScanNowButton = () => {
-        if (this.props.appMode === ApplicationModeEnum.Countdown) {
+        if (this.props.appMode !== ApplicationModeEnum.VideoPlayer) {
             return null;
         }
 
@@ -127,7 +144,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     data: { tabID: this.props.currentTabID, showResponse: true },
                 };
 
-                messanger.sendMessageToActiveTab(message);
+                communicationManager.sendMessageToActiveTab(message);
             }
         };
         const className = this.baseClassName + (scanDisabled ? 'disabled' : 'clickable' );
@@ -158,12 +175,12 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     const message: ContentScriptMessage = {
                         type: ContentScriptMessageTypeEnum.RemoveVideoScheduledShutdown,
                     };
-                    messanger.sendMessageToTab(this.props.isShutdownEventScheduled, message);
+                    communicationManager.sendMessageToTab(this.props.isShutdownEventScheduled, message);
                 } else {
-                    const message: ContentScriptMessage = {
-                        type: ContentScriptMessageTypeEnum.RemoveCountdownToShutdown,
+                    const message: BackgroundMessage = {
+                        type: BackgroundMessageTypeEnum.RemoveCountdownToShutdown,
                     };
-                    messanger.sendMessageToActiveTab(message);
+                    communicationManager.sendMessageToBackgroundPage(message);
                 }
             }
         };

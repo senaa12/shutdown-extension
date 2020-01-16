@@ -15,5 +15,3 @@ chrome.tabs.onUpdated.addListener(onUpdated);
 chrome.tabs.onRemoved.addListener(onRemoved);
 
 chrome.runtime.onMessage.addListener(messageHandler);
-
-connecToNativeApp();

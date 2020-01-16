@@ -23,6 +23,9 @@ const messageHandler = (
                 removeCountdownShutdownEvent();
                 break;
             }
+            case BackgroundMessageTypeEnum.TimerShutdown: {
+                break;
+            }
             default: {
                 throw new Error('message handler not defined');
             }

@@ -48,22 +48,22 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
                     disabled={isShutdownScheduled}
                 />
                 <ButtonComponent
+                    isSelected={selectedMode === ApplicationModeEnum.Timer}
+                    label={'Timer'}
+                    onClick={!isShutdownScheduled ?
+                        () => changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
+                    icon={IconEnum.AlarmClock}
+                    className={'custom-button clickable'}
+                    iconSize={IconSize.Normal}
+                    disabled={isShutdownScheduled}
+                />
+                <ButtonComponent
                     isSelected={selectedMode === ApplicationModeEnum.Countdown}
                     label={'Countdown'}
                     onClick={!isShutdownScheduled ?
                         () => changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
                     icon={IconEnum.Countdown}
                     className={'custom-button clickable'}
-                    disabled={isShutdownScheduled}
-                />
-                <ButtonComponent
-                    isSelected={selectedMode === ApplicationModeEnum.Timer}
-                    label={'Clock'}
-                    onClick={!isShutdownScheduled ?
-                        () => changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
-                    icon={IconEnum.AlarmClock}
-                    className={'custom-button clickable'}
-                    iconSize={IconSize.Normal}
                     disabled={isShutdownScheduled}
                 />
                 <div className={'triggers-label'}>{'Choose Trigger'}</div>

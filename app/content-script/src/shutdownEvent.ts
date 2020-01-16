@@ -27,7 +27,7 @@ export const checkVideoForShutdown = (selectedTime: number) => {
             type: BackgroundMessageTypeEnum.ShutdownComputer,
         };
         chrome.runtime.sendMessage(message,
-            // ,(mess: string) => alert(mess)
+            // (mess: string) => alert(mess)
             );
         removeVideoScheduledShutdown();
     }
@@ -67,28 +67,4 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         store.dispatch(resultAction);
     }
     return;
-};
-
-export const removeCountdownToShutdow = () => {
-    const message = {
-        type: BackgroundMessageTypeEnum.RemoveCountdownToShutdown,
-    };
-
-    chrome.runtime.sendMessage(message);
-};
-
-export const countdownToShutdown = () => {
-    const message = {
-        type: BackgroundMessageTypeEnum.CountdownToShutdown,
-    };
-
-    chrome.runtime.sendMessage(message);
-};
-
-export const checkNativeApp = () => {
-    const message = {
-        type: BackgroundMessageTypeEnum.CheckNativeApp,
-    };
-
-    chrome.runtime.sendMessage(message);
 };

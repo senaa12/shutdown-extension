@@ -1,4 +1,4 @@
-import { ApplicationModeEnum, hostNotActive, RootReducerState, TabState } from 'common';
+import { ApplicationModeEnum, hostNotActive, links, RootReducerState, TabState } from 'common';
 import React from 'react';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
@@ -6,6 +6,7 @@ import ActionButtons from './actionButtons/actionButtons';
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
+import TimerComponent from './timerComponent/timerComponent';
 import UnmountChildrenAnimation from './transitionWrappers/unmountChildrenAnimation';
 import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
 
@@ -43,16 +44,18 @@ class App extends React.Component<AppContentProps> {
                 return <CountdownComponent key={'second'} />;
             }
             default: {
-                return <div key={'third'}>assaffa</div>;
+                return <TimerComponent key={'third'} />;
             }
         }
     }
+
+    private openNativeDownloadLink = () => chrome.tabs.update({ url: links.nativeWin });
 
     public render() {
         return(
             <>
                 <UnmountChildrenAnimation shouldShowChildren={!this.props.isHostAppActive}>
-                    {hostNotActive()}
+                    {hostNotActive(this.openNativeDownloadLink)}
                 </UnmountChildrenAnimation>
                 <Header />
                 <MenuButtons />

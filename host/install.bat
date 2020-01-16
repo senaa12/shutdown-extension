@@ -16,5 +16,5 @@ REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\shutdown.extension.hos
 @echo } >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.json
 
 copy shutdown.extension.host.exe %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host
-echo Setup Complete
+echo Setup complete,  installed in %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host
 pause

@@ -4,7 +4,7 @@
             {
                 "name": "typescript-tslint-plugin",
                 "configFile": "./tslint.json",
-                "alwaysShowRuleFailuresAsWarnings": false,
+                "alwaysShowRuleFailuresAsWarnings": true,
                 "exclude": [ "node_modules" ]
             }
         ],

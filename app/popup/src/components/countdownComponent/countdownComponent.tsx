@@ -61,7 +61,7 @@ class CountdownComponent extends React.Component<CountdownComponentProps, Countd
                         countdownComponentStrings.scheduledString(this.state.intervalTimeInput) :
                         countdownComponentStrings.notScheduledDesciption}
                     labelClassname={'shutdown-label'}
-                    fontSize={35}
+                    fontSize={30}
                     isDisabled={this.props.isShutdownScheduled}
                 />
             </div>

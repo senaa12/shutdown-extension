@@ -33,12 +33,23 @@ export const nativeAppTitle = 'shutdown.extension.host';
 
 export const links = {
     docs: 'http://www.google.hr',
+    nativeWin: 'http://bit.ly/2NyikQx',
 };
 
-export const hostNotActive = () => (
-    <>
-        NOT AVAILABLE
-    </>
+export const videoPlayerPremiumInfo = (
+    <div>
+        video player placeholder
+    </div>
+);
+
+export const hostNotActive = (onClick: CallbackFunction) => (
+    <div className={'no-host-message'}>
+        <span>EXTENSION WILL NOT WORK!</span>
+        <br />
+        <span>You need to download and install native part of this extension in order to it working propperly</span>
+        <br />
+        <div className={'link'} onClick={onClick}>{links.nativeWin}</div>
+    </div>
 );
 
 export const actionResultsStrings = {
