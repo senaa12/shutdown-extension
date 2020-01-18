@@ -109,14 +109,10 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         const onClick = this.props.isShutdownButtonDisabled ? () => {} : shutdown;
         return(
             <SimpleTooltipComponent
-                content={appProperties.PremiumAppMode() ?
-                    this.props.actionResultTooltipContent :
-                    videoPlayerPremiumInfo}
+                content={this.props.actionResultTooltipContent}
                 isOpen={this.props.actionResultTooltip === ActionResultEnum.Shutdown}
-                trigger={appProperties.PremiumAppMode() ? 'manual' : 'hover'}
-                tooltipClassname={appProperties.PremiumAppMode() ?
-                    'action-tooltips ' + (this.props.isShutdownEventScheduled ? 'sucess-tooltip' : 'error-tooltip') :
-                    'video-player-tooltip'}
+                trigger={'manual'}
+                tooltipClassname={'action-tooltips ' + (this.props.isShutdownEventScheduled ? 'sucess-tooltip' : 'error-tooltip')}
             >
                 <ButtonComponent
                         isSelected={false}
@@ -125,7 +121,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                         onClick={onClick}
                         icon={IconEnum.PowerButton}
                         iconSize={IconSize.Smallest}
-                        disabled={!this.props.isHostAppActive}
+                        disabled={!this.props.isHostAppActive || appProperties.isBaseApp}
             />
             </SimpleTooltipComponent>
         );

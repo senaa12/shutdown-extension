@@ -31,6 +31,8 @@
         "node_modules",
         "./content-script/webpack.config.js",
         "./background/webpack.config.js",
-        "./popup/webpack.config.js"
-    ],
+        "./popup/webpack.config.js",
+        "./popup/webpack/plugins.js",
+        "./popup/webpack/rules.js"
+    ]
 }

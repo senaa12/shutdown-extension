@@ -10,6 +10,8 @@ import TimerComponent from './timerComponent/timerComponent';
 import UnmountChildrenAnimation from './transitionWrappers/unmountChildrenAnimation';
 import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
 
+import propss from '../utilities/appProperties';
+
 import './app.scss';
 
 export interface AppOwnProps {

@@ -1,8 +1,11 @@
 import { Action, AppActionTypeEnum } from 'common';
 import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
+const initialAppMode = (process.env.IS_BASE !== undefined ? JSON.parse(process.env.IS_BASE) : true)  ?
+    ApplicationModeEnum.Countdown : ApplicationModeEnum.VideoPlayer;
+
 export const appReducerInitialState: AppReducerState = {
-    selectedApplicationMode: ApplicationModeEnum.VideoPlayer,
+    selectedApplicationMode: initialAppMode,
     isHostAppActive: false,
     isShutdownEventScheduled: 0,
     shutdownEvent: undefined,

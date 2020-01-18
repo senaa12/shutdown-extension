@@ -7,7 +7,7 @@ import './buttonComponent.scss';
 export interface CustomButtonProps {
     label: string;
     isSelected: boolean;
-    onClick(): void;
+    onClick?: () => void;
     icon: IconEnum;
     className: string;
     tooltip?: string;
@@ -24,7 +24,7 @@ const buttonComponent = (props: CustomButtonProps) => {
             title={props.tooltip}
             className={className}
             // tslint:disable-next-line: no-empty
-            onClick={!props.disabled ? props.onClick : () => {}}
+            onClick={(!props.disabled || !props.onClick) ? props.onClick : () => {}}
         >
             <div>
                 <Icon

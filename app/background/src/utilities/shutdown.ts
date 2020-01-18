@@ -3,7 +3,7 @@ import { Action, ActionResultActionTypeEnum, ActionResultEnum,
 import { store } from '..';
 import { shutdownCommand } from './nativeCommunication';
 
-export const removeCountdownShutdownEvent = () => {
+export const removeShutdownEvent = () => {
     const event = store.getState().appReducer.shutdownEvent;
     clearInterval(event);
 
@@ -53,4 +53,8 @@ export const countdownShutdownEvent = () => {
         resultAction.data.message = actionResultsStrings.shutdown.success;
         store.dispatch(resultAction);
     }
+};
+
+export const timerShutdown = () => {
+    const selectedTime = store.getState().appReducer.inputSelectedTime;
 };

@@ -1,10 +1,13 @@
-import { ApplicationModeEnum, RootReducerState } from 'common';
+import { ApplicationModeEnum, RootReducerState, videoPlayerPremiumInfo } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { changeAppState } from '../../actions/actions';
+import appProperties from '../../utilities/appProperties';
 import { IconEnum, IconSize } from '../icon/iconEnum';
 import ButtonComponent from '../reusableComponents/buttonComponent';
+import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent';
+
 import './menuButtons.scss';
 
 export interface MenuButtonsProps {
@@ -32,40 +35,65 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
         super(props);
     }
 
-    public render() {
-        const { selectedMode, changeSelectedMode, isShutdownScheduled } = this.props;
+    private renderVideoButton = () => (
+        appProperties.isBaseApp ?
+        <SimpleTooltipComponent
+            content={videoPlayerPremiumInfo}
+            trigger={'hover'}
+            wrapperClassname={'custom-button'}
+        >
+            <ButtonComponent
+                isSelected={false}
+                label={'Video Player'}
+                icon={IconEnum.VideoPlayer}
+                className={'fixer-class'}
+                iconSize={IconSize.Normal}
+                disabled={true}
+            />
+        </SimpleTooltipComponent> :
+        <ButtonComponent
+            isSelected={this.props.selectedMode === ApplicationModeEnum.VideoPlayer}
+            label={'Video Player'}
+            onClick={!this.props.isShutdownScheduled ?
+                () => this.props.changeSelectedMode(ApplicationModeEnum.VideoPlayer) : () => {}}
+            icon={IconEnum.VideoPlayer}
+            className={'custom-button clickable'}
+            iconSize={IconSize.Normal}
+            disabled={this.props.isShutdownScheduled}
+        />
+    )
 
+    private renderTimerButton = () => (
+        <ButtonComponent
+            isSelected={this.props.selectedMode === ApplicationModeEnum.Timer}
+            label={'Timer'}
+            onClick={!this.props.isShutdownScheduled ?
+                () => this.props.changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
+            icon={IconEnum.AlarmClock}
+            className={'custom-button clickable'}
+            iconSize={IconSize.Normal}
+            disabled={this.props.isShutdownScheduled}
+        />
+    )
+
+    private renderCountdownButton = () => (
+        <ButtonComponent
+            isSelected={this.props.selectedMode === ApplicationModeEnum.Countdown}
+            label={'Countdown'}
+            onClick={!this.props.isShutdownScheduled ?
+                () => this.props.changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
+            icon={IconEnum.Countdown}
+            className={'custom-button clickable'}
+            disabled={this.props.isShutdownScheduled}
+        />
+    )
+
+    public render() {
         return(
             <div className='menu-buttons-wrapper'>
-                <ButtonComponent
-                    isSelected={selectedMode === ApplicationModeEnum.VideoPlayer}
-                    label={'Video Player'}
-                    onClick={!isShutdownScheduled ?
-                        () => changeSelectedMode(ApplicationModeEnum.VideoPlayer) : () => {}}
-                    icon={IconEnum.VideoPlayer}
-                    className={'custom-button clickable'}
-                    iconSize={IconSize.Normal}
-                    disabled={isShutdownScheduled}
-                />
-                <ButtonComponent
-                    isSelected={selectedMode === ApplicationModeEnum.Timer}
-                    label={'Timer'}
-                    onClick={!isShutdownScheduled ?
-                        () => changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
-                    icon={IconEnum.AlarmClock}
-                    className={'custom-button clickable'}
-                    iconSize={IconSize.Normal}
-                    disabled={isShutdownScheduled}
-                />
-                <ButtonComponent
-                    isSelected={selectedMode === ApplicationModeEnum.Countdown}
-                    label={'Countdown'}
-                    onClick={!isShutdownScheduled ?
-                        () => changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
-                    icon={IconEnum.Countdown}
-                    className={'custom-button clickable'}
-                    disabled={isShutdownScheduled}
-                />
+                {this.renderVideoButton()}
+                {this.renderTimerButton()}
+                {this.renderCountdownButton()}
                 <div className={'triggers-label'}>{'Choose Trigger'}</div>
             </div>
         );

@@ -17,6 +17,7 @@ export interface TimerComponentProps {
 
 export interface TimerComponentState {
     currentTime: Date;
+    selectedDate: Date;
 }
 
 const mapStateToProps = (state: RootReducerState): Partial<TimerComponentProps> => {
@@ -37,13 +38,9 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
         super(props);
         this.state = {
             currentTime: new Date(),
+            selectedDate: new Date(),
         };
         setInterval(() => this.setState({ currentTime: new Date() }), 1000);
-        const message = {
-            type: 'cislga',
-        };
-
-        chrome.runtime.sendMessage(message);
     }
 
     public render() {
@@ -64,11 +61,6 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
                     fontSize={25}
                     labelPosition={'TOP'}
                     maxValue={'23:59:59'}
-                />
-                <input
-                    type='date'
-                    className={'date-input'}
-                    onChange={(e) => console.log(e.target.value)}
                 />
             </div>
         );

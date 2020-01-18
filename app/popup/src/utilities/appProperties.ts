@@ -1,12 +1,13 @@
+import { throws } from 'assert';
+
 class AppProperties {
     constructor() {
-        this.isVideoAppModeIncluded = true;
+        this.isBaseApp = process.env.IS_BASE !== undefined ? JSON.parse(process.env.IS_BASE) : true;
+        this.isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : true;
     }
+    public isProduction: boolean;
+    public isBaseApp: boolean;
 
-    private isVideoAppModeIncluded: boolean;
-    public PremiumAppMode() {
-        return this.isVideoAppModeIncluded;
-    }
 }
 
 const properties = new AppProperties();

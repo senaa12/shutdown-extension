@@ -1,59 +1,13 @@
 const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 
-const htmlWebpackPlugin = new HtmlWebpackPlugin({
-    template: "popup/src/index.html"
-});
+const plugins = require("./webpack/plugins");
+const rules = require("./webpack/rules");
 
-const definePlugin = (isProd) => new webpack.DefinePlugin({ 
-    'process.env': { 
-        PRODUCTION: isProd 
-    },
-    '__REACT_DEVTOOLS_GLOBAL_HOOK__': '({ isDisabled: true })'
-});
+const isBaseMode = process.env.MODE == "base";
+const environment = process.env.ENV == "dev";
 
-const hashedModulePlugin = new webpack.HashedModuleIdsPlugin();
-
-const miniCssExtractPlugin = new MiniCssExtractPlugin({
-    filename: "[name].css",
-    chunkFilename: "[name].css"
-});
-
-const copyWebpackPlugin = new CopyPlugin([
-    { from: "manifest.json" , to: "" }
-]);
-
-// not used currently
-const babelLoader = {
-    test: /\.(js|jsx)$/,
-    exclude: /node_modules/,
-    loader: "babel-loader"
-};
-
-const styleProdLoader = {
-    test: /\.(s)css$/,
-    exclude: /node_modules/,
-    loader: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
-};
-
-const typescriptLoader = {
-    test: /\.(ts|tsx)$/,
-    exclude: /node_modules/,
-    include: [
-        path.resolve(__dirname, 'src'), 
-        path.resolve(__dirname, '../common')
-     ],
-    loader: "awesome-typescript-loader"
-};
-
-const svgLoader = {
-    test: /\.svg$/,
-    loader: "svg-sprite-loader",
-    include: [path.resolve(__dirname, 'src/assets/icons')]
-}
+console.log("Is base app: " + isBaseMode);
+console.log("Is dev: " + environment);
 
 module.exports = {
     entry: "./popup/src/index.tsx",
@@ -74,7 +28,18 @@ module.exports = {
         }
     },
     module: {
-        rules: [ styleProdLoader, typescriptLoader, svgLoader ]
+        rules: [ 
+            rules.styleProdLoader, 
+            rules.typescriptLoader, 
+            rules.svgLoader,
+            rules.cssLoader
+        ]
     },
-    plugins: [ copyWebpackPlugin, miniCssExtractPlugin, hashedModulePlugin, definePlugin(true), htmlWebpackPlugin ],
+    plugins: [ 
+        plugins.copyWebpackPlugin(isBaseMode), 
+        plugins.miniCssExtractPlugin, 
+        plugins.hashedModulePlugin, 
+        plugins.definePlugin(environment, isBaseMode), 
+        plugins.htmlWebpackPlugin 
+    ],
 }

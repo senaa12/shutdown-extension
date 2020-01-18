@@ -10,6 +10,7 @@ export interface TooltipComponentProps {
     isOpen?: boolean;
     trigger?: 'hover' | 'manual';
     tooltipStyle?: React.CSSProperties;
+    wrapperClassname?: string;
 }
 
 type PropsWithChildren<P> = P & { children: React.ReactNode };
@@ -85,7 +86,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
 
     return (
     <>
-        <div ref={parentRef}>{props.children}</div>
+        <div ref={parentRef} className={props.wrapperClassname}>{props.children}</div>
         {(isOpen || transitionInProgress) &&
             <div
                 ref={tooltipRef}

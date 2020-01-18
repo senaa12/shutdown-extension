@@ -9,6 +9,7 @@
     width: 100%;    
 
     .custom-button {
+        display: flex;
         @extend %tile;
         height: 60px;
         font-size: var(--normal-font-size);
@@ -23,5 +24,21 @@
         right: 0;
         text-align: center;
         font-size: var(--small-font-size);
+    }
+
+    .fixer-class {
+        margin: 0;
+        padding: 0;
+        border: none;
+        &:hover {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+    }
+
+    .wrapper-fix {
+        padding: 0;
+        width: 100%;
     }
 }
