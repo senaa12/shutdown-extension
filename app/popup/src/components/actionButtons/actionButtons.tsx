@@ -1,5 +1,6 @@
 import { ActionResultEnum, ApplicationModeEnum, BackgroundMessage,
-        BackgroundMessageTypeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum, links, RootReducerState, TabState, videoPlayerPremiumInfo } from 'common';
+        BackgroundMessageTypeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum,
+        links, RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -34,13 +35,14 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
     const isShutdownDisabled = state.appReducer.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
         !(tabState?.documentHasVideoTag && !state.appReducer.isShutdownEventScheduled) :
         !!state.appReducer.isShutdownEventScheduled;
+
     return {
         appMode: state.appReducer.selectedApplicationMode,
         isShutdownEventScheduled: state.appReducer.isShutdownEventScheduled,
         isShutdownButtonDisabled: isShutdownDisabled,
         currentTabID: ownProps.currentTabId,
         actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
-        selectedTime: state.appReducer.inputSelectedTime,
+        selectedTime: new Date(state.appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0],
         actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         isHostAppActive: state.appReducer.isHostAppActive,
         ...tabState,

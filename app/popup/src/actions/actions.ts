@@ -10,6 +10,11 @@ export const changeTimeSelected = (newTime: string): Action =>  ({
     data: newTime,
 });
 
+export const changeSelectedDate = (newDate: string) => ({
+    type: AppActionTypeEnum.ChangeSelectedDate,
+    data: newDate,
+});
+
 export const triggerActionResultTooltip = (newState: ActionResultEnum, mess?: React.ReactNode) => ({
     type: ActionResultActionTypeEnum.TriggerTooltip,
     data: {

@@ -3,13 +3,14 @@ import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
 const initialAppMode = (process.env.IS_BASE !== undefined ? JSON.parse(process.env.IS_BASE) : true)  ?
     ApplicationModeEnum.Countdown : ApplicationModeEnum.VideoPlayer;
+const initialDate = new Date(new Date().toDateString() + ', 00:00:00');
 
 export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: initialAppMode,
     isHostAppActive: false,
     isShutdownEventScheduled: 0,
     shutdownEvent: undefined,
-    inputSelectedTime: '00:00:00',
+    inputSelectedTime: initialDate,
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -38,13 +39,21 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 selectedApplicationMode: newState,
-                inputSelectedTime: '00:00:00',
+                inputSelectedTime: initialDate,
             };
         }
         case AppActionTypeEnum.ChangeSelectedTime: {
+            const newTime = new Date(state.inputSelectedTime.toDateString() + ', ' + action.data);
             return {
                 ...state,
-                inputSelectedTime: action.data,
+                inputSelectedTime: newTime,
+            };
+        }
+        case AppActionTypeEnum.ChangeSelectedDate: {
+            const newTime = new Date(action.data + ', ' + state.inputSelectedTime.toLocaleTimeString('hr-HR'));
+            return {
+                ...state,
+                inputSelectedTime: newTime,
             };
         }
         case AppActionTypeEnum.IsHostActiveCheck: {

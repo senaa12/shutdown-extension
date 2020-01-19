@@ -21,7 +21,7 @@ export interface CountdownComponentState {
 
 const mapStateToProps = (state: RootReducerState): Partial<CountdownComponentProps> => {
     return {
-        inputSelectedTime: state.appReducer.inputSelectedTime,
+        inputSelectedTime: new Date(state.appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0],
         isShutdownScheduled: !!state.appReducer.isShutdownEventScheduled,
     };
 };

@@ -12,12 +12,13 @@ export interface InputTimeComponentProps {
     fontSize?: number;
     labelClassname?: string;
     labelPosition?: 'TOP' | 'BOTTOM';
+    wrapperClassName?: string;
 }
 
 const inputTimeComponent = (props: InputTimeComponentProps) => {
     const wrapperClassname = React.useMemo(() => (
-        'input-time-holder ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
-    ), [props.labelPosition]);
+        props.wrapperClassName + ' input-time-holder ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
+    ), [props.labelPosition, props.wrapperClassName]);
 
     const labelClassname = React.useMemo(() => (
         'label ' + (props.labelClassname ? props.labelClassname : '')

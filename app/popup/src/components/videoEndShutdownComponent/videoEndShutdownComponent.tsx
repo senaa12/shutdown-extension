@@ -32,7 +32,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabID): Partia
             ...ownProps,
             ...state.openTabsReducer[ownProps.activeTabId],
             subscribedTab: state.appReducer.isShutdownEventScheduled,
-            selectedTime: state.appReducer.inputSelectedTime,
+            selectedTime: new Date(state.appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0],
         };
     }
 

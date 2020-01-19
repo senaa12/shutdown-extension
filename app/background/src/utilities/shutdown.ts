@@ -5,7 +5,11 @@ import { shutdownCommand } from './nativeCommunication';
 
 export const removeShutdownEvent = () => {
     const event = store.getState().appReducer.shutdownEvent;
-    clearInterval(event);
+    try {
+        clearInterval(event);
+    } catch (ex) {
+        clearTimeout(event);
+    }
 
     store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
 
@@ -21,7 +25,8 @@ export const removeShutdownEvent = () => {
 
 export const countdownShutdownEvent = () => {
     const countdownInterval = () => {
-        const seconds = calculateSeconds(store.getState().appReducer.inputSelectedTime) - 1;
+        const str = new Date(store.getState().appReducer.inputSelectedTime);
+        const seconds = str.setSeconds(str.getSeconds() - 1);
         if (seconds < 1) {
             shutdownCommand();
         } else {
@@ -42,7 +47,8 @@ export const countdownShutdownEvent = () => {
         },
     };
 
-    if (calculateSeconds(store.getState().appReducer.inputSelectedTime) < 10) {
+    const time = new Date(store.getState().appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0];
+    if (calculateSeconds(time) < 10) {
         resultAction.data.message = actionResultsStrings.shutdown.failedCountdown;
         store.dispatch(resultAction);
     } else {
@@ -56,5 +62,28 @@ export const countdownShutdownEvent = () => {
 };
 
 export const timerShutdown = () => {
-    const selectedTime = store.getState().appReducer.inputSelectedTime;
+    const action: Action = {
+        type: AppActionTypeEnum.ScheduleShutdown,
+    };
+    const resultAction: Action = {
+        type: ActionResultActionTypeEnum.TriggerTooltip,
+        data: {
+            type: ActionResultEnum.Shutdown,
+        },
+    };
+
+    const selectedTime = new Date(store.getState().appReducer.inputSelectedTime);
+    const currentTime = new Date();
+    if (currentTime > selectedTime) {
+        resultAction.data.message = actionResultsStrings.shutdown.failedTimer;
+        store.dispatch(resultAction);
+    } else {
+        const delay = selectedTime.getTime() - currentTime.getTime();
+        const func = setTimeout(() => shutdownCommand(), delay);
+        action.data = { success: true, event: func };
+        store.dispatch(action);
+
+        resultAction.data.message = actionResultsStrings.shutdown.success;
+        store.dispatch(resultAction);
+    }
 };

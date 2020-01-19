@@ -28,6 +28,11 @@ export const countdownComponentStrings = {
     scheduledString: (time: string) => <>Computer will shutdown in: <b>{time}</b></>,
 };
 
+export const timerComponentStrings = {
+    description: (currentTime: React.ReactNode) => <div style={{ marginBottom: 5, textAlign: 'center' }}>
+            Current time is {currentTime} select in what time you want your computer to shutdown</div>,
+};
+
 export const title = 'AUTO-SHUTDOWN EXTENSION';
 export const nativeAppTitle = 'shutdown.extension.host';
 
@@ -62,6 +67,7 @@ export const actionResultsStrings = {
         success: 'Success',
         failed: 'Failed',
         failedCountdown: 'Not supported less than 10 seconds',
+        failedTimer: 'Cannot select date in the past',
     },
     cancel: {
         canceledInBackground: 'Tab was Closed and Shutdown is canceled',

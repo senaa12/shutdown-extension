@@ -12,7 +12,7 @@ export interface AppReducerState {
     isShutdownEventScheduled: number;
     /** shutdown function */
     shutdownEvent: any;
-    inputSelectedTime: string;
+    inputSelectedTime: Date;
 }
 
 export interface ActionsResultState {
