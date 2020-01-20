@@ -6,7 +6,7 @@
 
 body { 
     width: 330px;
-    height: 380px;
+    height: 370px;
     padding: 10px 5px;
     margin: 0;
     background-color: var(--background-color);
@@ -18,14 +18,6 @@ body {
     -moz-user-select: none;   
     -ms-user-select: none;    
     user-select: none;     
-
-    input:focus,
-    select:focus,
-    textarea:focus,
-    button:focus {
-        outline: none;
-        -webkit-appearance:none;
-    }
 }
 
 :root {
@@ -84,16 +76,66 @@ body {
     }
 
     .no-host-message{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        @extend %flex-column;
         padding: 10px;
         text-align: center;
         color: var(--white);
         text-shadow: -1px 0 var(--black), 0 1px var(--black), 1px 0 var(--black), 0 -1px var(--black);
     }
-}
 
+    .input-style {
+        padding: 5px;
+        color: transparent;
+        text-shadow: 0 0 0 var(--font-color);
+        background-color: var(--background-color);
+        border: solid 1px var(--border-color);
+        border-radius: 8px;
+        font-family: 'Karla', sans-serif;
+        font-weight: 550;
+        text-align: center;
+        margin: 5px;
+
+        &:focus {
+            background-color: var(--selected-tile-color);
+            outline: none;
+            -webkit-appearance:none;
+        }
+    
+        &:hover {
+            cursor: default;
+        }
+    
+        &::-webkit-datetime-edit-minute-field:focus,
+        &::-webkit-datetime-edit-hour-field:focus,
+        &::-webkit-datetime-edit-second-field:focus,
+        &::-webkit-datetime-edit-ampm-field:focus,
+        &::-webkit-datetime-edit-day-field:focus,
+        &::-webkit-datetime-edit-month-field:focus,
+        &::-webkit-datetime-edit-year-field:focus,
+        &::selection {
+            background-color: var(--background-color);
+            color: var(--red);
+        }
+    
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button,
+        &::-webkit-clear-button  {
+            display: none;
+        }
+    
+        &::-webkit-calendar-picker-indicator:hover {
+            cursor: pointer;
+            background: url(https://image.flaticon.com/icons/svg/747/747310.svg) no-repeat;
+            background-color: var(--background-color);
+        }
+    }
+}
+%flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
 
 %selected-tile {
     border: solid 2px rgba($hover-color ,0.4);

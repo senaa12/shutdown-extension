@@ -2,15 +2,14 @@ import { ApplicationModeEnum, hostNotActive, links, RootReducerState, TabState }
 import React from 'react';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
+
 import ActionButtons from './actionButtons/actionButtons';
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
+import RevealContentAnimationWrapper from './revealContentAnimationWrapper/revealContentAnimationWrapper';
 import TimerComponent from './timerComponent/timerComponent';
-import UnmountChildrenAnimation from './transitionWrappers/unmountChildrenAnimation';
 import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
-
-import propss from '../utilities/appProperties';
 
 import './app.scss';
 
@@ -56,18 +55,17 @@ class App extends React.Component<AppContentProps> {
     public render() {
         return(
             <>
-                <UnmountChildrenAnimation shouldShowChildren={!this.props.isHostAppActive}>
+                <RevealContentAnimationWrapper shouldShowChildren={!this.props.isHostAppActive}>
                     {hostNotActive(this.openNativeDownloadLink)}
-                </UnmountChildrenAnimation>
+                </RevealContentAnimationWrapper>
                 <Header />
                 <MenuButtons />
-                <div className='app-content'>
                     <ReactCSSTransitionReplace
                         transitionName='cross-fade'
+                        className='app-content'
                     >
                         {this.renderAppContent()}
                     </ReactCSSTransitionReplace>
-                </div>
                 <ActionButtons currentTabId={this.props.currentTabId} />
             </>
         );

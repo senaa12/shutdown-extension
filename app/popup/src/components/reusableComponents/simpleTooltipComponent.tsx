@@ -11,6 +11,7 @@ export interface TooltipComponentProps {
     trigger?: 'hover' | 'manual';
     tooltipStyle?: React.CSSProperties;
     wrapperClassname?: string;
+    position?: 'bottom' | 'top';
 }
 
 type PropsWithChildren<P> = P & { children: React.ReactNode };

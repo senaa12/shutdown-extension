@@ -1,7 +1,7 @@
+@import "../../index.scss";
+
 .tooltip-base {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @extend %flex-column;
     transition: opacity .3s ease-out;
     text-align: center;
 
@@ -15,5 +15,10 @@
         position: relative;
         bottom: 4px;
         fill: var(--hover-color);
+    }
+
+    .tooltip-bottom {
+        transform: rotate(180deg);
+        bottom: -4px;
     }
 }

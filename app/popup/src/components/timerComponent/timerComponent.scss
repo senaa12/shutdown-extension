@@ -1,41 +1,17 @@
+@import "../../index.scss";
+
 .timer-component {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @extend %flex-column;
     height: 100%;
     padding: 0 5px;
-
-    .time-fix {
-        display: inline;
-        margin: 0 3px;
-    }
-
-    .timer-result {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 15px;
+    
+    .custom-time {
+        width: 140px;
+        font-size: var(--title-font-size);
     }
 
     .custom-date {
-        width: 120px;
-        margin-top: -3px;
-        &::-webkit-inner-spin-button,
-        &::-webkit-clear-button { 
-            display: none; 
-        }
-
-        &::-webkit-calendar-picker-indicator:hover {
-            cursor: pointer;
-            background: url(https://image.flaticon.com/icons/svg/747/747310.svg) no-repeat;
-            background-color: var(--background-color);
-        }
-        &::-webkit-datetime-edit-day-field:focus,
-        &::-webkit-datetime-edit-month-field:focus,
-        &::-webkit-datetime-edit-year-field:focus {  
-            background-color: var(--background-color);
-            color: var(--red); 
-        }
+        width: 140px;
+        margin-top: 1px !important; 
     }
 }

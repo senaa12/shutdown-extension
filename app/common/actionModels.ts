@@ -11,7 +11,7 @@ export enum AppActionTypeEnum {
     RemoveScheduledShutdown = '@App/REMOVE_SCHEDULED_SHUTDOWN',
     ChangeApplicationState = '@App/CHANGE_APP_STATE',
     ChangeSelectedTime = '@App/CHANGE_SELECTED_TIME',
-    ChangeSelectedDate = '@App/CHANGE_SELECTED_DATE',
+    ChangeSelectedDateTime = '@App/CHANGE_SELECTED_DATE_TIME',
     IsHostActiveCheck = '@App/IS_HOST_ACTIVE',
 }
 

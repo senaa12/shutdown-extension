@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
-import InputTimeComponent from '../reusableComponents/inputTimeComponent';
 import LoadingComponent from '../reusableComponents/loadingComponent';
+import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
 import './videoEndShutdownComponent.scss';
 
 interface VideoEndShutdownComponentState {
@@ -32,7 +32,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabID): Partia
             ...ownProps,
             ...state.openTabsReducer[ownProps.activeTabId],
             subscribedTab: state.appReducer.isShutdownEventScheduled,
-            selectedTime: new Date(state.appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0],
+            selectedTime: state.appReducer.inputSelectedTime,
         };
     }
 
@@ -91,7 +91,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
             response =
             <>
                 <div>{videoPlayerStrings.videoAvailable}</div>
-                <InputTimeComponent
+                <TimeDurationComponent
                     onChange={this.props.timeChange}
                     value={this.props.selectedTime}
                     isDisabled={this.state.isDisabled}

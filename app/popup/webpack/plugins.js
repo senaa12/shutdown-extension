@@ -23,7 +23,12 @@ const miniCssExtractPlugin = new MiniCssExtractPlugin({
 });
 
 const copyWebpackPlugin = (isBaseApp) => new CopyPlugin([
-    { from: isBaseApp ? "manifest.lite.json" : "manifest.full.json" , to: "manifest.json" }
+    { 
+        from: isBaseApp ? 
+            "resources/manifest.lite.json" : 
+            "resources/manifest.full.json", 
+        to: "manifest.json" 
+    }
 ]);
 
 module.exports = {

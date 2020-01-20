@@ -3,14 +3,17 @@ import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
 const initialAppMode = (process.env.IS_BASE !== undefined ? JSON.parse(process.env.IS_BASE) : true)  ?
     ApplicationModeEnum.Countdown : ApplicationModeEnum.VideoPlayer;
-const initialDate = new Date(new Date().toDateString() + ', 00:00:00');
+
+const initialTime = '00:00:00';
+const initialDateTime = new Date(new Date().toDateString() + ', ' + initialTime);
 
 export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: initialAppMode,
     isHostAppActive: false,
     isShutdownEventScheduled: 0,
     shutdownEvent: undefined,
-    inputSelectedTime: initialDate,
+    inputSelectedDateTime: initialDateTime,
+    inputSelectedTime: initialTime,
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -39,21 +42,20 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 selectedApplicationMode: newState,
-                inputSelectedTime: initialDate,
+                inputSelectedDateTime: initialDateTime,
+                inputSelectedTime: initialTime,
             };
         }
         case AppActionTypeEnum.ChangeSelectedTime: {
-            const newTime = new Date(state.inputSelectedTime.toDateString() + ', ' + action.data);
             return {
                 ...state,
-                inputSelectedTime: newTime,
+                inputSelectedTime: action.data,
             };
         }
-        case AppActionTypeEnum.ChangeSelectedDate: {
-            const newTime = new Date(action.data + ', ' + state.inputSelectedTime.toLocaleTimeString('hr-HR'));
+        case AppActionTypeEnum.ChangeSelectedDateTime: {
             return {
                 ...state,
-                inputSelectedTime: newTime,
+                inputSelectedDateTime: action.data,
             };
         }
         case AppActionTypeEnum.IsHostActiveCheck: {

@@ -25,8 +25,7 @@ export const removeShutdownEvent = () => {
 
 export const countdownShutdownEvent = () => {
     const countdownInterval = () => {
-        const str = new Date(store.getState().appReducer.inputSelectedTime);
-        const seconds = str.setSeconds(str.getSeconds() - 1);
+        const seconds = calculateSeconds(store.getState().appReducer.inputSelectedTime) - 1;
         if (seconds < 1) {
             shutdownCommand();
         } else {
@@ -47,7 +46,7 @@ export const countdownShutdownEvent = () => {
         },
     };
 
-    const time = new Date(store.getState().appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0];
+    const time = store.getState().appReducer.inputSelectedTime;
     if (calculateSeconds(time) < 10) {
         resultAction.data.message = actionResultsStrings.shutdown.failedCountdown;
         store.dispatch(resultAction);
@@ -72,7 +71,7 @@ export const timerShutdown = () => {
         },
     };
 
-    const selectedTime = new Date(store.getState().appReducer.inputSelectedTime);
+    const selectedTime = new Date(store.getState().appReducer.inputSelectedDateTime);
     const currentTime = new Date();
     if (currentTime > selectedTime) {
         resultAction.data.message = actionResultsStrings.shutdown.failedTimer;

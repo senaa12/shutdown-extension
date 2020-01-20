@@ -10,8 +10,8 @@ export const changeTimeSelected = (newTime: string): Action =>  ({
     data: newTime,
 });
 
-export const changeSelectedDate = (newDate: string) => ({
-    type: AppActionTypeEnum.ChangeSelectedDate,
+export const changeSelectedDateTime = (newDate: Date) => ({
+    type: AppActionTypeEnum.ChangeSelectedDateTime,
     data: newDate,
 });
 

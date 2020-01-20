@@ -1,9 +1,45 @@
 import React from 'react';
 
 import { calculateSeconds, convertSecondsToTimeFormat } from 'common';
-import './timeInput.scss';
+import './timeDurationComponent.scss';
 
-export interface TimeInputProps {
+export interface TimeDurationComponentProps {
+    value: string;
+    onChange?(newValue: string): void;
+    isDisabled?: boolean;
+    maxValue?: string;
+    label?: React.ReactNode;
+    fontSize?: number;
+    labelClassname?: string;
+    labelPosition?: 'TOP' | 'BOTTOM';
+    wrapperClassName?: string;
+    style?: React.CSSProperties;
+}
+
+const timeDurationComponent = (props: TimeDurationComponentProps) => {
+    const wrapperClassname = React.useMemo(() => (
+        props.wrapperClassName + ' input-time-holder ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
+    ), [props.labelPosition, props.wrapperClassName]);
+
+    const labelClassname = React.useMemo(() => (
+        'label ' + (props.labelClassname ? props.labelClassname : '')
+    ), [props.labelClassname]);
+
+    return (
+        <div className={wrapperClassname} style={props.style}>
+            {props.label && <div className={labelClassname}>{props.label}</div>}
+            <TimeDurationInput
+                value={props.value}
+                onChange={props.onChange}
+                fontSize={props.fontSize}
+                maxValue={props.maxValue}
+                disabled={props.isDisabled}
+            />
+        </div>
+    );
+};
+
+export interface TimeDurationInputProps {
     disabled?: boolean;
     value: string;
     onChange?: (newVal: string) => void;
@@ -12,10 +48,9 @@ export interface TimeInputProps {
     minValue?: string;
     fontSize?: number;
 }
-
 // custom time input component
 // because standard input time reads time format from computer
-const timeInput = (props: TimeInputProps) => {
+const TimeDurationInput = (props: TimeDurationInputProps) => {
     const inputRef = React.useRef(null);
     const [ value, setValue ] = React.useState(props.value);
 
@@ -116,7 +151,7 @@ const timeInput = (props: TimeInputProps) => {
         }
     };
 
-    let className = 'custom-time-input';
+    let className = 'input-style';
     className += props.disabled ? ' disabled' : '';
 
     return (
@@ -138,4 +173,4 @@ const timeInput = (props: TimeInputProps) => {
     );
 };
 
-export default timeInput;
+export default timeDurationComponent;

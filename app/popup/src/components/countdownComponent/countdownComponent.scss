@@ -1,11 +1,10 @@
+@import "../../index.scss";
+
 .countdown-component {
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @extend %flex-column;
     
     .shutdown-label {
-        font-size: var(--big-font-size);
         margin-bottom: 5px;
     }
 }

@@ -41,6 +41,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
             content={videoPlayerPremiumInfo}
             trigger={'hover'}
             wrapperClassname={'custom-button'}
+            position={'bottom'}
         >
             <ButtonComponent
                 isSelected={false}

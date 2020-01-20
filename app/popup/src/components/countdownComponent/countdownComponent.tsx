@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
-import InputTimeComponent from '../reusableComponents/inputTimeComponent';
+import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
 
 import './countdownComponent.scss';
 
@@ -21,7 +21,7 @@ export interface CountdownComponentState {
 
 const mapStateToProps = (state: RootReducerState): Partial<CountdownComponentProps> => {
     return {
-        inputSelectedTime: new Date(state.appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0],
+        inputSelectedTime: state.appReducer.inputSelectedTime,
         isShutdownScheduled: !!state.appReducer.isShutdownEventScheduled,
     };
 };
@@ -51,7 +51,7 @@ class CountdownComponent extends React.Component<CountdownComponentProps, Countd
     public render() {
         return (
             <div className='countdown-component'>
-                <InputTimeComponent
+                <TimeDurationComponent
                     value={this.props.inputSelectedTime}
                     onChange={!this.props.isShutdownScheduled ?
                         this.props.changeInputTime :
@@ -63,6 +63,7 @@ class CountdownComponent extends React.Component<CountdownComponentProps, Countd
                     labelClassname={'shutdown-label'}
                     fontSize={30}
                     isDisabled={this.props.isShutdownScheduled}
+                    style={{ marginTop: 15 }}
                 />
             </div>
         );

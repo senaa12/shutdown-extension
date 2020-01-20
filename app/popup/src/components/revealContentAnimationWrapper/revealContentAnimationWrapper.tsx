@@ -1,23 +1,23 @@
 import React from 'react';
 
-import './unmountChildrenAnimation.scss';
+import './revealContentAnimationWrapper.scss';
 
-export interface UnmountChildrenAnimationProps {
+export interface RevealContentAnimationWrapperProps {
     shouldShowChildren: boolean;
 }
 
-export interface UnmountChildrenAnimationState {
+export interface RevealContentAnimationWrapperState {
     classNameTrigger: string;
 }
 
 // tslint:disable-next-line: max-line-length
-export default class UnmountChildrenAnimation extends React.Component<UnmountChildrenAnimationProps, UnmountChildrenAnimationState> {
-    constructor(props: UnmountChildrenAnimationProps) {
+export default class RevealContentAnimationWrapper extends React.Component<RevealContentAnimationWrapperProps, RevealContentAnimationWrapperState> {
+    constructor(props: RevealContentAnimationWrapperProps) {
         super(props);
         this.state = { classNameTrigger: props.shouldShowChildren ? 'placeholder' : '' };
     }
 
-    public componentDidUpdate(prevProps: UnmountChildrenAnimationProps) {
+    public componentDidUpdate(prevProps: RevealContentAnimationWrapperProps) {
         if (prevProps.shouldShowChildren && !this.props.shouldShowChildren) {
             this.setState({ classNameTrigger: 'open' });
         }

@@ -42,7 +42,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
         isShutdownButtonDisabled: isShutdownDisabled,
         currentTabID: ownProps.currentTabId,
         actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
-        selectedTime: new Date(state.appReducer.inputSelectedTime).toLocaleTimeString('hr-HR').split(' ')[0],
+        selectedTime: state.appReducer.inputSelectedTime,
         actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         isHostAppActive: state.appReducer.isHostAppActive,
         ...tabState,
@@ -123,7 +123,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                         onClick={onClick}
                         icon={IconEnum.PowerButton}
                         iconSize={IconSize.Smallest}
-                        disabled={!this.props.isHostAppActive || appProperties.isBaseApp}
+                        disabled={!this.props.isHostAppActive}
             />
             </SimpleTooltipComponent>
         );

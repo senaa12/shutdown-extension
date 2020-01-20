@@ -1,13 +1,13 @@
+@import "../../index.scss";
+
 .wrapper{
     position:fixed;
     width:100%;
     height:100%;
     top:0;
-    left:0;
-    display:flex;
-    flex-direction:column;
+    left:0;   
+    @extend %flex-column;
     justify-content:center;
-    align-items:center;
     z-index: 10;
     font-size: var(--title-font-size);
     font-weight: 600;
