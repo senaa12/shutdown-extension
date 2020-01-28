@@ -1,5 +1,5 @@
 import { Action, ActionResultActionTypeEnum, ActionResultEnum,
-    actionResultsStrings, AppActionTypeEnum, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+    actionResultsStrings, AppActionTypeEnum, BackgroundMessage, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
 import store from '.';
 
 // remove
@@ -17,6 +17,12 @@ export const removeVideoScheduledShutdown = () => {
         },
     };
     store.dispatch(resultAction);
+
+    const changeIconMessage: BackgroundMessage = {
+        type: BackgroundMessageTypeEnum.ChangeIcon,
+        data: false,
+    };
+    chrome.runtime.sendMessage(changeIconMessage);
 };
 
 // setters
@@ -56,6 +62,12 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
 
         resultAction.data.message = actionResultsStrings.shutdown.success;
         store.dispatch(resultAction);
+
+        const changeIconMessage: BackgroundMessage = {
+            type: BackgroundMessageTypeEnum.ChangeIcon,
+            data: true,
+        };
+        chrome.runtime.sendMessage(changeIconMessage);
     } catch (e) {
         // tslint:disable-next-line: no-console
         console.error(e);

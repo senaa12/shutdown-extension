@@ -27,6 +27,7 @@ export enum BackgroundMessageTypeEnum {
     CountdownToShutdown,
     RemoveCountdownToShutdown,
     TimerShutdown,
+    ChangeIcon,
 }
 
 // webext-redux sender type

@@ -8,29 +8,23 @@ export interface IconProps {
 }
 
 const icon = (props: IconProps) => {
-    const [ useTag, setUseTag ] = React.useState<string>('');
-
     React.useEffect(() => {
         try {
-            const iconFile = require('../../assets/icons/' + props.iconName + '.svg');
-            setUseTag('<use xlink:href="#' + iconFile.default.id + '\"></use>');
+            require('../../assets/icons/' + props.iconName + '.svg');
         } catch (ex) {
             // tslint:disable-next-line:no-console
             console.error(ex);
         }
     }, []);
 
-    if (!useTag.length) {
-        return null;
-    }
-
     return(
         <svg
             className={props.iconName + ' ' + props.className}
-            dangerouslySetInnerHTML={{ __html: useTag }}
             height={props.iconSize ? props.iconSize : IconSize.Small}
             width={props.iconSize ? props.iconSize : IconSize.Small}
-        />
+        >
+            <use xlinkHref={`#${props.iconName}`} />
+        </svg>
     );
 };
 

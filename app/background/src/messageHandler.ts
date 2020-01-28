@@ -1,4 +1,5 @@
 import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
+import { changeIcon } from './utilities/changeIcon';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 import { countdownShutdownEvent, removeShutdownEvent, timerShutdown } from './utilities/shutdown';
 
@@ -25,6 +26,10 @@ const messageHandler = (
             }
             case BackgroundMessageTypeEnum.TimerShutdown: {
                 timerShutdown();
+                break;
+            }
+            case BackgroundMessageTypeEnum.ChangeIcon: {
+                changeIcon(request.data);
                 break;
             }
             default: {

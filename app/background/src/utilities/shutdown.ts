@@ -1,6 +1,7 @@
 import { Action, ActionResultActionTypeEnum, ActionResultEnum,
     actionResultsStrings, AppActionTypeEnum, calculateSeconds, convertSecondsToTimeFormat } from 'common';
 import { store } from '..';
+import { changeIcon } from './changeIcon';
 import { shutdownCommand } from './nativeCommunication';
 
 export const removeShutdownEvent = () => {
@@ -21,6 +22,7 @@ export const removeShutdownEvent = () => {
         },
     };
     store.dispatch(resultAction);
+    changeIcon(false);
 };
 
 export const countdownShutdownEvent = () => {
@@ -57,6 +59,7 @@ export const countdownShutdownEvent = () => {
 
         resultAction.data.message = actionResultsStrings.shutdown.success;
         store.dispatch(resultAction);
+        changeIcon(true);
     }
 };
 
@@ -84,5 +87,6 @@ export const timerShutdown = () => {
 
         resultAction.data.message = actionResultsStrings.shutdown.success;
         store.dispatch(resultAction);
+        changeIcon(true);
     }
 };

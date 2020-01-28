@@ -27,8 +27,24 @@ const copyWebpackPlugin = (isBaseApp) => new CopyPlugin([
         from: isBaseApp ? 
             "resources/manifest.lite.json" : 
             "resources/manifest.full.json", 
-        to: "manifest.json" 
-    }
+        to: "manifest.json",
+    },
+    {
+        from: "resources/logo-16.png",
+        to: "logo-16.png"
+    },
+    {
+        from: "resources/logo-16-shutdown.png",
+        to: "logo-16-shutdown.png"
+    },
+    {
+        from: "resources/logo-48.png",
+        to: "logo-48.png"
+    },
+    {
+        from: "resources/logo-128.png",
+        to: "logo-128.png"
+    },
 ]);
 
 module.exports = {
