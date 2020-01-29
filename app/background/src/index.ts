@@ -7,7 +7,13 @@ import messageHandler from './messageHandler';
 import { connecToNativeApp } from './utilities/nativeCommunication';
 import { onRemoved, onUpdated } from './utilities/tabsManipulation';
 
-export const store = createStore(rootReducer, rootReducerInitialState, applyMiddleware(logger));
+const isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : false;
+
+export const store = createStore(
+    rootReducer,
+    rootReducerInitialState,
+    !isProduction ? applyMiddleware(logger) : undefined,
+);
 
 export default wrapStore(store);
 

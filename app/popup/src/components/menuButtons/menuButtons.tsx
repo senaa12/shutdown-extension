@@ -42,6 +42,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
             trigger={'hover'}
             wrapperClassname={'custom-button'}
             position={'bottom'}
+            tooltipClassname={'custom-tooltip'}
         >
             <ButtonComponent
                 isSelected={false}

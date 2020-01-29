@@ -33,10 +33,13 @@ const messageHandler = (
                 break;
             }
             default: {
-                throw new Error('message handler not defined');
+                // if not redux store action throw error
+                if (request.type !== 'chromex.dispatch') {
+                    throw new Error('Message handler must be defined');
+                }
+
             }
         }
-
 };
 
 export default messageHandler;

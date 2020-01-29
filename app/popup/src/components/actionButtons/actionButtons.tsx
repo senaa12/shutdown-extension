@@ -9,7 +9,6 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 
 import { Dispatch } from 'redux';
 import { triggerActionResultTooltip } from '../../actions/actions';
-import appProperties from '../../utilities/appProperties';
 import communicationManager from '../../utilities/communicationManager';
 import { AppOwnProps } from '../app';
 import './actionButtons.scss';

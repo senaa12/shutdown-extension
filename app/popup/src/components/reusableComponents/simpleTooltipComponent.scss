@@ -2,7 +2,7 @@
 
 .tooltip-base {
     @extend %flex-column;
-    transition: opacity .3s ease-out;
+    transition: opacity .2s ease-out;
     text-align: center;
 
     .content {
@@ -12,8 +12,6 @@
     }
 
     .tooltip-arrow {
-        position: relative;
-        bottom: 4px;
         fill: var(--hover-color);
     }
 

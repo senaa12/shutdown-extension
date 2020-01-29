@@ -4,10 +4,10 @@ const plugins = require("./webpack/plugins");
 const rules = require("./webpack/rules");
 
 const isBaseMode = process.env.MODE == "base";
-const environment = process.env.ENV == "dev";
+const isDev = process.env.ENV == "dev";
 
 console.log("Is base app: " + isBaseMode);
-console.log("Is dev: " + environment);
+console.log("Is dev: " + isDev);
 
 module.exports = {
     entry: "./popup/src/index.tsx",
@@ -39,7 +39,7 @@ module.exports = {
         plugins.copyWebpackPlugin(isBaseMode), 
         plugins.miniCssExtractPlugin, 
         plugins.hashedModulePlugin, 
-        plugins.definePlugin(environment, isBaseMode), 
+        plugins.definePlugin(!isDev, isBaseMode), 
         plugins.htmlWebpackPlugin 
     ],
 }

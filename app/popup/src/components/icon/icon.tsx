@@ -5,6 +5,7 @@ export interface IconProps {
     iconName: IconEnum;
     className?: string;
     iconSize?: IconSize;
+    style?: React.CSSProperties;
 }
 
 const icon = (props: IconProps) => {
@@ -22,6 +23,7 @@ const icon = (props: IconProps) => {
             className={props.iconName + ' ' + props.className}
             height={props.iconSize ? props.iconSize : IconSize.Small}
             width={props.iconSize ? props.iconSize : IconSize.Small}
+            style={props.style}
         >
             <use xlinkHref={`#${props.iconName}`} />
         </svg>

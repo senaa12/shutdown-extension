@@ -44,7 +44,7 @@ export const links = {
 
 export const videoPlayerPremiumInfo = (
     <div>
-        video player placeholder
+        NOT AVAILABLE <br/> IN LITE VERSION
     </div>
 );
 

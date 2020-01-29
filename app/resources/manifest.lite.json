@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Shutdown Extension Lite",
-    "version": "1.0",
+    "version": "0.2",
 
     "description": "Small and simple extension for automatic computer shutdown",
 
@@ -17,10 +17,14 @@
     },
 
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["background.js"],
+        "persistent": false
     },
 
     "permissions": [
         "nativeMessaging"
-    ]
+    ],
+
+    "offline_enabled": true
+    
 }

@@ -31,3 +31,15 @@ There are several build scripts but for dev purposes run
 ```
 npm run build
 ```
+
+## Chrome Web Store Description
+
+You want to shutdown you computer automatically?
+This is a chrome extension for you. Extremely easy to use, you have available options like: 
+
+
+* Timed shutdown - at specific time
+* Countdown shutdown - time to count down
+* Video player - In progress, schedule shutdown at specific point of video
+
+NOTE: for now extension only works on Windows.

@@ -3,7 +3,6 @@ import { ActionResultActionTypeEnum, ActionResultEnum, actionResultsStrings,
 import { store } from '..';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
-    console.log('removed');
     const subscribedTabID: number = store.getState().appReducer.isShutdownEventScheduled;
     if (subscribedTabID === tabID) {
         store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
