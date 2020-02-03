@@ -39,12 +39,12 @@ export const nativeAppTitle = 'shutdown.extension.host';
 
 export const links = {
     docs: 'http://www.google.hr',
-    nativeWin: 'http://bit.ly/2NyikQx',
+    nativeWin: 'http://bit.ly/shutdown-host',
 };
 
 export const videoPlayerPremiumInfo = (
     <div>
-        NOT AVAILABLE <br/> IN LITE VERSION
+        NOT AVAILABLE
     </div>
 );
 

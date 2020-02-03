@@ -30,12 +30,12 @@ const copyWebpackPlugin = (isBaseApp) => new CopyPlugin([
         to: "manifest.json",
     },
     {
-        from: "resources/logo-16.png",
-        to: "logo-16.png"
+        from: "resources/icon.png",
+        to: "icon.png"
     },
     {
-        from: "resources/logo-16-shutdown.png",
-        to: "logo-16-shutdown.png"
+        from: "resources/icon-shutdown.png",
+        to: "icon-shutdown.png"
     },
     {
         from: "resources/logo-48.png",

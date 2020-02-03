@@ -17,7 +17,7 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;   
     -ms-user-select: none;    
-    user-select: none;     
+    user-select: none;
 }
 
 :root {
@@ -47,6 +47,10 @@ body {
     @include color-shades($red, my-red);
     @include color-shades($grey, my-grey);
 
+    .tile-button {
+        @extend %tile;
+    }
+    
     .link {
         margin: 5px;
         text-overflow: ellipsis;
@@ -57,22 +61,24 @@ body {
         }
     }
 
+    .clickable {
+        &:hover {
+            border: solid 2px rgba($hover-color ,0.4);
+            box-shadow: 0 0 5px rgba($hover-color, 0.8);
+            cursor: pointer;
+        }
+    }
+
     .selected {
         background-color: var(--selected-tile-color);
     }
 
-    .tile-button {
-        @extend %tile;
-    }
-    
-    .clickable {
-        &:hover {
-            @extend %selected-tile;
-        }
-    }
-
     .disabled {
-        @extend %disabled;
+        opacity: 0.5;
+        &:hover {
+            cursor: default;
+            box-shadow: none;
+        }
     }
 
     .no-host-message{
@@ -130,17 +136,12 @@ body {
         }
     }
 }
+
 %flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
-
-%selected-tile {
-    border: solid 2px rgba($hover-color ,0.4);
-    box-shadow: 0 0 5px rgba($hover-color, 0.8);
-    cursor: pointer;
 }
 
 %tile {
@@ -154,12 +155,3 @@ body {
     border-radius: 14px;
     padding: 5px 10px;
 }
-
-%disabled {
-    opacity: 0.7;
-    &:hover {
-        cursor: default;
-        box-shadow: none;
-    }
-}
-

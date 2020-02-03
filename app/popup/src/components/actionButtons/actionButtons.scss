@@ -34,3 +34,12 @@
 .video-player-tooltip {
     color: var(--white);
 }
+
+.cancel-hover {
+    &:hover {
+        color: var(--red);
+        .button-icon {
+            fill: var(--red);
+        }
+    }
+}

@@ -181,7 +181,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                 }
             }
         };
-        const className = this.baseClassName + (this.props.isShutdownEventScheduled ? 'clickable' : 'disabled');
+        const className = this.baseClassName + (this.props.isShutdownEventScheduled ? 'clickable cancel-hover' : 'disabled');
         return (
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
@@ -202,20 +202,6 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         );
     }
 
-    private renderDocsButton = () => {
-        const onClick = () => chrome.tabs.create({ url: `${links.docs}` });
-        return (
-                <ButtonComponent
-                    isSelected={false}
-                    className={'action-button clickable'}
-                    label={'Docs'}
-                    onClick={onClick}
-                    icon={IconEnum.OpenDocs}
-                    iconSize={IconSize.Smallest}
-                />
-        );
-    }
-
     public render() {
         return(
             <div className='action-buttons-container'>
@@ -223,7 +209,6 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                 {this.renderClearButton()}
                 <div style={{flexGrow: 1}}/>
                 {this.renderScanNowButton()}
-                {this.renderDocsButton()}
             </div>
         );
     }

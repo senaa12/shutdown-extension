@@ -1,8 +1,8 @@
 
 export const changeIcon = (shutdownIcon: boolean) => {
     if (shutdownIcon) {
-        chrome.browserAction.setIcon({ path: '/logo-16-shutdown.png' });
+        chrome.browserAction.setIcon({ path: '/icon-shutdown.png' });
     } else {
-        chrome.browserAction.setIcon({ path: '/logo-16.png' });
+        chrome.browserAction.setIcon({ path: '/icon.png' });
     }
 };
