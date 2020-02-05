@@ -40,6 +40,7 @@ export const nativeAppTitle = 'shutdown.extension.host';
 export const links = {
     docs: 'http://www.google.hr',
     nativeWin: 'http://bit.ly/shutdown-host',
+    FAQ: 'http://bit.ly/shut-ex-faq',
 };
 
 export const videoPlayerPremiumInfo = (
@@ -48,13 +49,17 @@ export const videoPlayerPremiumInfo = (
     </div>
 );
 
-export const hostNotActive = (onClick: CallbackFunction) => (
+export const hostNotActive = (onClick: CallbackFunction, faqOnClick: CallbackFunction) => (
     <div className={'no-host-message'}>
         <span>EXTENSION WILL NOT WORK!</span>
         <br />
         <span>You need to download and install native part of this extension in order to it working propperly</span>
         <br />
         <div className={'link'} onClick={onClick}>{links.nativeWin}</div>
+        <br />
+        <span> Read more on why do you need native part
+            <span className={'link'} onClick={faqOnClick}>here.</span>
+        </span>
     </div>
 );
 

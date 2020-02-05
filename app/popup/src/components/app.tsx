@@ -51,12 +51,13 @@ class App extends React.Component<AppContentProps> {
     }
 
     private openNativeDownloadLink = () => chrome.tabs.update({ url: links.nativeWin });
+    private readMoreAbout = () => window.open(links.FAQ, '_blank');
 
     public render() {
         return(
             <>
                 <RevealContentAnimationWrapper shouldShowChildren={!this.props.isHostAppActive}>
-                    {hostNotActive(this.openNativeDownloadLink)}
+                    {hostNotActive(this.openNativeDownloadLink, this.readMoreAbout)}
                 </RevealContentAnimationWrapper>
                 <Header />
                 <MenuButtons />

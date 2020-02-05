@@ -32,6 +32,10 @@ There are several build scripts but for dev purposes run
 npm run build
 ```
 
+## FAQ
+
+See the [FAQ](FAQ) document.
+
 ## Chrome Web Store Description
 
 You want to shutdown you computer automatically?
