@@ -71,6 +71,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
         const { activeTabId,
             documentHasVideoTag,
             documentHasIFrameTag,
+            iframeSource,
             subscribedTab,
             waitingForFirstLoad } = this.props;
         let response;
@@ -103,7 +104,7 @@ class VideoEndShutdownComponent extends React.Component<VideoEndShutdownComponen
                 />
             </>;
         } else if (documentHasIFrameTag) {
-            response = videoPlayerStrings.iframeAvailable(this.navigateToIframeSource);
+            response = videoPlayerStrings.iframeAvailable(this.navigateToIframeSource, iframeSource);
         } else {
             response =  videoPlayerStrings.notAvailable;
         }

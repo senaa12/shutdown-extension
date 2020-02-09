@@ -34,7 +34,7 @@ npm run build
 
 ## FAQ
 
-See the [FAQ](FAQ) document.
+See the [FAQ](FAQ.md) document.
 
 ## Chrome Web Store Description
 

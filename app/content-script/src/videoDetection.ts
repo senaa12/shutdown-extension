@@ -9,10 +9,13 @@ import { Action,
     TabState} from 'common';
 import store from '.';
 
+const iframeSourcesToIgnore = [
+    'ogs.google.com',
+];
+
 export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFunction) => {
     const videoTag = document.getElementsByTagName('video');
     const currentState: TabState = getCurrentTabState(data?.tabID);
-    const shouldSendResponseToPopup: boolean = !!data?.showResponse;
 
     const action: Action = {
         type: TabsActionTypeEnum.CheckTabVideoAvailability,
@@ -47,17 +50,11 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
                 videoDuration: Math.round(videoTag[0].duration),
             } as TabState;
             store.dispatch(action);
+
+            resultAction.data.message = actionResultsStrings.scanNow.videoFound;
+            store.dispatch(resultAction);
         }
 
-        if (shouldSendResponseToPopup) {
-            if (videoTag[0].duration && !currentState?.documentHasVideoTag) {
-                resultAction.data.message = actionResultsStrings.scanNow.videoFound;
-                store.dispatch(resultAction);
-            } else {
-                resultAction.data.message = actionResultsStrings.scanNow.noChanges;
-                store.dispatch(resultAction);
-            }
-        }
         return;
     }
 
@@ -69,38 +66,30 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         const withSrc = iframe.filter((ifr) => ifr.src);
         console.log(withSrc);
         if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
-            withSrc[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
+            iframe[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {
             action.data =  {
                 documentHasIFrameTag: true,
                 iframeSource: withSrc[0].src,
             } as TabState;
             store.dispatch(action);
+
+            resultAction.data.message = actionResultsStrings.scanNow.iFrameFound;
+            store.dispatch(resultAction);
         }
 
-        if (shouldSendResponseToPopup) {
-            if (withSrc[0].src && (!currentState?.iframeSource || withSrc[0].src !== currentState?.iframeSource)) {
-                resultAction.data.message = actionResultsStrings.scanNow.iFrameFound;
-                store.dispatch(resultAction);
-            } else {
-                resultAction.data.message = actionResultsStrings.scanNow.noChanges;
-                store.dispatch(resultAction);
-            }
-        }
         return;
     }
 
-    if (!currentState?.waitingForFirstLoad) {
+    if (!currentState?.waitingForFirstLoad || !!data?.showResponse) {
         action.data =  {
             documentHasVideoTag: false,
             documentHasIFrameTag: false,
         } as TabState;
         store.dispatch(action);
 
-        if (shouldSendResponseToPopup) {
-            resultAction.data.message = actionResultsStrings.scanNow.noChanges;
-            store.dispatch(resultAction);
-        }
+        resultAction.data.message = actionResultsStrings.scanNow.noChanges;
+        store.dispatch(resultAction);
     } else {
         store.dispatch({
             type: TabsActionTypeEnum.SetWaitingForFirstLoad,
@@ -109,8 +98,8 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
                 waitingToFirstLoad: false,
             },
         });
-
-        setTimeout(() => checkVideoAvailability({ showResponse: true }), 500);
+        // document.onload = () => checkVideoAvailability({ showResponse: true });
+        setTimeout(() => checkVideoAvailability({ showResponse: true }), 2000);
     }
 
 };
