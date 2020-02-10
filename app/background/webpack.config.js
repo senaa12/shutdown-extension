@@ -1,8 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 
-const isDev = process.env.ENV === "dev";
-const isBaseMode = process.env.MODE == "base";
+const isProd = process.env.ENV !== "dev";
 
 module.exports = {
     entry: './background/src/index.ts',
@@ -32,8 +31,7 @@ module.exports = {
     plugins: [
       new webpack.DefinePlugin({ 
         'process.env': { 
-            PRODUCTION: JSON.stringify(!isDev),
-            IS_BASE: JSON.stringify(isBaseMode)
+            PRODUCTION: JSON.stringify(isProd),
         }
       })
     ]

@@ -5,18 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build-popup": "cross-env ENV=dev webpack --config ./popup/webpack.config.js --mode production",
-    "build-popup-prod": "webpack --config ./popup/webpack.config.js --mode production",
-    "build-popup-base-prod": "cross-env MODE=base webpack --config ./popup/webpack.config.js --mode production",
-    
+    "build-popup-prod": "webpack --config ./popup/webpack.config.js --mode production",    
     "build-content-script": "webpack --config ./content-script/webpack.config.js --mode production",
-
     "build-background": "cross-env ENV=dev webpack --config ./background/webpack.config.js --mode production",
     "build-background-prod": "webpack --config ./background/webpack.config.js --mode production",
-    "build-background-base-prod": "cross-env MODE=base webpack --config ./background/webpack.config.js --mode production",
-
-    "build": "npm run build-popup && npm run build-background && npm run build-content-script",
-    "build-prod": "npm run build-popup-prod && npm run build-content-script && build-background-prod",
-    "build-base-prod": "npm run build-popup-base-prod && npm run build-background-base-prod"
+    "build": "npm run build-popup && npm run build-content-script && npm run build-background",
+    "build-prod": "npm run build-popup-prod && npm run build-content-script && build-background-prod"
   },
   "browser": {
     "child_process": false

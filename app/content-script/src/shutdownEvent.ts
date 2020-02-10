@@ -1,22 +1,16 @@
-import { Action, ActionResultActionTypeEnum, ActionResultEnum,
-    actionResultsStrings, AppActionTypeEnum, BackgroundMessage, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+import {  ActionResultEnum, actionResultsStrings, BackgroundMessage, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+
 import store from '.';
+import { removeScheduledShutdown, scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
 
 // remove
 export const removeVideoScheduledShutdown = () => {
     const event = store.getState().appReducer.shutdownEvent;
     clearInterval(event);
 
-    store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
+    removeScheduledShutdown();
 
-    const resultAction: Action = {
-        type: ActionResultActionTypeEnum.TriggerTooltip,
-        data: {
-            type: ActionResultEnum.Canceled,
-            message: actionResultsStrings.cancel.canceled,
-        },
-    };
-    store.dispatch(resultAction);
+    triggerTooltipWithMessage(actionResultsStrings.cancel.canceled, ActionResultEnum.Canceled);
 
     const changeIconMessage: BackgroundMessage = {
         type: BackgroundMessageTypeEnum.ChangeIcon,
@@ -34,34 +28,24 @@ export const checkVideoForShutdown = (selectedTime: number) => {
         };
         chrome.runtime.sendMessage(message,
             // (mess: string) => alert(mess)
-            );
+        );
+
         removeVideoScheduledShutdown();
     }
 };
 
 export const SubscribeToVideoEnd = (selectedTime: string) => {
-    const action: Action = {
-        type: AppActionTypeEnum.ScheduleShutdown,
-    };
-    const resultAction: Action = {
-        type: ActionResultActionTypeEnum.TriggerTooltip,
-        data: {
-            type: ActionResultEnum.Shutdown,
-        },
-    };
-
     try {
         const videoTag = document.getElementsByTagName('video')[0];
         const seconds = calculateSeconds(selectedTime);
         if (videoTag.currentTime > seconds) {
             throw new Error('not valid time');
         }
-        const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
-        action.data = { success: true, event: func };
-        store.dispatch(action);
 
-        resultAction.data.message = actionResultsStrings.shutdown.success;
-        store.dispatch(resultAction);
+        const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
+        scheduleShutdownAction({ success: true, event: func });
+
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
 
         const changeIconMessage: BackgroundMessage = {
             type: BackgroundMessageTypeEnum.ChangeIcon,
@@ -72,11 +56,9 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         // tslint:disable-next-line: no-console
         console.error(e);
 
-        action.data = { success: false };
-        store.dispatch(action);
+        scheduleShutdownAction({ success: false });
 
-        resultAction.data.message = actionResultsStrings.shutdown.failed;
-        store.dispatch(resultAction);
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.failed, ActionResultEnum.Shutdown);
     }
     return;
 };

@@ -1,5 +1,5 @@
 import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
-import { changeIcon } from './utilities/changeIcon';
+import { changeIcon } from './utilities/actions';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 import { countdownShutdownEvent, removeShutdownEvent, timerShutdown } from './utilities/shutdown';
 

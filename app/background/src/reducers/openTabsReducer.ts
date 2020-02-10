@@ -13,12 +13,10 @@ export default (state = openTabsReducerInitialState, action: Action): OpenTabsRe
             };
         }
         case TabsActionTypeEnum.SetWaitingForFirstLoad: {
-            const loadState: TabState = action.data.waitingForFirstLoad ? {
+            const loadState: TabState = {
                 ...state[action.data.tabID],
-                waitingForFirstLoad: true,
-            } : {
-                waitingForFirstLoad: false,
-            } as TabState;
+                waitingForFirstLoad: action.data.waitingForFirstLoad,
+            } ;
 
             return {
                 ...state,

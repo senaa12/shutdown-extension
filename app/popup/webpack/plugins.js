@@ -3,9 +3,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const definePlugin = (isProd , isBaseApp) => new webpack.DefinePlugin({ 
+const definePlugin = (isProd) => new webpack.DefinePlugin({ 
     'process.env': { 
-        IS_BASE: JSON.stringify(isBaseApp),
         PRODUCTION: JSON.stringify(isProd)
     },
     '__REACT_DEVTOOLS_GLOBAL_HOOK__': '({ isDisabled: true })'
@@ -22,11 +21,9 @@ const miniCssExtractPlugin = new MiniCssExtractPlugin({
     chunkFilename: "[name].css"
 });
 
-const copyWebpackPlugin = (isBaseApp) => new CopyPlugin([
+const copyWebpackPlugin = new CopyPlugin([
     { 
-        from: isBaseApp ? 
-            "resources/manifest.lite.json" : 
-            "resources/manifest.full.json", 
+        from: "resources/manifest.json",
         to: "manifest.json",
     },
     {

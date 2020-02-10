@@ -30,7 +30,7 @@ export const countdownComponentStrings = {
 
 export const timerComponentStrings = {
     description: (currentTime: React.ReactNode) => <div style={{ marginBottom: 5, textAlign: 'center' }}>
-            Current time is {currentTime} select in what time you want your computer to shutdown</div>,
+            Current time is {currentTime} select in what time you want your computer to shut down</div>,
     scheduled: () => <div style={{ marginTop: 15 }}>Shutdown scheduled at:</div>,
 };
 

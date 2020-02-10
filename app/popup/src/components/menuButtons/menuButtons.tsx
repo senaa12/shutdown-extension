@@ -36,23 +36,6 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
     }
 
     private renderVideoButton = () => (
-        appProperties.isBaseApp ?
-        <SimpleTooltipComponent
-            content={videoPlayerPremiumInfo}
-            trigger={'hover'}
-            wrapperClassname={'custom-button'}
-            position={'bottom'}
-            tooltipClassname={'custom-tooltip'}
-        >
-            <ButtonComponent
-                isSelected={false}
-                label={'Video Player'}
-                icon={IconEnum.VideoPlayer}
-                className={'fixer-class'}
-                iconSize={IconSize.Normal}
-                disabled={true}
-            />
-        </SimpleTooltipComponent> :
         <ButtonComponent
             isSelected={this.props.selectedMode === ApplicationModeEnum.VideoPlayer}
             label={'Video Player'}

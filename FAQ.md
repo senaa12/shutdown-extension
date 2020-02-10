@@ -1,4 +1,4 @@
-# FAQs
+# FAQ
 
 1. What is Shutdown Extension?
 

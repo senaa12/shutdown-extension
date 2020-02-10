@@ -5,7 +5,9 @@ import { store } from '..';
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
     const subscribedTabID: number = store.getState().appReducer.isShutdownEventScheduled;
     if (subscribedTabID === tabID) {
-        store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
+        store.dispatch({
+            type: AppActionTypeEnum.RemoveScheduledShutdown,
+        });
         store.dispatch({
             type: ActionResultActionTypeEnum.TriggerTooltip,
             data: {
@@ -25,7 +27,7 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
 
 export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdateProperties, tab: Tab) => {
     // tslint:disable-next-line: no-string-literal
-    if (changeInfo['status'] && changeInfo['status'] === 'complete') {
+    if (changeInfo['status'] && changeInfo['status'] === 'loading') {
         store.dispatch({
             type: TabsActionTypeEnum.SetWaitingForFirstLoad,
             data: {
@@ -33,7 +35,10 @@ export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdatePropertie
                 waitingForFirstLoad: true,
             },
         });
+    }
 
+    // tslint:disable-next-line: no-string-literal
+    if (changeInfo['status'] && changeInfo['status'] === 'complete') {
         chrome.tabs.sendMessage(tabId, {
                 type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
                 data: {

@@ -1,8 +1,7 @@
 import { Action, AppActionTypeEnum } from 'common';
 import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
-const initialAppMode = (process.env.IS_BASE !== undefined ? JSON.parse(process.env.IS_BASE) : false) ?
-        ApplicationModeEnum.Timer : ApplicationModeEnum.VideoPlayer;
+const initialAppMode = ApplicationModeEnum.VideoPlayer;
 const initialTime = '00:00:00';
 const initialDateTime = new Date(new Date().toDateString() + ', ' + initialTime);
 

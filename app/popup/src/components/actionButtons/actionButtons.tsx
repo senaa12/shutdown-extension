@@ -1,6 +1,6 @@
 import { ActionResultEnum, ApplicationModeEnum, BackgroundMessage,
         BackgroundMessageTypeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum,
-        links, RootReducerState, TabState } from 'common';
+        RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -181,6 +181,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                 }
             }
         };
+
         const className = this.baseClassName + (this.props.isShutdownEventScheduled ? 'clickable cancel-hover' : 'disabled');
         return (
             <SimpleTooltipComponent

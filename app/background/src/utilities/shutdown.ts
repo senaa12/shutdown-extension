@@ -1,7 +1,7 @@
-import { Action, ActionResultActionTypeEnum, ActionResultEnum,
-    actionResultsStrings, AppActionTypeEnum, calculateSeconds, convertSecondsToTimeFormat } from 'common';
+import {  ActionResultEnum, actionResultsStrings, calculateSeconds, convertSecondsToTimeFormat } from 'common';
 import { store } from '..';
-import { changeIcon } from './changeIcon';
+import { changeIcon, changeSelectedTimeAction,
+    removeScheduleShutdownAction, scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
 import { shutdownCommand } from './nativeCommunication';
 
 export const removeShutdownEvent = () => {
@@ -12,16 +12,8 @@ export const removeShutdownEvent = () => {
         clearTimeout(event);
     }
 
-    store.dispatch({ type: AppActionTypeEnum.RemoveScheduledShutdown });
-
-    const resultAction: Action = {
-        type: ActionResultActionTypeEnum.TriggerTooltip,
-        data: {
-            type: ActionResultEnum.Canceled,
-            message: actionResultsStrings.cancel.canceled,
-        },
-    };
-    store.dispatch(resultAction);
+    removeScheduleShutdownAction();
+    triggerTooltipWithMessage(actionResultsStrings.cancel.canceled, ActionResultEnum.Canceled);
     changeIcon(false);
 };
 
@@ -31,62 +23,31 @@ export const countdownShutdownEvent = () => {
         if (seconds < 1) {
             shutdownCommand();
         } else {
-            store.dispatch({
-                type: AppActionTypeEnum.ChangeSelectedTime,
-                data: convertSecondsToTimeFormat(seconds, true),
-            });
+            changeSelectedTimeAction(convertSecondsToTimeFormat(seconds, true));
         }
-    };
-
-    const action: Action = {
-        type: AppActionTypeEnum.ScheduleShutdown,
-    };
-    const resultAction: Action = {
-        type: ActionResultActionTypeEnum.TriggerTooltip,
-        data: {
-            type: ActionResultEnum.Shutdown,
-        },
     };
 
     const time = store.getState().appReducer.inputSelectedTime;
     if (calculateSeconds(time) < 10) {
-        resultAction.data.message = actionResultsStrings.shutdown.failedCountdown;
-        store.dispatch(resultAction);
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.failedCountdown, ActionResultEnum.Shutdown);
     } else {
         const func = setInterval(() => countdownInterval(), 1000);
-        action.data = { success: true, event: func };
-        store.dispatch(action);
-
-        resultAction.data.message = actionResultsStrings.shutdown.success;
-        store.dispatch(resultAction);
-        changeIcon(true);
+        scheduleShutdownAction(true, func);
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
     }
 };
 
 export const timerShutdown = () => {
-    const action: Action = {
-        type: AppActionTypeEnum.ScheduleShutdown,
-    };
-    const resultAction: Action = {
-        type: ActionResultActionTypeEnum.TriggerTooltip,
-        data: {
-            type: ActionResultEnum.Shutdown,
-        },
-    };
-
     const selectedTime = new Date(store.getState().appReducer.inputSelectedDateTime);
     const currentTime = new Date();
+
     if (currentTime > selectedTime) {
-        resultAction.data.message = actionResultsStrings.shutdown.failedTimer;
-        store.dispatch(resultAction);
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.failedTimer, ActionResultEnum.Shutdown);
     } else {
         const delay = selectedTime.getTime() - currentTime.getTime();
         const func = setTimeout(() => shutdownCommand(), delay);
-        action.data = { success: true, event: func };
-        store.dispatch(action);
-
-        resultAction.data.message = actionResultsStrings.shutdown.success;
-        store.dispatch(resultAction);
+        scheduleShutdownAction(true, func);
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
         changeIcon(true);
     }
 };
