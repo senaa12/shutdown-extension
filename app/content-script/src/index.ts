@@ -4,7 +4,7 @@ import {
     ContentScriptMessageTypeEnum,
     MessageSender } from 'common';
 import { Store } from 'webext-redux';
-import { removeVideoScheduledShutdown, SubscribeToVideoEnd } from './shutdownEvent';
+import { SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 
 const messageHandler = (
@@ -12,25 +12,15 @@ const messageHandler = (
     sender: MessageSender,
     sendResponse: CallbackFunction) => {
         switch (request.type) {
-        case ContentScriptMessageTypeEnum.SubscribeToVideoEnd: {
-            SubscribeToVideoEnd(request.data.selectedTime);
-            break;
+            case ContentScriptMessageTypeEnum.SubscribeToVideoEnd: {
+                SubscribeToVideoEnd(request.data.selectedTime);
+                break;
+            }
+            case ContentScriptMessageTypeEnum.CheckVideoAvailability: {
+                checkVideoAvailability(request.data);
+                break;
+            }
         }
-        case ContentScriptMessageTypeEnum.RemoveVideoScheduledShutdown: {
-            removeVideoScheduledShutdown();
-            break;
-        }
-        case ContentScriptMessageTypeEnum.CheckVideoAvailability: {
-            checkVideoAvailability(request.data);
-            break;
-        }
-        case ContentScriptMessageTypeEnum.TriggerAlert: {
-            alert(request.data);
-            break;
-        }
-        default:
-            throw new Error('Handler for message is not defined!');
-    }
 };
 
 const store = new Store();

@@ -9,7 +9,7 @@ import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
 import RevealContentAnimationWrapper from './revealContentAnimationWrapper/revealContentAnimationWrapper';
 import TimerComponent from './timerComponent/timerComponent';
-import VideoEndShutdownComponent from './videoEndShutdownComponent/videoEndShutdownComponent';
+import VideoEndComponent from './videoEndComponent/videoEndComponent';
 
 import './app.scss';
 
@@ -39,7 +39,7 @@ class App extends React.Component<AppContentProps> {
     public renderAppContent = () => {
         switch (this.props.selectedAppMode) {
             case ApplicationModeEnum.VideoPlayer: {
-                return <VideoEndShutdownComponent key={'first'} activeTabId={this.props.currentTabId}/>;
+                return <VideoEndComponent key={'first'} activeTabId={this.props.currentTabId}/>;
             }
             case ApplicationModeEnum.Countdown: {
                 return <CountdownComponent key={'second'} />;

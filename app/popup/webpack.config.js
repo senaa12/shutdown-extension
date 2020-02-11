@@ -4,7 +4,7 @@ const plugins = require("./webpack/plugins");
 const rules = require("./webpack/rules");
 
 const isProd = process.env.ENV != "dev";
-console.log("Is prod: " + isProd);
+console.log(`Is prod: ${isProd}\n`);
 
 module.exports = {
     entry: "./popup/src/index.tsx",

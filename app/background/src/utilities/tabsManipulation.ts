@@ -1,5 +1,5 @@
-import { ActionResultActionTypeEnum, ActionResultEnum, actionResultsStrings,
-    AppActionTypeEnum, ContentScriptMessageTypeEnum, Tab, TabsActionTypeEnum } from 'common';
+import { Action, ActionResultActionTypeEnum, ActionResultEnum,
+    actionResultsStrings, AppActionTypeEnum, ContentScriptMessageTypeEnum, PageStateEnum, Tab, TabsActionTypeEnum } from 'common';
 import { store } from '..';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
@@ -29,12 +29,16 @@ export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdatePropertie
     // tslint:disable-next-line: no-string-literal
     if (changeInfo['status'] && changeInfo['status'] === 'loading') {
         store.dispatch({
-            type: TabsActionTypeEnum.SetWaitingForFirstLoad,
+            type: TabsActionTypeEnum.SetTabState,
             data: {
-                tabID: tabId,
-                waitingForFirstLoad: true,
+                state: PageStateEnum.WaitingForFirstLoad,
             },
-        });
+            _sender: {
+                tab: {
+                    id: tabId,
+                },
+            },
+        } as Action);
     }
 
     // tslint:disable-next-line: no-string-literal

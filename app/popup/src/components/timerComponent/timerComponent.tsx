@@ -4,7 +4,7 @@ import { formatDate, RootReducerState, timerComponentStrings } from 'common';
 import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
-import { changeSelectedDateTime, changeTimeSelected } from '../../actions/actions';
+import { changeSelectedDateTime } from '../../actions/actions';
 import './timerComponent.scss';
 
 export interface TimerComponentProps {

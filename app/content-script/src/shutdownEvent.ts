@@ -1,25 +1,7 @@
 import {  ActionResultEnum, actionResultsStrings, BackgroundMessage, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+import { scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
 
-import store from '.';
-import { removeScheduledShutdown, scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
-
-// remove
-export const removeVideoScheduledShutdown = () => {
-    const event = store.getState().appReducer.shutdownEvent;
-    clearInterval(event);
-
-    removeScheduledShutdown();
-
-    triggerTooltipWithMessage(actionResultsStrings.cancel.canceled, ActionResultEnum.Canceled);
-
-    const changeIconMessage: BackgroundMessage = {
-        type: BackgroundMessageTypeEnum.ChangeIcon,
-        data: false,
-    };
-    chrome.runtime.sendMessage(changeIconMessage);
-};
-
-// setters
+// shutdown function
 export const checkVideoForShutdown = (selectedTime: number) => {
     const videoTag = document.getElementsByTagName('video')[0];
     if (videoTag.currentTime > selectedTime) {
@@ -30,10 +12,13 @@ export const checkVideoForShutdown = (selectedTime: number) => {
             // (mess: string) => alert(mess)
         );
 
-        removeVideoScheduledShutdown();
+        chrome.runtime.sendMessage({
+            type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
+        } as BackgroundMessage);
     }
 };
 
+// setter
 export const SubscribeToVideoEnd = (selectedTime: string) => {
     try {
         const videoTag = document.getElementsByTagName('video')[0];
@@ -44,20 +29,17 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
 
         const func = setInterval(() => checkVideoForShutdown(seconds), 1000);
         scheduleShutdownAction({ success: true, event: func });
-
         triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
 
-        const changeIconMessage: BackgroundMessage = {
+        chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.ChangeIcon,
             data: true,
-        };
-        chrome.runtime.sendMessage(changeIconMessage);
+        } as BackgroundMessage);
     } catch (e) {
         // tslint:disable-next-line: no-console
         console.error(e);
 
         scheduleShutdownAction({ success: false });
-
         triggerTooltipWithMessage(actionResultsStrings.shutdown.failed, ActionResultEnum.Shutdown);
     }
     return;

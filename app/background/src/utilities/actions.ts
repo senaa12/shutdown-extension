@@ -19,11 +19,11 @@ export const changeSelectedTimeAction = (newVal: string | undefined) => {
     });
 };
 
-export const scheduleShutdownAction = (isSuccess: boolean, eventFunc: any) => {
+export const scheduleShutdownAction = (isActionSuccess: boolean, eventFunc: any) => {
     store.dispatch({
         type: AppActionTypeEnum.ScheduleShutdown,
         data: {
-            success: isSuccess,
+            success: isActionSuccess,
             event: eventFunc,
         },
     });
@@ -34,7 +34,6 @@ export const removeScheduleShutdownAction = () => {
         type: AppActionTypeEnum.RemoveScheduledShutdown,
     });
 };
-
 /* #endregion */
 
 /* #region  Chrome actions */

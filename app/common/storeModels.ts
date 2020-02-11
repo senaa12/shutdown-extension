@@ -22,15 +22,20 @@ export interface ActionsResultState {
 }
 
 export interface OpenTabsReducerState {
-    [key: number]: TabState;
+    [tabID: number]: TabState;
 }
 
 export interface TabState {
-    documentHasVideoTag: boolean;
-    videoDuration: number;
-    documentHasIFrameTag: boolean;
-    iframeSource: string;
-    waitingForFirstLoad: boolean;
+    state: PageStateEnum;
+    videoDuration?: number;
+    iframeSource?: string;
+}
+
+export enum PageStateEnum {
+    WaitingForFirstLoad,
+    PageContainsVideoTag,
+    PageContainsIFrameTag,
+    PageCannotUseThisExtension,
 }
 
 export enum ApplicationModeEnum {

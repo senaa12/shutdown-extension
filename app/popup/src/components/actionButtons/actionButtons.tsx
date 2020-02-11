@@ -1,6 +1,6 @@
 import { ActionResultEnum, ApplicationModeEnum, BackgroundMessage,
         BackgroundMessageTypeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum,
-        RootReducerState, TabState } from 'common';
+        PageStateEnum, RootReducerState, TabState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -32,7 +32,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
     const tabState: (TabState | undefined) =
         ownProps.currentTabId ? state.openTabsReducer[ownProps.currentTabId] : undefined;
     const isShutdownDisabled = state.appReducer.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
-        !(tabState?.documentHasVideoTag && !state.appReducer.isShutdownEventScheduled) :
+        !(tabState?.state === PageStateEnum.PageContainsVideoTag && !state.appReducer.isShutdownEventScheduled) :
         !!state.appReducer.isShutdownEventScheduled;
 
     return {
@@ -168,17 +168,10 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     private renderClearButton = () => {
         const onClick = () => {
             if (this.props.isShutdownEventScheduled) {
-                if (this.props.appMode === ApplicationModeEnum.VideoPlayer) {
-                    const message: ContentScriptMessage = {
-                        type: ContentScriptMessageTypeEnum.RemoveVideoScheduledShutdown,
-                    };
-                    communicationManager.sendMessageToTab(this.props.isShutdownEventScheduled, message);
-                } else {
-                    const message: BackgroundMessage = {
-                        type: BackgroundMessageTypeEnum.RemoveCountdownToShutdown,
-                    };
-                    communicationManager.sendMessageToBackgroundPage(message);
-                }
+                const message: BackgroundMessage = {
+                    type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
+                };
+                communicationManager.sendMessageToBackgroundPage(message);
             }
         };
 

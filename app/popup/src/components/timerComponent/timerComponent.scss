@@ -1,9 +1,9 @@
 @import "../../index.scss";
 
 .timer-component {
-    @extend %flex-column;
     height: 100%;
-    padding: 0 5px;
+    margin: 0 10px 15px 10px;
+    @extend %flex-column;
     
     .custom-time {
         width: 140px;

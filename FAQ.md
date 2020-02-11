@@ -19,3 +19,6 @@ First, you need to download the native part from [http://bit.ly/shutdown-host](h
 5. What does it mean to install the native part and why do I need to run an installation as administrator?
 
 It means creating the manifest file in the installation folder, copying the executable file to it and register the manifest file path to your registry. Because it changes your registery (inserts one key/value pair that specifies where a manifest file from the native part is located) you also need to run it as administrator.
+
+6. Why do I need to navigate to IFrame when detecting video on specific sites?
+

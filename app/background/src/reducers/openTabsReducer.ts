@@ -4,23 +4,12 @@ export const openTabsReducerInitialState: OpenTabsReducerState = {};
 
 export default (state = openTabsReducerInitialState, action: Action): OpenTabsReducerState => {
     switch (action.type) {
-        case TabsActionTypeEnum.CheckTabVideoAvailability: {
+        case TabsActionTypeEnum.SetTabState: {
             const data: TabState = action.data;
             const sender: number = action._sender?.tab.id  ? action._sender.tab.id : -1;
             return {
                 ...state,
                 [sender]: { ...data },
-            };
-        }
-        case TabsActionTypeEnum.SetWaitingForFirstLoad: {
-            const loadState: TabState = {
-                ...state[action.data.tabID],
-                waitingForFirstLoad: action.data.waitingForFirstLoad,
-            } ;
-
-            return {
-                ...state,
-                [action.data.tabID]: { ...loadState },
             };
         }
         case TabsActionTypeEnum.RemoveTab: {

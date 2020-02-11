@@ -10,9 +10,7 @@ export interface ContentScriptMessage {
 
 export enum ContentScriptMessageTypeEnum {
     SubscribeToVideoEnd,
-    RemoveVideoScheduledShutdown,
     CheckVideoAvailability,
-    TriggerAlert,
 }
 
 // => bacground messaging
@@ -25,8 +23,8 @@ export enum BackgroundMessageTypeEnum {
     ShutdownComputer,
     CheckNativeApp,
     CountdownToShutdown,
-    RemoveCountdownToShutdown,
     TimerShutdown,
+    RemoveShutdownEvent,
     ChangeIcon,
 }
 

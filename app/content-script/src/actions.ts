@@ -1,4 +1,4 @@
-import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum, TabsActionTypeEnum } from 'common';
+import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum, TabsActionTypeEnum, TabState } from 'common';
 import store from '.';
 
 export const triggerTooltipWithMessage = (respMessage: string, action: ActionResultEnum) => {
@@ -11,9 +11,9 @@ export const triggerTooltipWithMessage = (respMessage: string, action: ActionRes
     });
 };
 
-export const sendResultingTabState = (actionData: any) => {
+export const sendResultingTabState = (actionData: TabState) => {
     store.dispatch({
-        type: TabsActionTypeEnum.CheckTabVideoAvailability,
+        type: TabsActionTypeEnum.SetTabState,
         data: actionData,
     });
 };
@@ -22,12 +22,6 @@ export const scheduleShutdownAction = (actionData: any) => {
     store.dispatch({
         type: AppActionTypeEnum.ScheduleShutdown,
         data: actionData,
-    });
-};
-
-export const removeScheduledShutdown = () => {
-    store.dispatch({
-        type: AppActionTypeEnum.RemoveScheduledShutdown,
     });
 };
 

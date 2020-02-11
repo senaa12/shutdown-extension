@@ -3,6 +3,7 @@ import {
     actionResultsStrings,
     CallbackFunction,
     convertSecondsToTimeFormat,
+    PageStateEnum,
     TabState,
 } from 'common';
 import store from '.';
@@ -12,27 +13,26 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     const videoTag = document.getElementsByTagName('video');
     const currentState: TabState = getCurrentTabState(data?.tabID);
 
-    console.log('doso si tu');
-    console.log(data);
-    console.log(currentState);
-    console.log('videotag');
-    console.log(videoTag);
     if (videoTag.length) {
         // page has video tag so we check duration
-        console.log(videoTag[0].duration);
         if (!videoTag[0].duration || isNaN(videoTag[0].duration)) {
+            if (!!data?.showResponse) {
+                sendResultingTabState({ state: PageStateEnum.PageCannotUseThisExtension });
+            }
+
+            setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
             videoTag[0].onloadedmetadata = () => checkVideoAvailability({ ...data });
         } else if (videoTag[0].duration.toString() === 'Infinity') {
-            setTimeout(() => checkVideoAvailability({ ...data }), 700);
+            // if infinity => delay, possible bug
+            setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
         } else {
             // set input selected time to end
             changeInputSelectedTime(convertSecondsToTimeFormat(videoTag[0].duration, true));
 
             // set tab state
             sendResultingTabState({
-                documentHasVideoTag: true,
+                state: PageStateEnum.PageContainsVideoTag,
                 videoDuration: Math.round(videoTag[0].duration),
-                waitingForFirstLoad: false,
             });
 
             // tooltip
@@ -43,35 +43,27 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
     // maybe video tag does not exist but IFrame exists on page
     const iframe = Array.from(document.getElementsByTagName('iframe'));
-    console.log('iframe');
-    console.log(iframe);
     if (iframe.length) {
+        // has Iframe source but lets filter it
         const withSrc = iframe.filter((ifr) => ifr.src && !isSourceInIgnoredIframeSources(ifr.src));
-        console.log(withSrc);
         if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
             iframe[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {
             // set tab state
             sendResultingTabState({
-                documentHasIFrameTag: true,
+                state: PageStateEnum.PageContainsIFrameTag,
                 iframeSource: withSrc[0].src,
-                waitingForFirstLoad: false,
             });
 
             // tooltip
             triggerTooltipWithMessage(actionResultsStrings.scanNow.iFrameFound, ActionResultEnum.Scan);
         }
-
         return;
     }
 
-    if (!currentState?.waitingForFirstLoad || !!data?.showResponse) {
+    if (!(currentState?.state === PageStateEnum.WaitingForFirstLoad) || !!data?.showResponse) {
         // set tab state
-        sendResultingTabState({
-            documentHasVideoTag: false,
-            documentHasIFrameTag: false,
-            waitingForFirstLoad: false,
-        });
+        sendResultingTabState({ state: PageStateEnum.PageCannotUseThisExtension });
 
         // tooltip
         triggerTooltipWithMessage(actionResultsStrings.scanNow.noChanges, ActionResultEnum.Scan);

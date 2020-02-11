@@ -20,12 +20,12 @@ const messageHandler = (
                 countdownShutdownEvent();
                 break;
             }
-            case BackgroundMessageTypeEnum.RemoveCountdownToShutdown: {
-                removeShutdownEvent();
-                break;
-            }
             case BackgroundMessageTypeEnum.TimerShutdown: {
                 timerShutdown();
+                break;
+            }
+            case BackgroundMessageTypeEnum.RemoveShutdownEvent: {
+                removeShutdownEvent();
                 break;
             }
             case BackgroundMessageTypeEnum.ChangeIcon: {
