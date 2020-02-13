@@ -1,4 +1,5 @@
-import { convertSecondsToTimeFormat, links, PageStateEnum, RootReducerState, TabState, videoPlayerStrings } from 'common';
+import { convertSecondsToTimeFormat, links, RootReducerState,
+    TabState, TabStateEnum, videoPlayerStrings } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -74,10 +75,6 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
         } = this.props;
         const shutdownIsSubscribed = subscribedTab > 0;
 
-        if (state === PageStateEnum.WaitingForFirstLoad) {
-            return <LoadingComponent />;
-        }
-
         if (shutdownIsSubscribed) {
             if (activeTabId === subscribedTab) {
                 return videoPlayerStrings.shutdownSubscribed.thisTab(`${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`);
@@ -87,7 +84,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
         }
 
         switch (state) {
-            case PageStateEnum.PageContainsVideoTag: {
+            case TabStateEnum.PageContainsVideoTag: {
                 return (
                     <>
                         <div>{videoPlayerStrings.videoAvailable}</div>
@@ -103,16 +100,16 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
                     </>
                 );
             }
-            case PageStateEnum.PageContainsIFrameTag : {
+            case TabStateEnum.PageContainsIFrameTag : {
                 return (
                     <>
                         {videoPlayerStrings.iframeAvailable(this.navigateToIframeSource, iframeSource)}
-                        <div className={'read-more'}>
-                            If you want to know why do you need to navigate to IFrame and much more, you should
-                            open our <span className='link' onClick={this.readMoreAbout}>FAQ document</span>.
-                        </div>
+                        <div className={'read-more'}>{videoPlayerStrings.readMore(this.readMoreAbout)}</div>
                     </>
                 );
+            }
+            case TabStateEnum.WaitingForFirstLoad: {
+                return <LoadingComponent />;
             }
             default: {
                 return videoPlayerStrings.notAvailable;
@@ -122,7 +119,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
 
     public render() {
         return (
-            <div className='video-end-component'>
+            <div className='flex-column video-end-component'>
                 {this.renderContent()}
             </div>
         );

@@ -16,7 +16,7 @@ export interface CustomButtonProps {
 }
 
 const buttonComponent = (props: CustomButtonProps) => {
-    let className = 'button-base ' + props.className;
+    let className = 'flex-column button-base ' + props.className;
     className += props.isSelected ? ' selected' : '';
     className += props.disabled ? ' disabled' : '';
     return(

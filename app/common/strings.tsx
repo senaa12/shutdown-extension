@@ -21,6 +21,10 @@ export const videoPlayerStrings = {
             <div className='link' onClick={onClick}>{tabTitle}</div>
         </>),
     },
+    readMore: (onClick: CallbackFunction) => (<>
+        If you want to know why do you need to navigate to IFrame and much more, you should
+        open our <span className='link' onClick={onClick}>FAQ document</span>.
+    </>),
 };
 
 export const countdownComponentStrings = {
@@ -34,7 +38,7 @@ export const timerComponentStrings = {
     scheduled: () => <div style={{ marginTop: 15 }}>Shutdown scheduled at:</div>,
 };
 
-export const title = 'AUTO-SHUTDOWN EXTENSION';
+export const title = 'AUTO SHUTDOWN EXTENSION';
 export const nativeAppTitle = 'shutdown.extension.host';
 
 export const links = {
@@ -43,14 +47,8 @@ export const links = {
     FAQ: 'http://bit.ly/shut-ex-faq',
 };
 
-export const videoPlayerPremiumInfo = (
-    <div>
-        NOT AVAILABLE
-    </div>
-);
-
 export const hostNotActive = (onClick: CallbackFunction, faqOnClick: CallbackFunction) => (
-    <div className={'no-host-message'}>
+    <div className={'flex-column no-host-message'}>
         <span>EXTENSION WILL NOT WORK!</span>
         <br />
         <span>You need to download and install native part of this extension in order to it working propperly</span>

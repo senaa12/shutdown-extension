@@ -57,7 +57,7 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
         const { selectedInputDateTime, isShutdownScheduled } = this.props;
 
         return (
-            <div className={'timer-component'}>
+            <div className={'flex-column timer-component'}>
                 {!isShutdownScheduled ?
                 timerComponentStrings.description(
                     <input

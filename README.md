@@ -32,18 +32,9 @@ There are several build scripts but for dev purposes run
 npm run build
 ```
 
+And to load it into your browser navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button where you need to select the build folder `//app/public`.
+
 ## FAQ
 
 See the [FAQ](FAQ.md) document.
 
-## Chrome Web Store Description
-
-You want to shutdown you computer automatically?
-This is a chrome extension for you. Extremely easy to use, you have available options like: 
-
-
-* Timed shutdown - at specific time
-* Countdown shutdown - time to count down
-* Video player - In progress, schedule shutdown at specific point of video
-
-NOTE: for now extension only works on Windows.

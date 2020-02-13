@@ -1,12 +1,10 @@
-import { ApplicationModeEnum, RootReducerState, videoPlayerPremiumInfo } from 'common';
+import { ApplicationModeEnum, RootReducerState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { changeAppState } from '../../actions/actions';
-import appProperties from '../../utilities/appProperties';
 import { IconEnum, IconSize } from '../icon/iconEnum';
 import ButtonComponent from '../reusableComponents/buttonComponent';
-import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent';
 
 import './menuButtons.scss';
 
@@ -42,7 +40,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
             onClick={!this.props.isShutdownScheduled ?
                 () => this.props.changeSelectedMode(ApplicationModeEnum.VideoPlayer) : () => {}}
             icon={IconEnum.VideoPlayer}
-            className={'custom-button clickable'}
+            className={'tile custom-button clickable'}
             iconSize={IconSize.Normal}
             disabled={this.props.isShutdownScheduled}
         />
@@ -55,7 +53,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
             onClick={!this.props.isShutdownScheduled ?
                 () => this.props.changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
             icon={IconEnum.AlarmClock}
-            className={'custom-button clickable'}
+            className={'tile custom-button clickable'}
             iconSize={IconSize.Normal}
             disabled={this.props.isShutdownScheduled}
         />
@@ -68,7 +66,7 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
             onClick={!this.props.isShutdownScheduled ?
                 () => this.props.changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
             icon={IconEnum.Countdown}
-            className={'custom-button clickable'}
+            className={'tile custom-button clickable'}
             disabled={this.props.isShutdownScheduled}
         />
     )

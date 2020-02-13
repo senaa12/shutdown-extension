@@ -1,4 +1,11 @@
-import { Sender } from './chromeApiModels';
+import { Tab } from './chromeApiModels';
+
+// webext-redux sender type
+export interface Sender  {
+    id: string;
+    tab: Tab;
+    url?: string;
+}
 
 export interface Action {
     type: ActionTypeEnum;

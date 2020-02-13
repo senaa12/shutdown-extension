@@ -1,4 +1,4 @@
-import {  BackgroundMessage, BackgroundMessageTypeEnum } from 'common';
+import {  BackgroundMessageTypeEnum, ChromeApiMessage } from 'common';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -14,10 +14,9 @@ const store = new Store();
 store.ready().then(() => {
     const isHostActive = store.getState().appReducer.isHostAppActive;
     if (!isHostActive) {
-        const message: BackgroundMessage = {
+        communicationManager.sendMessageToBackgroundPage({
             type: BackgroundMessageTypeEnum.CheckNativeApp,
-        };
-        communicationManager.sendMessageToBackgroundPage(message);
+        } as ChromeApiMessage);
     }
 
     ReactDOM.render(

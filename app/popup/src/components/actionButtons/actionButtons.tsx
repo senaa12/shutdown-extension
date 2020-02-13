@@ -1,6 +1,5 @@
-import { ActionResultEnum, ApplicationModeEnum, BackgroundMessage,
-        BackgroundMessageTypeEnum, ContentScriptMessage, ContentScriptMessageTypeEnum,
-        PageStateEnum, RootReducerState, TabState } from 'common';
+import { ActionResultEnum, ApplicationModeEnum, BackgroundMessageTypeEnum,
+        ChromeApiMessage, ContentScriptMessageTypeEnum, RootReducerState, TabState, TabStateEnum } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -32,7 +31,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partia
     const tabState: (TabState | undefined) =
         ownProps.currentTabId ? state.openTabsReducer[ownProps.currentTabId] : undefined;
     const isShutdownDisabled = state.appReducer.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
-        !(tabState?.state === PageStateEnum.PageContainsVideoTag && !state.appReducer.isShutdownEventScheduled) :
+        !(tabState?.state === TabStateEnum.PageContainsVideoTag && !state.appReducer.isShutdownEventScheduled) :
         !!state.appReducer.isShutdownEventScheduled;
 
     return {
@@ -80,27 +79,24 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         const shutdown = () => {
             switch (this.props.appMode) {
                 case ApplicationModeEnum.VideoPlayer: {
-                    const message: ContentScriptMessage = {
+                    communicationManager.sendMessageToActiveTab({
                         type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
                         data: {
                             selectedTime: this.props.selectedTime,
                         },
-                    };
-                    communicationManager.sendMessageToActiveTab(message);
+                    } as ChromeApiMessage);
                     break;
                 }
                 case ApplicationModeEnum.Countdown: {
-                    const message: BackgroundMessage = {
+                    communicationManager.sendMessageToBackgroundPage({
                         type: BackgroundMessageTypeEnum.CountdownToShutdown,
-                    };
-                    communicationManager.sendMessageToBackgroundPage(message);
+                    } as ChromeApiMessage);
                     break;
                 }
                 default: {
-                    const message: BackgroundMessage = {
+                    communicationManager.sendMessageToBackgroundPage({
                         type: BackgroundMessageTypeEnum.TimerShutdown,
-                    };
-                    communicationManager.sendMessageToBackgroundPage(message);
+                    } as ChromeApiMessage);
                 }
             }
         };
@@ -136,12 +132,10 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isShutdownEventScheduled);
         const onClick = () => {
             if (!scanDisabled) {
-                const message: ContentScriptMessage = {
+                communicationManager.sendMessageToActiveTab({
                     type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
                     data: { tabID: this.props.currentTabID, showResponse: true },
-                };
-
-                communicationManager.sendMessageToActiveTab(message);
+                } as ChromeApiMessage);
             }
         };
         const className = this.baseClassName + (scanDisabled ? 'disabled' : 'clickable' );
@@ -168,10 +162,9 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     private renderClearButton = () => {
         const onClick = () => {
             if (this.props.isShutdownEventScheduled) {
-                const message: BackgroundMessage = {
+                communicationManager.sendMessageToBackgroundPage({
                     type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
-                };
-                communicationManager.sendMessageToBackgroundPage(message);
+                } as ChromeApiMessage);
             }
         };
 

@@ -4,22 +4,6 @@
 /* FONT STUFF*/
 @import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
 
-body { 
-    width: 330px;
-    height: 370px;
-    padding: 10px 5px;
-    margin: 0;
-    background-color: var(--background-color);
-    font-family: 'Karla', sans-serif;
-    font-size: var(--normal-font-size);
-
-    // disable selection
-    -webkit-user-select: none;
-    -moz-user-select: none;   
-    -ms-user-select: none;    
-    user-select: none;
-}
-
 :root {
     --blue: #{$blue};
     --green: #{$green};
@@ -46,9 +30,40 @@ body {
     @include color-shades($yellow, my-yellow);
     @include color-shades($red, my-red);
     @include color-shades($grey, my-grey);
+}
 
-    .tile-button {
-        @extend %tile;
+body { 
+    width: 330px;
+    height: 370px;
+    padding: 10px 5px;
+    margin: 0;
+    background-color: var(--background-color);
+    font-family: 'Karla', sans-serif;
+    font-size: var(--normal-font-size);
+
+    // disable selection
+    -webkit-user-select: none;
+    -moz-user-select: none;   
+    -ms-user-select: none;    
+    user-select: none;
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .tile {
+        font-size: var(--normal-font-size);
+        width: fit-content;
+        max-width: 80%;
+        text-overflow: ellipsis;
+        margin: 10px 15px;
+        background-color: var(--background-color);
+        border: solid 2px var(--border-color);
+        border-radius: 14px;
+        padding: 5px 10px;;
     }
     
     .link {
@@ -82,7 +97,6 @@ body {
     }
 
     .no-host-message{
-        @extend %flex-column;
         padding: 10px;
         text-align: center;
         color: var(--white);
@@ -135,23 +149,4 @@ body {
             background-color: var(--background-color);
         }
     }
-}
-
-%flex-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-%tile {
-    font-size: var(--normal-font-size);
-    width: fit-content;
-    max-width: 80%;
-    text-overflow: ellipsis;
-    margin: 10px 15px;
-    background-color: var(--background-color);
-    border: solid 2px var(--border-color);
-    border-radius: 14px;
-    padding: 5px 10px;
 }

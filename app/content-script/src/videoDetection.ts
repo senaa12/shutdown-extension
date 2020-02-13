@@ -3,8 +3,8 @@ import {
     actionResultsStrings,
     CallbackFunction,
     convertSecondsToTimeFormat,
-    PageStateEnum,
     TabState,
+    TabStateEnum,
 } from 'common';
 import store from '.';
 import { changeInputSelectedTime, sendResultingTabState, triggerTooltipWithMessage } from './actions';
@@ -16,11 +16,6 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     if (videoTag.length) {
         // page has video tag so we check duration
         if (!videoTag[0].duration || isNaN(videoTag[0].duration)) {
-            if (!!data?.showResponse) {
-                sendResultingTabState({ state: PageStateEnum.PageCannotUseThisExtension });
-            }
-
-            setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
             videoTag[0].onloadedmetadata = () => checkVideoAvailability({ ...data });
         } else if (videoTag[0].duration.toString() === 'Infinity') {
             // if infinity => delay, possible bug
@@ -31,7 +26,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
             // set tab state
             sendResultingTabState({
-                state: PageStateEnum.PageContainsVideoTag,
+                state: TabStateEnum.PageContainsVideoTag,
                 videoDuration: Math.round(videoTag[0].duration),
             });
 
@@ -51,7 +46,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         } else {
             // set tab state
             sendResultingTabState({
-                state: PageStateEnum.PageContainsIFrameTag,
+                state: TabStateEnum.PageContainsIFrameTag,
                 iframeSource: withSrc[0].src,
             });
 
@@ -61,9 +56,9 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         return;
     }
 
-    if (!(currentState?.state === PageStateEnum.WaitingForFirstLoad) || !!data?.showResponse) {
+    if (!(currentState?.state === TabStateEnum.WaitingForFirstLoad) || !!data?.showResponse) {
         // set tab state
-        sendResultingTabState({ state: PageStateEnum.PageCannotUseThisExtension });
+        sendResultingTabState({ state: TabStateEnum.PageCannotUseThisExtension });
 
         // tooltip
         triggerTooltipWithMessage(actionResultsStrings.scanNow.noChanges, ActionResultEnum.Scan);

@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -123,7 +123,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
                 ref={tooltipRef}
                 style={calculatePosition()}
                 onTransitionEnd={setTransitionToFalse}
-                className={props.tooltipClassname + ' tooltip-base'}
+                className={props.tooltipClassname + ' flex-column tooltip-base'}
             >
                     <div className={'content'}>{props.content}</div>
                     <Icon

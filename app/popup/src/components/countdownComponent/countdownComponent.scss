@@ -1,9 +1,6 @@
-@import "../../index.scss";
-
 .countdown-component {
     height: 100%;
     margin: 0 10px 15px 10px;
-    @extend %flex-column;
     
     .shutdown-label {
         margin-bottom: 5px;

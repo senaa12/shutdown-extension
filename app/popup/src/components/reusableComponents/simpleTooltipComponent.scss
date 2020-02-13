@@ -1,7 +1,4 @@
-@import "../../index.scss";
-
 .tooltip-base {
-    @extend %flex-column;
     transition: opacity .2s ease-out;
     text-align: center;
 

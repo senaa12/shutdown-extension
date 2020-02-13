@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build-popup": "cross-env ENV=dev webpack --config ./popup/webpack.config.js --mode production",
-    "build-popup-prod": "webpack --config ./popup/webpack.config.js --mode production",    
+    "build-popup-prod": "webpack --config ./popup/webpack.config.js --mode production",
     "build-content-script": "webpack --config ./content-script/webpack.config.js --mode production",
     "build-background": "cross-env ENV=dev webpack --config ./background/webpack.config.js --mode production",
     "build-background-prod": "webpack --config ./background/webpack.config.js --mode production",
@@ -29,7 +29,7 @@
     "Chrome"
   ],
   "author": "Luka Senicic",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "react": "^16.12.0",
     "react-css-transition-replace": "^4.0.2",

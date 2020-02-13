@@ -50,7 +50,7 @@ class CountdownComponent extends React.Component<CountdownComponentProps, Countd
 
     public render() {
         return (
-            <div className='countdown-component'>
+            <div className='flex-column countdown-component'>
                 <TimeDurationComponent
                     value={this.props.inputSelectedTime}
                     onChange={!this.props.isShutdownScheduled ?

@@ -1,7 +1,4 @@
-@import "../../index.scss";
-
 .button-base {
-    @extend %flex-column;
     justify-content: center;
     margin: 4px;
     padding: 5px;

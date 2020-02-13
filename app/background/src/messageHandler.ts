@@ -1,10 +1,10 @@
-import { BackgroundMessage, BackgroundMessageTypeEnum, CallbackFunction, MessageSender } from 'common';
+import { BackgroundMessageTypeEnum, CallbackFunction, ChromeApiMessage, MessageSender } from 'common';
 import { changeIcon } from './utilities/actions';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 import { countdownShutdownEvent, removeShutdownEvent, timerShutdown } from './utilities/shutdown';
 
 const messageHandler = (
-    request: BackgroundMessage,
+    request: ChromeApiMessage,
     sender: MessageSender,
     sendResponse: CallbackFunction) => {
         switch (request.type) {
@@ -31,13 +31,6 @@ const messageHandler = (
             case BackgroundMessageTypeEnum.ChangeIcon: {
                 changeIcon(request.data);
                 break;
-            }
-            default: {
-                // if not redux store action throw error
-                if (request.type !== 'chromex.dispatch') {
-                    throw new Error('Message handler must be defined');
-                }
-
             }
         }
 };

@@ -26,12 +26,12 @@ export interface OpenTabsReducerState {
 }
 
 export interface TabState {
-    state: PageStateEnum;
+    state: TabStateEnum;
     videoDuration?: number;
     iframeSource?: string;
 }
 
-export enum PageStateEnum {
+export enum TabStateEnum {
     WaitingForFirstLoad,
     PageContainsVideoTag,
     PageContainsIFrameTag,

@@ -1,5 +1,6 @@
 import { Action, ActionResultActionTypeEnum, ActionResultEnum,
-    actionResultsStrings, AppActionTypeEnum, ContentScriptMessageTypeEnum, PageStateEnum, Tab, TabsActionTypeEnum } from 'common';
+    actionResultsStrings, AppActionTypeEnum, ContentScriptMessageTypeEnum,
+    Tab, TabsActionTypeEnum, TabStateEnum } from 'common';
 import { store } from '..';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
@@ -31,7 +32,7 @@ export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdatePropertie
         store.dispatch({
             type: TabsActionTypeEnum.SetTabState,
             data: {
-                state: PageStateEnum.WaitingForFirstLoad,
+                state: TabStateEnum.WaitingForFirstLoad,
             },
             _sender: {
                 tab: {

@@ -1,7 +1,7 @@
-import { BackgroundMessage, CallbackFunction, ContentScriptMessage } from 'common';
+import { CallbackFunction, ChromeApiMessage } from 'common';
 
 class CommunicationManager {
-    public sendMessageToActiveTab(message: ContentScriptMessage, onReponse?: CallbackFunction) {
+    public sendMessageToActiveTab(message: ChromeApiMessage, onReponse?: CallbackFunction) {
         chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
             if (tabs[0] && tabs[0].id) {
                 chrome.tabs.sendMessage(tabs[0].id, message, onReponse);
@@ -9,11 +9,11 @@ class CommunicationManager {
         });
     }
 
-    public sendMessageToTab(tabID: number, message: ContentScriptMessage, onReponse?: CallbackFunction) {
+    public sendMessageToTab(tabID: number, message: ChromeApiMessage, onReponse?: CallbackFunction) {
         chrome.tabs.sendMessage(tabID, message, onReponse);
     }
 
-    public sendMessageToBackgroundPage(message: BackgroundMessage, onReponse?: CallbackFunction) {
+    public sendMessageToBackgroundPage(message: ChromeApiMessage, onReponse?: CallbackFunction) {
         chrome.runtime.sendMessage(message, onReponse);
     }
 }

@@ -1,4 +1,4 @@
-import {  ActionResultEnum, actionResultsStrings, BackgroundMessage, BackgroundMessageTypeEnum, calculateSeconds } from 'common';
+import {  ActionResultEnum, actionResultsStrings, BackgroundMessageTypeEnum, calculateSeconds, ChromeApiMessage } from 'common';
 import { scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
 
 // shutdown function
@@ -14,7 +14,7 @@ export const checkVideoForShutdown = (selectedTime: number) => {
 
         chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
-        } as BackgroundMessage);
+        } as ChromeApiMessage);
     }
 };
 
@@ -34,7 +34,7 @@ export const SubscribeToVideoEnd = (selectedTime: string) => {
         chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.ChangeIcon,
             data: true,
-        } as BackgroundMessage);
+        } as ChromeApiMessage);
     } catch (e) {
         // tslint:disable-next-line: no-console
         console.error(e);

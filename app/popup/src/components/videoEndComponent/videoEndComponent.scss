@@ -1,9 +1,6 @@
-@import "../../index.scss";
-
 .video-end-component {
     height: 100%;
     margin: 0 10px 15px 10px;
-    @extend %flex-column;
 
     .small-label {
         font-size: var(--small-font-size);

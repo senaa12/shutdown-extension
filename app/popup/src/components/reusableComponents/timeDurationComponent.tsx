@@ -18,7 +18,7 @@ export interface TimeDurationComponentProps {
 
 const timeDurationComponent = (props: TimeDurationComponentProps) => {
     const wrapperClassname = React.useMemo(() => (
-        props.wrapperClassName + ' input-time-holder ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
+        props.wrapperClassName + ' input-time-holder flex-column ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
     ), [props.labelPosition, props.wrapperClassName]);
 
     const labelClassname = React.useMemo(() => (

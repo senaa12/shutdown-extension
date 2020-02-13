@@ -1,14 +1,14 @@
 import {
     CallbackFunction,
-    ContentScriptMessage,
+    ChromeApiMessage,
     ContentScriptMessageTypeEnum,
-    MessageSender } from 'common';
+    MessageSender} from 'common';
 import { Store } from 'webext-redux';
 import { SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 
 const messageHandler = (
-    request: ContentScriptMessage,
+    request: ChromeApiMessage,
     sender: MessageSender,
     sendResponse: CallbackFunction) => {
         switch (request.type) {

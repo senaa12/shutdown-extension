@@ -39,7 +39,10 @@ export default class RevealContentAnimationWrapper extends React.Component<Revea
         }
 
         return (
-            <div className={'wrapper ' + this.state.classNameTrigger} onTransitionEnd={this.unmountChildren}>
+            <div
+                className={'flex-column wrapper ' + this.state.classNameTrigger}
+                onTransitionEnd={this.unmountChildren}
+            >
                 <div className={'triangle left'}>{children}</div>
                 <div className={'triangle right'}>{children}</div>
             </div>

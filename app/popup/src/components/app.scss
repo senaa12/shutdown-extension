@@ -1,7 +1,5 @@
-@import "../index.scss";
 
 #app {
-    @extend %flex-column;
     height: 100%;
 
     .app-content {
