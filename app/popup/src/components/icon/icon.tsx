@@ -11,7 +11,7 @@ export interface IconProps {
 const icon = (props: IconProps) => {
     React.useEffect(() => {
         try {
-            require('../../assets/icons/' + props.iconName + '.svg');
+            require(`../../assets/icons/${props.iconName}.svg`);
         } catch (ex) {
             // tslint:disable-next-line:no-console
             console.error(ex);

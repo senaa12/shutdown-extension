@@ -38,7 +38,7 @@ export const timerComponentStrings = {
     scheduled: () => <div style={{ marginTop: 15 }}>Shutdown scheduled at:</div>,
 };
 
-export const title = 'AUTO SHUTDOWN EXTENSION';
+export const title = 'AUTO SHUTDOWN';
 export const nativeAppTitle = 'shutdown.extension.host';
 
 export const links = {

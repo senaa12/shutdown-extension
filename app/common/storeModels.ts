@@ -1,6 +1,6 @@
 export interface RootReducerState {
     appReducer: AppReducerState;
-    openTabsReducer: OpenTabsReducerState;
+    activeTabReducer: ActiveTabReducerState;
     actionsResultReducer: ActionsResultState;
 }
 
@@ -21,14 +21,14 @@ export interface ActionsResultState {
     actionResultTooltipMessage: React.ReactNode;
 }
 
-export interface OpenTabsReducerState {
-    [tabID: number]: TabState;
-}
-
 export interface TabState {
     state: TabStateEnum;
     videoDuration?: number;
     iframeSource?: string;
+}
+
+export interface ActiveTabReducerState extends TabState {
+    tabID: number;
 }
 
 export enum TabStateEnum {

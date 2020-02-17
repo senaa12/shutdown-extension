@@ -1,4 +1,4 @@
-import {  BackgroundMessageTypeEnum, ChromeApiMessage } from 'common';
+import {  BackgroundMessageTypeEnum, ChromeApiMessage, ContentScriptMessageTypeEnum, TabStateEnum } from 'common';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -17,13 +17,15 @@ store.ready().then(() => {
         communicationManager.sendMessageToBackgroundPage({
             type: BackgroundMessageTypeEnum.CheckNativeApp,
         } as ChromeApiMessage);
+    } else if (store.getState().activeTabReducer.state === TabStateEnum.WaitingForFirstLoad) {
+        communicationManager.sendMessageToActiveTab({
+            type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
+        });
     }
 
     ReactDOM.render(
         <Provider store={store}>
-            <ActiveTabReader>
-                <App />
-            </ActiveTabReader>
+            <App />
         </Provider>,
         document.getElementById('app'),
     );

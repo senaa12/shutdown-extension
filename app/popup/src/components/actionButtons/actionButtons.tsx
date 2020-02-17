@@ -9,14 +9,13 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 import { Dispatch } from 'redux';
 import { triggerActionResultTooltip } from '../../actions/actions';
 import communicationManager from '../../utilities/communicationManager';
-import { AppOwnProps } from '../app';
 import './actionButtons.scss';
 
 export interface ActionButtonCustomProps {
     appMode: ApplicationModeEnum;
     isShutdownEventScheduled: number;
     isShutdownButtonDisabled: boolean;
-    currentTabID: number;
+    tabID: number;
     selectedTime: string;
     isHostAppActive: boolean;
 
@@ -27,23 +26,21 @@ export interface ActionButtonCustomProps {
 
 declare type ActionButtonProps = ActionButtonCustomProps & TabState;
 
-const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partial<ActionButtonProps> => {
-    const tabState: (TabState | undefined) =
-        ownProps.currentTabId ? state.openTabsReducer[ownProps.currentTabId] : undefined;
+const mapStateToProps = (state: RootReducerState): Partial<ActionButtonProps> => {
     const isShutdownDisabled = state.appReducer.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
-        !(tabState?.state === TabStateEnum.PageContainsVideoTag && !state.appReducer.isShutdownEventScheduled) :
+        !(state.activeTabReducer?.state === TabStateEnum.PageContainsVideoTag
+            && !state.appReducer.isShutdownEventScheduled) :
         !!state.appReducer.isShutdownEventScheduled;
 
     return {
         appMode: state.appReducer.selectedApplicationMode,
         isShutdownEventScheduled: state.appReducer.isShutdownEventScheduled,
         isShutdownButtonDisabled: isShutdownDisabled,
-        currentTabID: ownProps.currentTabId,
         actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
         selectedTime: state.appReducer.inputSelectedTime,
         actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         isHostAppActive: state.appReducer.isHostAppActive,
-        ...tabState,
+        ...state.activeTabReducer,
     };
 };
 
@@ -134,7 +131,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             if (!scanDisabled) {
                 communicationManager.sendMessageToActiveTab({
                     type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
-                    data: { tabID: this.props.currentTabID, showResponse: true },
+                    data: { tabID: this.props.tabID, showResponse: true },
                 } as ChromeApiMessage);
             }
         };

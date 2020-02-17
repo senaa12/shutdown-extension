@@ -44,4 +44,18 @@ export const changeIcon = (shutdownIcon: boolean) => {
         chrome.browserAction.setIcon({ path: '/icon.png' });
     }
 };
+
+export const triggerOneMinuteWarningNotification = () => {
+    chrome.notifications.create('one-minute-warning',
+        {
+            title: 'Auto Shutdown Extension',
+            message: 'Computer will shut down in 1 minute',
+            type: 'basic',
+            iconUrl: 'logo-128.png',
+        },
+        (notificationId: string) => {
+            setTimeout(() => chrome.notifications.clear(notificationId), 3000);
+        },
+    );
+};
 /* #endregion */

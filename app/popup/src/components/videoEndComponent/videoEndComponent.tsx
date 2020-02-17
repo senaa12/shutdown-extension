@@ -1,5 +1,5 @@
-import { convertSecondsToTimeFormat, links, RootReducerState,
-    TabState, TabStateEnum, videoPlayerStrings } from 'common';
+import { ActiveTabReducerState, convertSecondsToTimeFormat, links,
+    RootReducerState, TabStateEnum, videoPlayerStrings } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -14,29 +14,20 @@ interface VideoEndComponentState {
     tabTitle?: string;
 }
 
-interface ActiveTabID {
-    activeTabId?: number;
-}
-
 interface VideoEndShutdownComponenStateProps {
     subscribedTab: number;
     selectedTime: string;
     timeChange(newTime: string): void;
 }
 
-declare type VideoEndComponentProps = ActiveTabID & TabState & VideoEndShutdownComponenStateProps;
+declare type VideoEndComponentProps = ActiveTabReducerState & VideoEndShutdownComponenStateProps;
 
-const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabID): Partial<VideoEndComponentProps> => {
-    if (ownProps.activeTabId) {
-        return {
-            ...ownProps,
-            ...state.openTabsReducer[ownProps.activeTabId],
-            subscribedTab: state.appReducer.isShutdownEventScheduled,
-            selectedTime: state.appReducer.inputSelectedTime,
-        };
-    }
-
-    return ownProps;
+const mapStateToProps = (state: RootReducerState): Partial<VideoEndComponentProps> => {
+    return {
+        ...state.activeTabReducer,
+        subscribedTab: state.appReducer.isShutdownEventScheduled,
+        selectedTime: state.appReducer.inputSelectedTime,
+    };
 };
 
 const dispatchStateToProps = (dispatch: Dispatch): Partial<VideoEndComponentProps> => {
@@ -68,7 +59,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
 
     private renderContent = () => {
         const {
-            activeTabId,
+            tabID,
             state,
             iframeSource,
             subscribedTab,
@@ -76,7 +67,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
         const shutdownIsSubscribed = subscribedTab > 0;
 
         if (shutdownIsSubscribed) {
-            if (activeTabId === subscribedTab) {
+            if (tabID === subscribedTab) {
                 return videoPlayerStrings.shutdownSubscribed.thisTab(`${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`);
             } else {
                 return videoPlayerStrings.shutdownSubscribed.otherTab(this.navigateToSelectedTab, this.state.tabTitle);
@@ -93,9 +84,10 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
                             value={this.props.selectedTime}
                             maxValue={convertSecondsToTimeFormat(this.props.videoDuration, true)}
                             fontSize={30}
+                            style={{ marginTop: 10 }}
                             labelPosition={'BOTTOM'}
                             labelClassname={'small-label'}
-                            label={`Video will end at ${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`}
+                            label={`Computer will shut down at ${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`}
                         />
                     </>
                 );

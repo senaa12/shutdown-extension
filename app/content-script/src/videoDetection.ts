@@ -1,6 +1,7 @@
 import {
     ActionResultEnum,
     actionResultsStrings,
+    ActiveTabReducerState,
     CallbackFunction,
     convertSecondsToTimeFormat,
     TabState,
@@ -11,7 +12,7 @@ import { changeInputSelectedTime, sendResultingTabState, triggerTooltipWithMessa
 
 export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFunction) => {
     const videoTag = document.getElementsByTagName('video');
-    const currentState: TabState = getCurrentTabState(data?.tabID);
+    const currentState: TabState = getCurrentTabState();
 
     if (videoTag.length) {
         // page has video tag so we check duration
@@ -40,7 +41,8 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     const iframe = Array.from(document.getElementsByTagName('iframe'));
     if (iframe.length) {
         // has Iframe source but lets filter it
-        const withSrc = iframe.filter((ifr) => ifr.src && !isSourceInIgnoredIframeSources(ifr.src));
+        const ignoredSources = iframe.filter((ifr) => !isSourceInIgnoredIframeSources(ifr.src));
+        const withSrc = ignoredSources.filter((ifr) => ifr.src);
         if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
             iframe[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {
@@ -74,11 +76,18 @@ const iframeSourcesToIgnore = [
     'comments',
     'google_ads_iframe',
     'googleads',
+    'googlesyndication.com',
+    'facebook.com/v2.0/,plugins',
 ];
 const isSourceInIgnoredIframeSources = (src: string): boolean => {
     return iframeSourcesToIgnore.filter((val) => src.includes(val)).length > 0;
 };
 
-const getCurrentTabState = (tabID: number) => {
-    return tabID ? store.getState().openTabsReducer[tabID] : undefined;
+const getCurrentTabState = () => {
+    const activeReducer: ActiveTabReducerState = store.getState().activeTabReducer;
+    return {
+        state: activeReducer.state,
+        iframeSource: activeReducer.iframeSource,
+        videoDuration: activeReducer.iframeSource,
+    } as TabState;
 };

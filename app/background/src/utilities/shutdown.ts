@@ -1,7 +1,8 @@
 import {  ActionResultEnum, actionResultsStrings, calculateSeconds, convertSecondsToTimeFormat } from 'common';
 import { store } from '..';
 import { changeIcon, changeSelectedTimeAction,
-    removeScheduleShutdownAction, scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
+    removeScheduleShutdownAction, scheduleShutdownAction,
+    triggerOneMinuteWarningNotification, triggerTooltipWithMessage } from './actions';
 import { shutdownCommand } from './nativeCommunication';
 
 export const removeShutdownEvent = () => {
@@ -23,6 +24,9 @@ export const countdownShutdownEvent = () => {
         if (seconds < 1) {
             shutdownCommand();
         } else {
+            if (seconds === 60) {
+                triggerOneMinuteWarningNotification();
+            }
             changeSelectedTimeAction(convertSecondsToTimeFormat(seconds, true));
         }
     };
@@ -44,8 +48,14 @@ export const timerShutdown = () => {
     if (currentTime > selectedTime) {
         triggerTooltipWithMessage(actionResultsStrings.shutdown.failedTimer, ActionResultEnum.Shutdown);
     } else {
+        const triggerTooltipAndScheduleShutdown = () => {
+            triggerOneMinuteWarningNotification();
+            const shutFunc = setTimeout(() => shutdownCommand(), 60000);
+            scheduleShutdownAction(true, shutFunc);
+        };
+
         const delay = selectedTime.getTime() - currentTime.getTime();
-        const func = setTimeout(() => shutdownCommand(), delay);
+        const func = setTimeout(() => triggerTooltipAndScheduleShutdown(), delay - 60000);
         scheduleShutdownAction(true, func);
         triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
         changeIcon(true);

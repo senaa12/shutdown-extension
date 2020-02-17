@@ -5,15 +5,16 @@ import { scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
 export const checkVideoForShutdown = (selectedTime: number) => {
     const videoTag = document.getElementsByTagName('video')[0];
     if (videoTag.currentTime > selectedTime) {
-        const message = {
+        chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.ShutdownComputer,
-        };
-        chrome.runtime.sendMessage(message,
-            // (mess: string) => alert(mess)
-        );
+        } as ChromeApiMessage);
 
         chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
+        } as ChromeApiMessage);
+    } else if (selectedTime - videoTag.currentTime < 60) {
+        chrome.runtime.sendMessage({
+            type: BackgroundMessageTypeEnum.TriggerNotification,
         } as ChromeApiMessage);
     }
 };

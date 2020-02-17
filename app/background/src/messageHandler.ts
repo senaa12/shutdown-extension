@@ -1,5 +1,5 @@
 import { BackgroundMessageTypeEnum, CallbackFunction, ChromeApiMessage, MessageSender } from 'common';
-import { changeIcon } from './utilities/actions';
+import { changeIcon, triggerOneMinuteWarningNotification } from './utilities/actions';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 import { countdownShutdownEvent, removeShutdownEvent, timerShutdown } from './utilities/shutdown';
 
@@ -30,6 +30,10 @@ const messageHandler = (
             }
             case BackgroundMessageTypeEnum.ChangeIcon: {
                 changeIcon(request.data);
+                break;
+            }
+            case BackgroundMessageTypeEnum.TriggerNotification: {
+                triggerOneMinuteWarningNotification();
                 break;
             }
         }

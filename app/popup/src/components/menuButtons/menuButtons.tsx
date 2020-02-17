@@ -33,50 +33,38 @@ class MenuButtons extends React.Component<MenuButtonsProps> {
         super(props);
     }
 
-    private renderVideoButton = () => (
-        <ButtonComponent
-            isSelected={this.props.selectedMode === ApplicationModeEnum.VideoPlayer}
-            label={'Video Player'}
-            onClick={!this.props.isShutdownScheduled ?
-                () => this.props.changeSelectedMode(ApplicationModeEnum.VideoPlayer) : () => {}}
-            icon={IconEnum.VideoPlayer}
-            className={'tile custom-button clickable'}
-            iconSize={IconSize.Normal}
-            disabled={this.props.isShutdownScheduled}
-        />
-    )
-
-    private renderTimerButton = () => (
-        <ButtonComponent
-            isSelected={this.props.selectedMode === ApplicationModeEnum.Timer}
-            label={'Timer'}
-            onClick={!this.props.isShutdownScheduled ?
-                () => this.props.changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
-            icon={IconEnum.AlarmClock}
-            className={'tile custom-button clickable'}
-            iconSize={IconSize.Normal}
-            disabled={this.props.isShutdownScheduled}
-        />
-    )
-
-    private renderCountdownButton = () => (
-        <ButtonComponent
-            isSelected={this.props.selectedMode === ApplicationModeEnum.Countdown}
-            label={'Countdown'}
-            onClick={!this.props.isShutdownScheduled ?
-                () => this.props.changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
-            icon={IconEnum.Countdown}
-            className={'tile custom-button clickable'}
-            disabled={this.props.isShutdownScheduled}
-        />
-    )
-
     public render() {
         return(
             <div className='menu-buttons-wrapper'>
-                {this.renderVideoButton()}
-                {this.renderTimerButton()}
-                {this.renderCountdownButton()}
+                <ButtonComponent
+                    isSelected={this.props.selectedMode === ApplicationModeEnum.VideoPlayer}
+                    label={'Video Player'}
+                    onClick={!this.props.isShutdownScheduled ?
+                        () => this.props.changeSelectedMode(ApplicationModeEnum.VideoPlayer) : () => {}}
+                    icon={IconEnum.VideoPlayer}
+                    className={'tile custom-button clickable'}
+                    iconSize={IconSize.Normal}
+                    disabled={this.props.isShutdownScheduled}
+                />
+                <ButtonComponent
+                    isSelected={this.props.selectedMode === ApplicationModeEnum.Timer}
+                    label={'Timer'}
+                    onClick={!this.props.isShutdownScheduled ?
+                        () => this.props.changeSelectedMode(ApplicationModeEnum.Timer) : () => {}}
+                    icon={IconEnum.AlarmClock}
+                    className={'tile custom-button clickable'}
+                    iconSize={IconSize.Normal}
+                    disabled={this.props.isShutdownScheduled}
+                />
+                <ButtonComponent
+                    isSelected={this.props.selectedMode === ApplicationModeEnum.Countdown}
+                    label={'Countdown'}
+                    onClick={!this.props.isShutdownScheduled ?
+                        () => this.props.changeSelectedMode(ApplicationModeEnum.Countdown) : () => {}}
+                    icon={IconEnum.Countdown}
+                    className={'tile custom-button clickable'}
+                    disabled={this.props.isShutdownScheduled}
+                />
                 <div className={'triggers-label'}>{'Choose Trigger'}</div>
             </div>
         );

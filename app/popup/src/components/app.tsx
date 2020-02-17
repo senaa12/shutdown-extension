@@ -13,20 +13,15 @@ import VideoEndComponent from './videoEndComponent/videoEndComponent';
 
 import './app.scss';
 
-export interface AppOwnProps {
-    currentTabId?: number;
-}
-
 export interface AppStateProps {
     selectedAppMode: ApplicationModeEnum;
     isHostAppActive: boolean;
 }
 
-declare type AppContentProps = AppOwnProps & TabState & AppStateProps;
+declare type AppContentProps = TabState & AppStateProps;
 
-const mapStateToProps = (state: RootReducerState, ownProps: AppOwnProps): Partial<AppContentProps> => {
+const mapStateToProps = (state: RootReducerState): Partial<AppContentProps> => {
     return {
-        ...ownProps,
         selectedAppMode: state.appReducer.selectedApplicationMode,
         isHostAppActive: state.appReducer.isHostAppActive,
     };
@@ -39,7 +34,7 @@ class App extends React.Component<AppContentProps> {
     public renderAppContent = () => {
         switch (this.props.selectedAppMode) {
             case ApplicationModeEnum.VideoPlayer: {
-                return <VideoEndComponent key={'first'} activeTabId={this.props.currentTabId}/>;
+                return <VideoEndComponent key={'first'} />;
             }
             case ApplicationModeEnum.Countdown: {
                 return <CountdownComponent key={'second'} />;
@@ -67,7 +62,7 @@ class App extends React.Component<AppContentProps> {
                     >
                         {this.renderAppContent()}
                     </ReactCSSTransitionReplace>
-                <ActionButtons currentTabId={this.props.currentTabId} />
+                <ActionButtons />
             </>
         );
     }

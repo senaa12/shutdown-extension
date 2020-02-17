@@ -28,7 +28,7 @@ export enum ActionResultActionTypeEnum {
 
 export enum TabsActionTypeEnum {
     SetTabState = '@Tabs/SET_TAB_STATE',
-    RemoveTab = '@Tabs/REMOVE_TAB',
+    ClearAndSetWaitingForFirstLoad = '@Tabs/CLEAR_AND_SET_WAITING',
 }
 
 export declare type ActionTypeEnum = TabsActionTypeEnum | ActionResultActionTypeEnum | AppActionTypeEnum;

@@ -12,7 +12,7 @@
     --grey: #{$grey};
     --black: #{$black};
     --white: #{$white};
-
+    
     --small-font-size: #{px-to-rem(10px)};
     --normal-font-size: #{px-to-rem(12px)};
     --big-font-size: #{px-to-rem(14px)};
@@ -29,7 +29,6 @@
     @include color-shades($green, my-green);
     @include color-shades($yellow, my-yellow);
     @include color-shades($red, my-red);
-    @include color-shades($grey, my-grey);
 }
 
 body { 
