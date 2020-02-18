@@ -25,7 +25,9 @@ store.ready().then(() => {
 
     ReactDOM.render(
         <Provider store={store}>
-            <App />
+            <ActiveTabReader>
+                <App />
+            </ActiveTabReader>
         </Provider>,
         document.getElementById('app'),
     );

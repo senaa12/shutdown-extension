@@ -4,7 +4,7 @@ import {
     ContentScriptMessageTypeEnum,
     MessageSender} from 'common';
 import { Store } from 'webext-redux';
-import { SubscribeToVideoEnd } from './shutdownEvent';
+import { removeShutdown, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 
 const messageHandler = (
@@ -18,6 +18,10 @@ const messageHandler = (
             }
             case ContentScriptMessageTypeEnum.CheckVideoAvailability: {
                 checkVideoAvailability(request.data);
+                break;
+            }
+            case ContentScriptMessageTypeEnum.RemoveVideoShutdownEvent: {
+                removeShutdown();
                 break;
             }
         }

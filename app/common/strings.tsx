@@ -70,7 +70,7 @@ export const actionResultsStrings = {
     shutdown: {
         success: 'Success',
         failed: 'Failed',
-        failedCountdown: 'Not supported less than 10 seconds',
+        failedCountdown: 'Not supported less than 60 seconds',
         failedTimer: 'Cannot select date in the past',
     },
     cancel: {

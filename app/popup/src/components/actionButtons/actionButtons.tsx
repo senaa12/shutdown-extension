@@ -1,5 +1,12 @@
-import { ActionResultEnum, ApplicationModeEnum, BackgroundMessageTypeEnum,
-        ChromeApiMessage, ContentScriptMessageTypeEnum, RootReducerState, TabState, TabStateEnum } from 'common';
+import {
+    ActionResultEnum,
+    ApplicationModeEnum,
+    BackgroundMessageTypeEnum,
+    ChromeApiMessage,
+    ContentScriptMessageTypeEnum,
+    RootReducerState,
+    TabState,
+    TabStateEnum } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -9,6 +16,7 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 import { Dispatch } from 'redux';
 import { triggerActionResultTooltip } from '../../actions/actions';
 import communicationManager from '../../utilities/communicationManager';
+import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader';
 import './actionButtons.scss';
 
 export interface ActionButtonCustomProps {
@@ -24,9 +32,10 @@ export interface ActionButtonCustomProps {
     triggerActionResultTooltip(newState: ActionResultEnum): void;
 }
 
-declare type ActionButtonProps = ActionButtonCustomProps & TabState;
+declare type ActionButtonProps = ActionButtonCustomProps & TabState & ActiveTabReaderInjectedProps;
 
-const mapStateToProps = (state: RootReducerState): Partial<ActionButtonProps> => {
+// tslint:disable-next-line: max-line-length
+const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): Partial<ActionButtonProps> => {
     const isShutdownDisabled = state.appReducer.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
         !(state.activeTabReducer?.state === TabStateEnum.PageContainsVideoTag
             && !state.appReducer.isShutdownEventScheduled) :
@@ -76,7 +85,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         const shutdown = () => {
             switch (this.props.appMode) {
                 case ApplicationModeEnum.VideoPlayer: {
-                    communicationManager.sendMessageToActiveTab({
+                    communicationManager.sendMessageToTab(this.props.tabID, {
                         type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
                         data: {
                             selectedTime: this.props.selectedTime,
@@ -126,16 +135,13 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             return null;
         }
 
-        const scanDisabled = !(this.props.isShutdownButtonDisabled && !this.props.isShutdownEventScheduled);
         const onClick = () => {
-            if (!scanDisabled) {
                 communicationManager.sendMessageToActiveTab({
                     type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
                     data: { tabID: this.props.tabID, showResponse: true },
                 } as ChromeApiMessage);
-            }
         };
-        const className = this.baseClassName + (scanDisabled ? 'disabled' : 'clickable' );
+        const className = this.baseClassName + (!!this.props.isShutdownEventScheduled ? 'disabled' : 'clickable' );
         return(
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
@@ -150,7 +156,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     onClick={onClick}
                     icon={IconEnum.ScanNow}
                     iconSize={IconSize.Smallest}
-                    disabled={scanDisabled}
+                    disabled={!!this.props.isShutdownEventScheduled}
                 />
             </SimpleTooltipComponent>
         );
@@ -159,13 +165,22 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     private renderClearButton = () => {
         const onClick = () => {
             if (this.props.isShutdownEventScheduled) {
-                communicationManager.sendMessageToBackgroundPage({
-                    type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
-                } as ChromeApiMessage);
+                if (this.props.appMode === ApplicationModeEnum.VideoPlayer) {
+                    communicationManager.sendMessageToTab(this.props.isShutdownEventScheduled, {
+                        type: ContentScriptMessageTypeEnum.RemoveVideoShutdownEvent,
+                    });
+                } else {
+                    communicationManager.sendMessageToBackgroundPage({
+                        type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
+                    } as ChromeApiMessage);
+                }
+
             }
         };
 
         const className = this.baseClassName + (this.props.isShutdownEventScheduled ? 'clickable cancel-hover' : 'disabled');
+        const isCancelDisabled = !this.props.isHostAppActive || (this.props.currentTabId !== this.props.tabID
+                    && this.props.appMode === ApplicationModeEnum.VideoPlayer);
         return (
             <SimpleTooltipComponent
                 content={this.props.actionResultTooltipContent}
@@ -180,7 +195,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     onClick={onClick}
                     icon={IconEnum.Cancel}
                     iconSize={IconSize.Smallest}
-                    disabled={!this.props.isHostAppActive}
+                    disabled={isCancelDisabled}
                 />
             </SimpleTooltipComponent>
         );

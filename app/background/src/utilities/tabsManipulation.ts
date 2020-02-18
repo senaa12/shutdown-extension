@@ -1,6 +1,13 @@
-import { Action, ActionResultActionTypeEnum, ActionResultEnum,
-    actionResultsStrings, AppActionTypeEnum, ContentScriptMessageTypeEnum,
-    Tab, TabsActionTypeEnum, TabStateEnum } from 'common';
+import {
+    Action,
+    ActionResultActionTypeEnum,
+    ActionResultEnum,
+    actionResultsStrings,
+    AppActionTypeEnum,
+    ContentScriptMessageTypeEnum,
+    Tab,
+    TabsActionTypeEnum,
+    TabStateEnum } from 'common';
 import { store } from '..';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {

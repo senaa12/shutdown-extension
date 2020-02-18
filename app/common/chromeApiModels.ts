@@ -6,6 +6,7 @@ export declare type Tab = chrome.tabs.Tab;
 export enum ContentScriptMessageTypeEnum {
     SubscribeToVideoEnd,
     CheckVideoAvailability,
+    RemoveVideoShutdownEvent,
 }
 
 // => bacground messaging

@@ -4,6 +4,7 @@ import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
 
 import ActionButtons from './actionButtons/actionButtons';
+import { ActiveTabReaderInjectedProps } from './activeTabReader/activeTabReader';
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
@@ -17,13 +18,14 @@ export interface AppStateProps {
     selectedAppMode: ApplicationModeEnum;
     isHostAppActive: boolean;
 }
+declare type AppContentStateProps = AppStateProps & ActiveTabReaderInjectedProps;
+declare type AppContentProps = Partial<AppContentStateProps>;
 
-declare type AppContentProps = TabState & AppStateProps;
-
-const mapStateToProps = (state: RootReducerState): Partial<AppContentProps> => {
+const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): AppContentStateProps => {
     return {
         selectedAppMode: state.appReducer.selectedApplicationMode,
         isHostAppActive: state.appReducer.isHostAppActive,
+        ...ownProps,
     };
 };
 class App extends React.Component<AppContentProps> {
@@ -34,7 +36,7 @@ class App extends React.Component<AppContentProps> {
     public renderAppContent = () => {
         switch (this.props.selectedAppMode) {
             case ApplicationModeEnum.VideoPlayer: {
-                return <VideoEndComponent key={'first'} />;
+                return <VideoEndComponent key={'first'} currentTabId={this.props.currentTabId} />;
             }
             case ApplicationModeEnum.Countdown: {
                 return <CountdownComponent key={'second'} />;
@@ -62,7 +64,7 @@ class App extends React.Component<AppContentProps> {
                     >
                         {this.renderAppContent()}
                     </ReactCSSTransitionReplace>
-                <ActionButtons />
+                <ActionButtons currentTabId={this.props.currentTabId} />
             </>
         );
     }

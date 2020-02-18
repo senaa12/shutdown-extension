@@ -1,10 +1,16 @@
-import { ActiveTabReducerState, convertSecondsToTimeFormat, links,
-    RootReducerState, TabStateEnum, videoPlayerStrings } from 'common';
+import {
+    ActiveTabReducerState,
+    convertSecondsToTimeFormat,
+    links,
+    RootReducerState,
+    TabStateEnum,
+    videoPlayerStrings } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
+import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader';
 import LoadingComponent from '../reusableComponents/loadingComponent';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
 import './VideoEndComponent.scss';
@@ -20,9 +26,12 @@ interface VideoEndShutdownComponenStateProps {
     timeChange(newTime: string): void;
 }
 
-declare type VideoEndComponentProps = ActiveTabReducerState & VideoEndShutdownComponenStateProps;
+declare type VideoEndComponentProps = ActiveTabReducerState
+    & VideoEndShutdownComponenStateProps
+    & ActiveTabReaderInjectedProps;
 
-const mapStateToProps = (state: RootReducerState): Partial<VideoEndComponentProps> => {
+// tslint:disable-next-line: max-line-length
+const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): Partial<VideoEndComponentProps> => {
     return {
         ...state.activeTabReducer,
         subscribedTab: state.appReducer.isShutdownEventScheduled,
@@ -59,15 +68,15 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
 
     private renderContent = () => {
         const {
-            tabID,
             state,
             iframeSource,
             subscribedTab,
+            currentTabId,
         } = this.props;
         const shutdownIsSubscribed = subscribedTab > 0;
 
         if (shutdownIsSubscribed) {
-            if (tabID === subscribedTab) {
+            if (currentTabId === subscribedTab) {
                 return videoPlayerStrings.shutdownSubscribed.thisTab(`${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`);
             } else {
                 return videoPlayerStrings.shutdownSubscribed.otherTab(this.navigateToSelectedTab, this.state.tabTitle);

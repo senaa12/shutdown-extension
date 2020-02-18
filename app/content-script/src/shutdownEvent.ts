@@ -1,5 +1,19 @@
 import {  ActionResultEnum, actionResultsStrings, BackgroundMessageTypeEnum, calculateSeconds, ChromeApiMessage } from 'common';
-import { scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
+import store from './';
+import { removeShutdownInStore, scheduleShutdownAction, triggerTooltipWithMessage } from './actions';
+
+export const removeShutdown = () => {
+    const event = store.getState().appReducer.shutdownEvent;
+    clearInterval(event);
+
+    removeShutdownInStore();
+    triggerTooltipWithMessage(actionResultsStrings.cancel.canceled, ActionResultEnum.Canceled);
+
+    chrome.runtime.sendMessage({
+        type: BackgroundMessageTypeEnum.ChangeIcon,
+        data: false,
+    } as ChromeApiMessage);
+};
 
 // shutdown function
 export const checkVideoForShutdown = (selectedTime: number) => {
@@ -12,7 +26,7 @@ export const checkVideoForShutdown = (selectedTime: number) => {
         chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.RemoveShutdownEvent,
         } as ChromeApiMessage);
-    } else if (selectedTime - videoTag.currentTime < 60) {
+    } else if (selectedTime - videoTag.currentTime <= 60 && selectedTime - videoTag.currentTime > 59) {
         chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.TriggerNotification,
         } as ChromeApiMessage);

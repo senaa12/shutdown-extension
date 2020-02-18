@@ -31,3 +31,9 @@ export const changeInputSelectedTime = (newVal: string | undefined) => {
         data: newVal,
     });
 };
+
+export const removeShutdownInStore = () => {
+    store.dispatch({
+        type: AppActionTypeEnum.RemoveScheduledShutdown,
+    });
+};

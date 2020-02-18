@@ -38,11 +38,11 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     }
 
     // maybe video tag does not exist but IFrame exists on page
-    const iframe = Array.from(document.getElementsByTagName('iframe'));
+    const iframe = Array.from(document.getElementsByTagName('iframe'))
+                        .filter((ifr) => !isSourceInIgnoredIframeSources(ifr.src));
     if (iframe.length) {
         // has Iframe source but lets filter it
-        const ignoredSources = iframe.filter((ifr) => !isSourceInIgnoredIframeSources(ifr.src));
-        const withSrc = ignoredSources.filter((ifr) => ifr.src);
+        const withSrc = iframe.filter((ifr) => ifr.src);
         if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
             iframe[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {

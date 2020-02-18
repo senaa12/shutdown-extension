@@ -42,4 +42,10 @@
             fill: var(--red);
         }
     }
+    &:hover.disabled{
+        color: var(--font-color);
+        .button-icon {
+            fill: var(--font-color);
+        }
+    }
 }

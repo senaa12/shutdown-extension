@@ -52,9 +52,10 @@ export const triggerOneMinuteWarningNotification = () => {
             message: 'Computer will shut down in 1 minute',
             type: 'basic',
             iconUrl: 'logo-128.png',
+            isClickable: false,
         },
         (notificationId: string) => {
-            setTimeout(() => chrome.notifications.clear(notificationId), 3000);
+            setTimeout(() => chrome.notifications.clear(notificationId), 2500);
         },
     );
 };
