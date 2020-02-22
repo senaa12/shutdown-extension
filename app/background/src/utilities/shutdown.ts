@@ -44,6 +44,7 @@ export const countdownShutdownEvent = () => {
         const func = setInterval(countdownInterval, 1000);
         scheduleShutdownAction(true, func);
         triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
+        changeIcon(true);
     }
 };
 

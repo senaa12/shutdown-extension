@@ -2,6 +2,8 @@
 
 Browser extension project for automatic shutdown; contains host (native) application and app (extension part).
 
+Chrome Web Store: [http://chrome.google.com/webstore/detail/auto-shutdown-extension/heanibacideokneklnfomdlokppmcaam](http://chrome.google.com/webstore/detail/auto-shutdown-extension/heanibacideokneklnfomdlokppmcaam)
+
 ## Project structure
 
 **Extension part:**
@@ -10,7 +12,7 @@ Browser extension project for automatic shutdown; contains host (native) applica
 * **common** - common project, has alias `common` in every webpack configuration so you can use it's where ever you want
 * **content-script** - content script project, has video detection inside, it is only used for premium version of application
 * **popup** - **MAIN** project, React application, responsible for coping right items from resources folder to build folder `/public`
-* **resources** - manifests and icons needed for application
+* **resources** - manifest and icons needed for application
 
 **Host app:**
 
@@ -32,7 +34,7 @@ There are several build scripts but for dev purposes run
 npm run build
 ```
 
-And to load it into your browser navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button where you need to select the build folder `//app/public`.
+And to load it into your browser navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button where you need to select the build folder `//app/public`. Don't forget, when developing you also need to install the native part, and before starting installation replace allowed origins field to your ID (you can read it in `chrome://extensions` tab)
 
 ## FAQ
 
