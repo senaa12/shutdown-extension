@@ -61,6 +61,14 @@ export const hostNotActive = (onClick: CallbackFunction, faqOnClick: CallbackFun
     </div>
 );
 
+export const extensionWillNotWork = (faqOnClick: CallbackFunction) => (
+    <>
+        Extension <b>will not work</b> because the native part isn't found.
+        <br />Read how to install the native part and much more
+        <span className={'link'} onClick={faqOnClick}>here.</span>
+    </>
+);
+
 export const actionResultsStrings = {
     scanNow: {
         noChanges: 'Nothing found',

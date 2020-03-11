@@ -1,4 +1,4 @@
-import { ApplicationModeEnum, hostNotActive, links, RootReducerState, TabState } from 'common';
+import { ApplicationModeEnum, extensionWillNotWork, hostNotActive, links, RootReducerState, TabState } from 'common';
 import React from 'react';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
@@ -8,7 +8,6 @@ import { ActiveTabReaderInjectedProps } from './activeTabReader/activeTabReader'
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
-import RevealContentAnimationWrapper from './revealContentAnimationWrapper/revealContentAnimationWrapper';
 import TimerComponent from './timerComponent/timerComponent';
 import VideoEndComponent from './videoEndComponent/videoEndComponent';
 
@@ -47,15 +46,11 @@ class App extends React.Component<AppContentProps> {
         }
     }
 
-    private openNativeDownloadLink = () => chrome.tabs.update({ url: links.nativeWin });
     private readMoreAbout = () => window.open(links.FAQ, '_blank');
 
     public render() {
         return(
             <>
-                <RevealContentAnimationWrapper shouldShowChildren={!this.props.isHostAppActive}>
-                    {hostNotActive(this.openNativeDownloadLink, this.readMoreAbout)}
-                </RevealContentAnimationWrapper>
                 <Header />
                 <MenuButtons />
                     <ReactCSSTransitionReplace
@@ -65,6 +60,8 @@ class App extends React.Component<AppContentProps> {
                         {this.renderAppContent()}
                     </ReactCSSTransitionReplace>
                 <ActionButtons currentTabId={this.props.currentTabId} />
+                {!this.props.isHostAppActive &&
+                    <div className='extension-will-not-work'>{extensionWillNotWork(this.readMoreAbout)}</div>}
             </>
         );
     }

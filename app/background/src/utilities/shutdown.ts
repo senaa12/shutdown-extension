@@ -10,6 +10,11 @@ import { changeIcon, changeSelectedTimeAction,
     triggerOneMinuteWarningNotification, triggerTooltipWithMessage } from './actions';
 import { shutdownCommand } from './nativeCommunication';
 
+const shutddownCommandWithIconChange = () => {
+    changeIcon(false);
+    shutdownCommand();
+};
+
 export const removeShutdownEvent = () => {
     const event = store.getState().appReducer.shutdownEvent;
     const appMode = store.getState().appReducer.selectedApplicationMode;
@@ -28,7 +33,7 @@ export const countdownShutdownEvent = () => {
     const countdownInterval = () => {
         const seconds = calculateSeconds(store.getState().appReducer.inputSelectedTime) - 1;
         if (seconds < 1) {
-            shutdownCommand();
+            shutddownCommandWithIconChange();
         } else {
             if (seconds === 60) {
                 triggerOneMinuteWarningNotification();
@@ -57,7 +62,7 @@ export const timerShutdown = () => {
     } else {
         const triggerTooltipAndScheduleShutdown = () => {
             triggerOneMinuteWarningNotification();
-            const shutFunc = setTimeout(shutdownCommand, 60000);
+            const shutFunc = setTimeout(shutddownCommandWithIconChange, 60000);
             scheduleShutdownAction(true, shutFunc);
         };
 
