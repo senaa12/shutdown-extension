@@ -1,8 +1,6 @@
+import { formatDate, isShutdownScheduledSelector, RootReducerState, timerComponentStrings } from 'common';
 import React from 'react';
-
-import { formatDate, RootReducerState, timerComponentStrings } from 'common';
 import { connect } from 'react-redux';
-
 import { Dispatch } from 'redux';
 import { changeSelectedDateTime } from '../../actions/actions';
 import './timerComponent.scss';
@@ -20,7 +18,7 @@ export interface TimerComponentState {
 
 const mapStateToProps = (state: RootReducerState): Partial<TimerComponentProps> => {
     return {
-        isShutdownScheduled: !!state.appReducer.isShutdownEventScheduled,
+        isShutdownScheduled: isShutdownScheduledSelector(state),
         selectedInputDateTime: state.appReducer.inputSelectedDateTime,
     };
 };
@@ -59,14 +57,14 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
         return (
             <div className={'flex-column timer-component'}>
                 {!isShutdownScheduled ?
-                timerComponentStrings.description(
-                    <input
-                        type='time'
-                        className='input-style'
-                        value={this.state.currentTime.toLocaleTimeString('hr-HR')}
-                        disabled={true}
-                    />) :
-                timerComponentStrings.scheduled()}
+                    timerComponentStrings.description(
+                        <input
+                            type='time'
+                            className='input-style'
+                            value={this.state.currentTime.toLocaleTimeString('hr-HR')}
+                            disabled={true}
+                        />) :
+                    timerComponentStrings.scheduled()}
                 <input
                     type='time'
                     step={1}

@@ -1,7 +1,8 @@
+import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
+
 import './simpleTooltipComponent.scss';
 
 export interface TooltipComponentProps {
@@ -79,42 +80,47 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             };
         }
 
-        if (props.position === 'bottom') {
-            return {
-                position: 'absolute',
-                display: 'flex',
-                flexDirection: 'column-reverse',
-                opacity: 1,
-                left: parentPosition.left + (parentPosition.width / 2) - (renderedTooltiop.width / 2),
-                top: parentPosition.bottom - 10,
-            } as React.CSSProperties;
+        switch (props.position) {
+            case 'bottom':
+                return {
+                    position: 'absolute',
+                    display: 'flex',
+                    flexDirection: 'column-reverse',
+                    opacity: 1,
+                    left: parentPosition.left + (parentPosition.width / 2) - (renderedTooltiop.width / 2),
+                    top: parentPosition.bottom - 10,
+                } as React.CSSProperties;
+            case 'top':
+            default:
+                return {
+                    position: 'absolute',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    opacity: 1,
+                    left: parentPosition.left + (parentPosition.width / 2) - (renderedTooltiop.width / 2),
+                    top: parentPosition.top - (renderedTooltiop.height) + 10,
+                } as React.CSSProperties;
         }
-
-        return {
-            position: 'absolute',
-            display: 'flex',
-            flexDirection: 'column',
-            opacity: 1,
-            left: parentPosition.left + (parentPosition.width / 2) - (renderedTooltiop.width / 2),
-            top: parentPosition.top - (renderedTooltiop.height) + 10,
-        } as React.CSSProperties;
     };
 
     const calculateIconPosition = () => {
-        if (props.position === 'bottom') {
-            return {
-                position: 'relative',
-                transform: 'rotate(180deg)',
-                top: 5,
-            } as React.CSSProperties;
+        switch (props.position) {
+            case 'bottom':
+                return {
+                    position: 'relative',
+                    transform: 'rotate(180deg)',
+                    top: 5,
+                } as React.CSSProperties;
+            case 'top':
+            default:
+                return {
+                    position: 'relative',
+                    bottom: 4,
+                } as React.CSSProperties;
         }
-
-        return {
-            position: 'relative',
-            bottom: 4,
-        } as React.CSSProperties;
     };
 
+    const className = classNames(props.tooltipClassname, 'flex-column', 'tooltip-base');
     return (
     <>
         <div ref={parentRef} className={props.wrapperClassname}>{props.children}</div>
@@ -123,9 +129,9 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
                 ref={tooltipRef}
                 style={calculatePosition()}
                 onTransitionEnd={setTransitionToFalse}
-                className={props.tooltipClassname + ' flex-column tooltip-base'}
+                className={className}
             >
-                    <div className={'content'}>{props.content}</div>
+                    <div className={' content'}>{props.content}</div>
                     <Icon
                         iconName={IconEnum.Arrow}
                         iconSize={IconSize.Smallest}

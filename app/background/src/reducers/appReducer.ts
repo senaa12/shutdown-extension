@@ -1,16 +1,14 @@
-import { Action, AppActionTypeEnum } from 'common';
-import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
+import { Action, AppActionTypeEnum, initialDateTime, initialTime } from 'common';
+import { ApplicationModeEnum, AppReducerState, RootReducerState } from 'common/storeModels';
 
 const initialAppMode = ApplicationModeEnum.VideoPlayer;
-const initialTime = '00:00:00';
-const initialDateTime = new Date(new Date().toDateString() + ', ' + initialTime);
 
 export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: initialAppMode,
-    isHostAppActive: false,
-    isShutdownEventScheduled: 0,
+    isHostAppActive: true,
+    shutdownEventScheduleData: 0,
     shutdownEvent: undefined,
-    inputSelectedDateTime: initialDateTime,
+    inputSelectedDateTime: initialDateTime(),
     inputSelectedTime: initialTime,
 };
 
@@ -24,7 +22,7 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 shutdownEvent: action.data.event,
-                isShutdownEventScheduled:  state.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
+                shutdownEventScheduleData:  state.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
                     (action._sender?.tab.id ? action._sender.tab.id : 0) : -1,
             };
         }
@@ -36,12 +34,13 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             };
         }
         case AppActionTypeEnum.ChangeApplicationState: {
-            const newState = action.data;
+            const newState = action.data.newState;
+            const newInputTime = action.data.newInputValue;
             return {
                 ...state,
                 selectedApplicationMode: newState,
-                inputSelectedDateTime: initialDateTime,
-                inputSelectedTime: initialTime,
+                inputSelectedDateTime: initialDateTime(),
+                inputSelectedTime: newInputTime ?? initialTime,
             };
         }
         case AppActionTypeEnum.ChangeSelectedTime: {

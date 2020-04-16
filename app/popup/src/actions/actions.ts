@@ -1,9 +1,23 @@
-import { Action, ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum, ApplicationModeEnum } from 'common';
+import { Action,
+    ActionResultActionTypeEnum,
+    ActionResultEnum,
+    AppActionTypeEnum,
+    ApplicationModeEnum,
+    convertSecondsToTimeFormat,
+    RootReducerState } from 'common';
 
-export const changeAppState = (newState: ApplicationModeEnum): Action => ({
-        type: AppActionTypeEnum.ChangeApplicationState,
-        data: newState,
-});
+export const changeAppState = (newState: ApplicationModeEnum): any =>
+     (dispatch, getState) => {
+         const state = getState() as RootReducerState;
+
+         dispatch({
+            type: AppActionTypeEnum.ChangeApplicationState,
+            data: {
+                newInputValue: convertSecondsToTimeFormat(state.activeTabReducer.videoDuration, true),
+                newState,
+            },
+        });
+    };
 
 export const changeTimeSelected = (newTime: string): Action =>  ({
     type: AppActionTypeEnum.ChangeSelectedTime,

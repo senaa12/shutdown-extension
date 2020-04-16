@@ -5,13 +5,14 @@ import {
     actionResultsStrings,
     AppActionTypeEnum,
     ContentScriptMessageTypeEnum,
+    isShutdownScheduledSelector,
     Tab,
     TabsActionTypeEnum,
-    TabStateEnum } from 'common';
+    TabStateEnum} from 'common';
 import { store } from '..';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
-    const subscribedTabID: number = store.getState().appReducer.isShutdownEventScheduled;
+    const subscribedTabID: number = store.getState().appReducer.shutdownEventScheduleData;
     if (subscribedTabID === tabID) {
         store.dispatch({
             type: AppActionTypeEnum.RemoveScheduledShutdown,
@@ -28,7 +29,7 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
 
 export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdateProperties, tab: Tab) => {
     const isPopupOpened = chrome.extension.getViews({ type: 'popup' }).length > 0;
-    const isShutdownScheduled = store.getState().appReducer.isShutdownEventScheduled !== 0;
+    const isShutdownScheduled = isShutdownScheduledSelector(store.getState());
     if (isPopupOpened && !isShutdownScheduled) {
         // tslint:disable-next-line: no-string-literal
         if (changeInfo['status'] && changeInfo['status'] === 'loading') {
@@ -57,14 +58,16 @@ export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdatePropertie
     }
 };
 
-export const onActivated = (activeInfo: chrome.tabs.TabActiveInfo) => {
-    const isShutdownScheduled = store.getState().appReducer.isShutdownEventScheduled !== 0;
-    if (!isShutdownScheduled) {
+export const onHistoryStateUpdated = (details: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
+    const isShutdownScheduled = isShutdownScheduledSelector(store.getState());
+
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webNavigation/transitionQualifier
+    if (!isShutdownScheduled && details.transitionQualifiers.includes('forward_back')) {
         store.dispatch({
             type: TabsActionTypeEnum.ClearAndSetWaitingForFirstLoad,
             _sender: {
                 tab: {
-                    id: activeInfo.windowId,
+                    id: details.tabId,
                 },
             },
         } as Action);

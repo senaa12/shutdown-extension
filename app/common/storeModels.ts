@@ -1,3 +1,6 @@
+export const isShutdownScheduledSelector = (state: RootReducerState) =>
+    state.appReducer.shutdownEventScheduleData !== 0;
+
 export interface RootReducerState {
     appReducer: AppReducerState;
     activeTabReducer: ActiveTabReducerState;
@@ -9,7 +12,7 @@ export interface AppReducerState {
     isHostAppActive: boolean;
     // tslint:disable-next-line: max-line-length
     /** -1 represents if countdown is scheduled, 0 if no event is scheduled, and >0 represents tabID from scheduled event */
-    isShutdownEventScheduled: number;
+    shutdownEventScheduleData: number;
     /** shutdown function */
     shutdownEvent: any;
     inputSelectedTime: string;

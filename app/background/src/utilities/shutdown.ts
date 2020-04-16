@@ -11,7 +11,7 @@ import { changeIcon, changeSelectedTimeAction,
 import { shutdownCommand } from './nativeCommunication';
 
 const shutddownCommandWithIconChange = () => {
-    changeIcon(false);
+    removeShutdownEvent();
     shutdownCommand();
 };
 
@@ -24,9 +24,9 @@ export const removeShutdownEvent = () => {
         clearInterval(event);
     }
 
+    changeIcon(false);
     removeScheduleShutdownAction();
     triggerTooltipWithMessage(actionResultsStrings.cancel.canceled, ActionResultEnum.Canceled);
-    changeIcon(false);
 };
 
 export const countdownShutdownEvent = () => {

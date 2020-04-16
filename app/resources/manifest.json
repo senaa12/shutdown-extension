@@ -31,7 +31,8 @@
         "tabs",
         "activeTab",
         "nativeMessaging",
-        "notifications"
+        "notifications",
+        "webNavigation"
     ],
 
     "offline_enabled": true

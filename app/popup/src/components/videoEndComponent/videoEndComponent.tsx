@@ -34,7 +34,7 @@ declare type VideoEndComponentProps = ActiveTabReducerState
 const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): Partial<VideoEndComponentProps> => {
     return {
         ...state.activeTabReducer,
-        subscribedTab: state.appReducer.isShutdownEventScheduled,
+        subscribedTab: state.appReducer.shutdownEventScheduleData,
         selectedTime: state.appReducer.inputSelectedTime,
     };
 };

@@ -1,8 +1,6 @@
-import { calculateSeconds, countdownComponentStrings, RootReducerState } from 'common';
-
+import { calculateSeconds, countdownComponentStrings, isShutdownScheduledSelector, RootReducerState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Dispatch } from 'redux';
 import { changeTimeSelected } from '../../actions/actions';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
@@ -22,7 +20,7 @@ export interface CountdownComponentState {
 const mapStateToProps = (state: RootReducerState): Partial<CountdownComponentProps> => {
     return {
         inputSelectedTime: state.appReducer.inputSelectedTime,
-        isShutdownScheduled: !!state.appReducer.isShutdownEventScheduled,
+        isShutdownScheduled: isShutdownScheduledSelector(state),
     };
 };
 
@@ -49,20 +47,20 @@ class CountdownComponent extends React.Component<CountdownComponentProps, Countd
     }
 
     public render() {
+        const { inputSelectedTime, isShutdownScheduled, changeInputTime } = this.props;
+        const { intervalTimeInput } = this.state;
         return (
             <div className='flex-column countdown-component'>
                 <TimeDurationComponent
-                    value={this.props.inputSelectedTime}
-                    onChange={!this.props.isShutdownScheduled ?
-                        this.props.changeInputTime :
-                        undefined}
+                    value={inputSelectedTime}
+                    onChange={changeInputTime}
                     labelPosition={'TOP'}
-                    label={this.props.isShutdownScheduled ?
-                        countdownComponentStrings.scheduledString(this.state.intervalTimeInput) :
+                    label={isShutdownScheduled ?
+                        countdownComponentStrings.scheduledString(intervalTimeInput) :
                         countdownComponentStrings.notScheduledDesciption}
                     labelClassname={'shutdown-label'}
                     fontSize={30}
-                    isDisabled={this.props.isShutdownScheduled}
+                    isDisabled={isShutdownScheduled}
                     style={{ marginTop: 15 }}
                 />
             </div>

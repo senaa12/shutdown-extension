@@ -2,7 +2,6 @@ import { ApplicationModeEnum, extensionWillNotWork, hostNotActive, links, RootRe
 import React from 'react';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
-
 import ActionButtons from './actionButtons/actionButtons';
 import { ActiveTabReaderInjectedProps } from './activeTabReader/activeTabReader';
 import CountdownComponent from './countdownComponent/countdownComponent';
@@ -17,18 +16,17 @@ export interface AppStateProps {
     selectedAppMode: ApplicationModeEnum;
     isHostAppActive: boolean;
 }
-declare type AppContentStateProps = AppStateProps & ActiveTabReaderInjectedProps;
-declare type AppContentProps = Partial<AppContentStateProps>;
+declare type AppProps = AppStateProps & ActiveTabReaderInjectedProps;
 
-const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): AppContentStateProps => {
+const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): AppProps => {
     return {
         selectedAppMode: state.appReducer.selectedApplicationMode,
         isHostAppActive: state.appReducer.isHostAppActive,
-        ...ownProps,
     };
 };
-class App extends React.Component<AppContentProps> {
-    constructor(props: AppContentProps) {
+
+class App extends React.Component<AppProps> {
+    constructor(props: AppProps) {
         super(props);
     }
 
@@ -40,8 +38,12 @@ class App extends React.Component<AppContentProps> {
             case ApplicationModeEnum.Countdown: {
                 return <CountdownComponent key={'second'} />;
             }
-            default: {
+            case ApplicationModeEnum.Timer: {
                 return <TimerComponent key={'third'} />;
+            }
+            default: {
+                const exhaustingCheck: never = this.props.selectedAppMode;
+                return null;
             }
         }
     }

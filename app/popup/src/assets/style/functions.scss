@@ -2,38 +2,6 @@
     @return 1rem * ($value / $root-value);
 }
 
-@function opaquify-color($color, $background-color: black) {
-    $opacity: alpha($color);
-    $red: $opacity * red($color) + (1 - $opacity) * red($background-color);
-    $green: $opacity * green($color) + (1 - $opacity) * green($background-color);
-    $blue: $opacity * blue($color) + (1 - $opacity) * blue($background-color);
-    @return rgb($red, $green, $blue);
-}
-
-@mixin color-shades($color, $name) {
-    --#{$name}-1: #{rgba($color, 0.01)};
-    --#{$name}-3: #{rgba($color, 0.03)};
-    --#{$name}-6: #{rgba($color, 0.06)};
-    --#{$name}-10: #{rgba($color, 0.1)};
-    --#{$name}-20: #{rgba($color, 0.2)};
-    --#{$name}-30: #{rgba($color, 0.3)};
-    --#{$name}-40: #{rgba($color, 0.4)};
-    --#{$name}-50: #{rgba($color, 0.5)};
-    --#{$name}-60: #{rgba($color, 0.6)};
-    --#{$name}-70: #{rgba($color, 0.7)};
-    --#{$name}-80: #{rgba($color, 0.8)};
-    --#{$name}-90: #{rgba($color, 0.9)};
-    --#{$name}-90-solid: #{opaquify-color(rgba($color, 0.9))};
-    --#{$name}-80-solid: #{opaquify-color(rgba($color, 0.8))};
-    --#{$name}-70-solid: #{opaquify-color(rgba($color, 0.7))};
-    --#{$name}-60-solid: #{opaquify-color(rgba($color, 0.6))};
-    --#{$name}-50-solid: #{opaquify-color(rgba($color, 0.5))};
-    --#{$name}-40-solid: #{opaquify-color(rgba($color, 0.4))};
-    --#{$name}-30-solid: #{opaquify-color(rgba($color, 0.3))};
-    --#{$name}-20-solid: #{opaquify-color(rgba($color, 0.2))};
-    --#{$name}-10-solid: #{opaquify-color(rgba($color, 0.1))};    
-}
-
 // @include center(both) || @include center(horizontal) || @include center(vertical)
 @mixin center($position) {
     position: absolute;

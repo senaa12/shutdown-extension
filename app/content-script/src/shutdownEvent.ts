@@ -18,7 +18,7 @@ export const removeShutdown = () => {
 // shutdown function
 export const checkVideoForShutdown = (selectedTime: number) => {
     const videoTag = document.getElementsByTagName('video')[0];
-    if (videoTag.currentTime > selectedTime) {
+    if (videoTag.currentTime - 1 < selectedTime &&  videoTag.currentTime > selectedTime) {
         chrome.runtime.sendMessage({
             type: BackgroundMessageTypeEnum.ShutdownComputer,
         } as ChromeApiMessage);

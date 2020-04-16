@@ -1,6 +1,6 @@
-import React from 'react';
-
+import classNames from 'classnames';
 import { calculateSeconds, convertSecondsToTimeFormat } from 'common';
+import React from 'react';
 import './timeDurationComponent.scss';
 
 export interface TimeDurationComponentProps {
@@ -73,10 +73,7 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
     };
 
     React.useEffect(() => {
-        if (!props.onChange) {
-            // ako nema postavljen onChange, a izvana se mjenja, tada promjeni vrijednost
-            setValue(props.value);
-        }
+        setValue(props.value);
     }, [props.value]);
 
     const detectArrows = (e) => {
@@ -151,9 +148,9 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
         }
     };
 
-    let className = 'input-style';
-    className += props.disabled ? ' disabled' : '';
-
+    const className = classNames('input-style', {
+        disabled: props.disabled,
+    });
     return (
         <input
             ref={inputRef}

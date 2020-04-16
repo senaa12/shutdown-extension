@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -6,9 +7,9 @@ import './buttonComponent.scss';
 
 export interface CustomButtonProps {
     label: string;
-    isSelected: boolean;
-    onClick?: () => void;
     icon: IconEnum;
+    isSelected?: boolean;
+    onClick?: () => void;
     className: string;
     tooltip?: string;
     iconSize?: IconSize;
@@ -16,15 +17,17 @@ export interface CustomButtonProps {
 }
 
 const buttonComponent = (props: CustomButtonProps) => {
-    let className = 'flex-column button-base ' + props.className;
-    className += props.isSelected ? ' selected' : '';
-    className += props.disabled ? ' disabled' : '';
+    const className = classNames('flex-column', 'button-base', props.className, {
+        selected: props.isSelected,
+        disabled: props.disabled,
+        clickable: !props.disabled,
+    });
+
     return(
         <div
             title={props.tooltip}
             className={className}
-            // tslint:disable-next-line: no-empty
-            onClick={(!props.disabled || !props.onClick) ? props.onClick : () => {}}
+            onClick={(!props.disabled || !props.onClick) ? props.onClick : undefined}
         >
             <div>
                 <Icon

@@ -1,43 +1,39 @@
 @import "./assets/style/functions.scss";
 @import "./assets/style/variables.scss";
+@import "./assets/style/colors-generator.scss";
 
 /* FONT STUFF*/
-@import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap');
 
 :root {
-    --blue: #{$blue};
-    --green: #{$green};
-    --yellow: #{$yellow};
-    --red: #{$red};
-    --grey: #{$grey};
-    --black: #{$black};
-    --white: #{$white};
-    
     --small-font-size: #{px-to-rem(10px)};
     --normal-font-size: #{px-to-rem(12px)};
     --big-font-size: #{px-to-rem(14px)};
     --title-font-size: #{px-to-rem(18px)};
     --time-font-size: #{px-to-rem(25px)};
 
-    --background-color: var(--my-yellow-6);
-    --selected-tile-color: var(--my-yellow-20);
-    --hover-color: #{$hover-color};
-    --border-color: var(--my-yellow-80);
-    --font-color: #{$black};
+    --background-color: var(--yellow-10-light);
+    --clickabile-color: var(--yellow-30-light);
+    --selected-tile-color: var(--yellow-15-dark);
+    --hover-color: var(--yellow-40-dark);
+    --border-color: var(--yellow-35-dark);
+    --box-shadow-color: var(--black-40-light);
+    --font-color: var(--black);
 
-    @include color-shades($blue, my-blue);
-    @include color-shades($green, my-green);
-    @include color-shades($yellow, my-yellow);
-    @include color-shades($red, my-red);
-}
+    @include color-pallete($green, "green");
+    @include color-pallete($red, "red");
+    @include color-pallete($yellow, "yellow");
+    @include dark-color-pallete($white, "white");
+    @include light-color-pallete($black, "black");
+}    
 
 body { 
-    width: 330px;
-    height: 370px;
+    height: 400px;
+    width: 337px;
     padding: 10px 5px;
     margin: 0;
     background-color: var(--background-color);
-    font-family: 'Karla', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: var(--normal-font-size);
 
     // disable selection
@@ -60,13 +56,14 @@ body {
         text-overflow: ellipsis;
         margin: 10px 15px;
         background-color: var(--background-color);
-        border: solid 2px var(--border-color);
+        border: solid 1.5px var(--border-color);
         border-radius: 14px;
         padding: 5px 10px;;
     }
     
     .link {
         margin: 5px;
+        font-weight: 700;
         text-overflow: ellipsis;
         pointer-events: auto;
         text-decoration: underline;
@@ -76,19 +73,24 @@ body {
     }
 
     .clickable {
+        background-color: var(--clickabile-color);
+        border: solid 1.5px var(--border-color);
         &:hover {
-            border: solid 2px rgba($hover-color ,0.4);
-            box-shadow: 0 0 5px rgba($hover-color, 0.8);
+            background-color: var(--clickabile-color);
+            border: solid 1.5px var(--border-color);
+            box-shadow: 0 0 8px 2px var(--box-shadow-color);
             cursor: pointer;
         }
     }
 
     .selected {
         background-color: var(--selected-tile-color);
+        &:hover {
+            background-color: var(--selected-tile-color);
+        }
     }
 
     .disabled {
-        opacity: 0.6;
         &:hover {
             cursor: default;
             box-shadow: none;
@@ -115,7 +117,7 @@ body {
         margin: 5px;
 
         &:focus {
-            background-color: var(--selected-tile-color);
+            background-color: var(--background-color);
             outline: none;
             -webkit-appearance:none;
         }
@@ -124,6 +126,10 @@ body {
             cursor: default;
         }
     
+        &:disabled {
+            background: var(--disabled-color);
+        }
+
         &::-webkit-datetime-edit-minute-field:focus,
         &::-webkit-datetime-edit-hour-field:focus,
         &::-webkit-datetime-edit-second-field:focus,

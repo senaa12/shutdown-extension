@@ -86,3 +86,6 @@ export const actionResultsStrings = {
         canceled: 'Canceled',
     },
 };
+
+export const initialTime = '00:00:00';
+export const initialDateTime = () => new Date(new Date().toDateString() + ', ' + initialTime);

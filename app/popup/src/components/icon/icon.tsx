@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconEnum, IconSize } from './iconEnum';
+import classNames from 'classnames';
 
 export interface IconProps {
     iconName: IconEnum;
@@ -18,9 +19,10 @@ const icon = (props: IconProps) => {
         }
     }, []);
 
+    const className = classNames(props.iconName, props.className);
     return(
         <svg
-            className={props.iconName + ' ' + props.className}
+            className={className}
             height={props.iconSize ? props.iconSize : IconSize.Small}
             width={props.iconSize ? props.iconSize : IconSize.Small}
             style={props.style}
