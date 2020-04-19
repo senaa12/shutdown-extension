@@ -123,11 +123,15 @@ body {
         }
     
         &:hover {
-            cursor: default;
+            cursor: pointer;
         }
     
         &:disabled {
             background: var(--disabled-color);
+            &:hover {
+                cursor: default;
+                box-shadow: none;
+            }
         }
 
         &::-webkit-datetime-edit-minute-field:focus,

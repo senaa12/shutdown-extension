@@ -1,4 +1,4 @@
-import { Action, AppActionTypeEnum, initialDateTime, initialTime } from 'common';
+import { Action, AppActionTypeEnum, commandsPerPlatform, initialDateTime, initialTime, PlatformEnum } from 'common';
 import { ApplicationModeEnum, AppReducerState, RootReducerState } from 'common/storeModels';
 
 const initialAppMode = ApplicationModeEnum.VideoPlayer;
@@ -6,9 +6,10 @@ const initialAppMode = ApplicationModeEnum.VideoPlayer;
 export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: initialAppMode,
     isHostAppActive: true,
+    platformType: PlatformEnum.win,
     shutdownEventScheduleData: 0,
     shutdownEvent: undefined,
-    inputSelectedDateTime: initialDateTime(),
+    inputSelectedDateTimeString: initialDateTime(),
     inputSelectedTime: initialTime,
 };
 
@@ -39,7 +40,7 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 selectedApplicationMode: newState,
-                inputSelectedDateTime: initialDateTime(),
+                inputSelectedDateTimeString: initialDateTime(),
                 inputSelectedTime: newInputTime ?? initialTime,
             };
         }
@@ -52,13 +53,19 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
         case AppActionTypeEnum.ChangeSelectedDateTime: {
             return {
                 ...state,
-                inputSelectedDateTime: action.data,
+                inputSelectedDateTimeString: action.data,
             };
         }
         case AppActionTypeEnum.IsHostActiveCheck: {
             return {
                 ...state,
                 isHostAppActive: action.data,
+            };
+        }
+        case AppActionTypeEnum.SetPlatformType: {
+            return {
+                ...state,
+                platformType: action.data,
             };
         }
         default:

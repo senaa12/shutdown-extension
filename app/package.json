@@ -1,7 +1,7 @@
 {
   "name": "auto-shutdown",
   "version": "1.0.0",
-  "description": "Popup for Auto-Shutdown Chrome Extension",
+  "description": "Small Chrome extension project for automatic computer shutdown",
   "main": "index.js",
   "scripts": {
     "build-popup": "cross-env ENV=dev webpack --config ./popup/webpack.config.js --mode production",

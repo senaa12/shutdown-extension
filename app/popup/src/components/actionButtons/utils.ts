@@ -22,9 +22,10 @@ export const isShutdownButtonDisabledCheck = (state: RootReducerState) => {
                 state.appReducer.inputSelectedTime !== initialTime);
         }
         case ApplicationModeEnum.Timer: {
-            // !(shutdown is not scheduled and input value is different from initial)
+            // !(shutdown is not scheduled and input value is different from initial and scheduled date is in future)
             return !(!isShutdownScheduledSelector(state) &&
-                state.appReducer.inputSelectedDateTime !== initialDateTime());
+                state.appReducer.inputSelectedDateTimeString !== initialDateTime() &&
+                new Date(state.appReducer.inputSelectedDateTimeString).getTime() > new Date().getTime());
         }
         default: {
             throw new Error(`Shutdown disability check is not defined for ${state.appReducer.selectedApplicationMode}`);

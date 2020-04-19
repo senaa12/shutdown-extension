@@ -18,14 +18,16 @@
         "moduleResolution": "Node",
         "baseUrl": "./",
         "paths": {
-            "common": [ "./common/index" ]
+            "common": [ "./common/index" ],
+            "common-host": [ "../common/index" ]
         }
     },
     "include": [
         "./background",
         "./content-script",
         "./popup",
-        "./common"
+        "./common",
+        "../common"
     ],
     "exclude": [
         "node_modules",

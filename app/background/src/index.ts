@@ -3,6 +3,7 @@ import logger from 'redux-logger';
 import { wrapStore } from 'webext-redux';
 import messageHandler from './messageHandler';
 import rootReducer, { rootReducerInitialState } from './reducers/rootReducer';
+import { checkSystem } from './utilities/actions';
 import { connecToNativeApp } from './utilities/nativeCommunication';
 import { onHistoryStateUpdated, onRemoved, onUpdated } from './utilities/tabsManipulation';
 
@@ -25,3 +26,5 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(onHistoryStateUpdated);
 chrome.runtime.onMessage.addListener(messageHandler);
 
 connecToNativeApp();
+
+checkSystem();

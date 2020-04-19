@@ -11,7 +11,8 @@ module.exports = {
     },
     resolve: {
       alias: {
-        common: path.resolve(__dirname, '../common')
+        common: path.resolve(__dirname, '../common'),
+        'common-host': path.resolve(__dirname, '../../common')
       },
       extensions: [ '.ts', '.js', '.tsx' ]
     },
@@ -22,7 +23,8 @@ module.exports = {
           exclude: /node_modules/,
           include: [
              path.resolve(__dirname, 'src'), 
-             path.resolve(__dirname, '../common')
+             path.resolve(__dirname, '../common'),
+             path.resolve(__dirname, '../../common')
           ],
           loader: "awesome-typescript-loader"
         }

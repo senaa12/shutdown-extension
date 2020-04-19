@@ -1,3 +1,5 @@
+import { PlatformEnum } from './chromeApiModels';
+
 export const isShutdownScheduledSelector = (state: RootReducerState) =>
     state.appReducer.shutdownEventScheduleData !== 0;
 
@@ -16,7 +18,8 @@ export interface AppReducerState {
     /** shutdown function */
     shutdownEvent: any;
     inputSelectedTime: string;
-    inputSelectedDateTime: Date;
+    inputSelectedDateTimeString: string;
+    platformType: PlatformEnum;
 }
 
 export interface ActionsResultState {

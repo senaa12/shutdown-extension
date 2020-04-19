@@ -25,3 +25,16 @@ export interface ChromeApiMessage {
     type: ChromeApiMessageTypeEnum;
     data?: any;
 }
+
+export enum PlatformEnum {
+    mac = 'mac',
+    win = 'win',
+    android = 'android',
+    cros = 'cros',
+    linux = 'linux',
+    openbsd = 'openbsd',
+}
+
+export const commandsPerPlatform = {
+    win: 'shutdown /s /f /t 0',
+};

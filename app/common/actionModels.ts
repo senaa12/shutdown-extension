@@ -20,6 +20,7 @@ export enum AppActionTypeEnum {
     ChangeSelectedTime = '@App/CHANGE_SELECTED_TIME',
     ChangeSelectedDateTime = '@App/CHANGE_SELECTED_DATE_TIME',
     IsHostActiveCheck = '@App/IS_HOST_ACTIVE',
+    SetPlatformType = '@App/SET_PLATFORM_TYPE',
 }
 
 export enum ActionResultActionTypeEnum {

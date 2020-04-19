@@ -1,4 +1,4 @@
-import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum } from 'common';
+import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum, PlatformEnum } from 'common';
 import { store } from '..';
 
 /* #region Store actions */
@@ -34,6 +34,13 @@ export const removeScheduleShutdownAction = () => {
         type: AppActionTypeEnum.RemoveScheduledShutdown,
     });
 };
+
+export const setPlatformType = (type: string) => {
+    store.dispatch({
+        type: AppActionTypeEnum.SetPlatformType,
+        data: type,
+    });
+};
 /* #endregion */
 
 /* #region  Chrome actions */
@@ -43,6 +50,13 @@ export const changeIcon = (shutdownIcon: boolean) => {
     } else {
         chrome.browserAction.setIcon({ path: '/icon.png' });
     }
+};
+
+export const checkSystem = () => {
+    const callBack = (details: chrome.runtime.PlatformInfo) => {
+        setPlatformType(details.os);
+    };
+    chrome.runtime.getPlatformInfo(callBack);
 };
 
 export const triggerOneMinuteWarningNotification = () => {

@@ -1,15 +1,21 @@
 import { AppActionTypeEnum, nativeAppTitle } from 'common';
+import { EchoNativeMessage, NativeMessageTypeEnum } from 'common-host';
 import { store } from '../';
 
 export const connecToNativeApp = () => {
     const response = (resp: any) => {
-        const isHostActive = !!resp?.isActive;
+        const isHostActive = !!resp?.data.isActive;
         store.dispatch({
             type: AppActionTypeEnum.IsHostActiveCheck,
             data: isHostActive,
         });
     };
-    const message = { text: '#PING#' };
+    const message: EchoNativeMessage = {
+        type: NativeMessageTypeEnum.Echo,
+        data: {
+            isActive: true,
+        },
+    };
 
     chrome.runtime.sendNativeMessage(
         nativeAppTitle,

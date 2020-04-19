@@ -13,13 +13,17 @@ export interface TimerComponentProps {
 
 export interface TimerComponentState {
     currentTime: Date;
-    selectedTime: string;
+    /**
+     * don't know why but when changing input value through props (maybe something with async) it does not work well,
+     * so this is just to set input value throught state
+     */
+    selectedDateTime: Date;
 }
 
 const mapStateToProps = (state: RootReducerState): Partial<TimerComponentProps> => {
     return {
         isShutdownScheduled: isShutdownScheduledSelector(state),
-        selectedInputDateTime: state.appReducer.inputSelectedDateTime,
+        selectedInputDateTime: new Date(state.appReducer.inputSelectedDateTimeString),
     };
 };
 
@@ -34,8 +38,9 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
         super(props);
         this.state = {
             currentTime: new Date(),
-            selectedTime: new Date().toLocaleTimeString('hr-HR'),
+            selectedDateTime: props.isShutdownScheduled ? new Date(props.selectedInputDateTime) : new Date(),
         };
+
         setInterval(() => this.setState({ currentTime: new Date() }), 1000);
     }
 
@@ -45,14 +50,13 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
     }
 
     private setTime = (e) => {
-        this.setState({ ...this.state, selectedTime: e.target.value });
-
         const newDate = new Date(new Date(this.props.selectedInputDateTime).toDateString() + ', ' + e.target.value);
-        this.props.changeSelectedDateTime(newDate);
+        this.setState({ selectedDateTime: newDate }, () => this.props.changeSelectedDateTime(newDate));
     }
 
     public render() {
-        const { selectedInputDateTime, isShutdownScheduled } = this.props;
+        const { isShutdownScheduled } = this.props;
+        const { currentTime, selectedDateTime } = this.state;
 
         return (
             <div className={'flex-column timer-component'}>
@@ -61,23 +65,23 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
                         <input
                             type='time'
                             className='input-style'
-                            value={this.state.currentTime.toLocaleTimeString('hr-HR')}
+                            value={currentTime.toLocaleTimeString('hr-HR')}
                             disabled={true}
                         />) :
                     timerComponentStrings.scheduled()}
                 <input
                     type='time'
                     step={1}
-                    className={'custom-time input-style' + (isShutdownScheduled ? ' disabled' : '')}
-                    value={this.state.selectedTime}
+                    className={'input-style custom-time'}
+                    value={selectedDateTime.toLocaleTimeString()}
                     onChange={this.setTime}
                     disabled={isShutdownScheduled}
                 />
                 <input
                     type='date'
-                    className={'custom-date input-style' + (isShutdownScheduled ? ' disabled' : '')}
-                    value={formatDate(selectedInputDateTime)}
-                    min={formatDate(new Date())}
+                    className={'custom-date input-style'}
+                    value={formatDate(selectedDateTime)}
+                    min={new Date().toLocaleDateString()}
                     onChange={this.setDate}
                     disabled={isShutdownScheduled}
                 />

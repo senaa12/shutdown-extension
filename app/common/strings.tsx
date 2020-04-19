@@ -88,4 +88,4 @@ export const actionResultsStrings = {
 };
 
 export const initialTime = '00:00:00';
-export const initialDateTime = () => new Date(new Date().toDateString() + ', ' + initialTime);
+export const initialDateTime = () => new Date().toString();

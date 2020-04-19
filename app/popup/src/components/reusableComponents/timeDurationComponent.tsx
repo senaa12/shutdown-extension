@@ -13,20 +13,18 @@ export interface TimeDurationComponentProps {
     labelClassname?: string;
     labelPosition?: 'TOP' | 'BOTTOM';
     wrapperClassName?: string;
+    inputClassName?: string;
     style?: React.CSSProperties;
 }
 
 const timeDurationComponent = (props: TimeDurationComponentProps) => {
-    const wrapperClassname = React.useMemo(() => (
-        props.wrapperClassName + ' input-time-holder flex-column ' + (props.labelPosition === 'BOTTOM' ? 'flex-column-reverse' : '')
-    ), [props.labelPosition, props.wrapperClassName]);
-
-    const labelClassname = React.useMemo(() => (
-        'label ' + (props.labelClassname ? props.labelClassname : '')
-    ), [props.labelClassname]);
+    const wrapperClassName = classNames(props.wrapperClassName, 'input-time-holder', 'flex-column', {
+        'flex-column-reverse': props.labelPosition === 'BOTTOM',
+    });
+    const labelClassname = classNames(props.labelClassname, 'label');
 
     return (
-        <div className={wrapperClassname} style={props.style}>
+        <div className={wrapperClassName} style={props.style}>
             {props.label && <div className={labelClassname}>{props.label}</div>}
             <TimeDurationInput
                 value={props.value}
@@ -34,6 +32,7 @@ const timeDurationComponent = (props: TimeDurationComponentProps) => {
                 fontSize={props.fontSize}
                 maxValue={props.maxValue}
                 disabled={props.isDisabled}
+                className={props.inputClassName}
             />
         </div>
     );
@@ -148,7 +147,7 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
         }
     };
 
-    const className = classNames('input-style', {
+    const className = classNames('input-style', props.className, {
         disabled: props.disabled,
     });
     return (

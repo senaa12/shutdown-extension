@@ -161,7 +161,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     onClick={onClick}
                     icon={IconEnum.ScanNow}
                     iconSize={IconSize.Smallest}
-                    disabled={!!isShutdownEventScheduled}
+                    disabled={isShutdownEventScheduled}
                 />
             </SimpleTooltipComponent>
         );

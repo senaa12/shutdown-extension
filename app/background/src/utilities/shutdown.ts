@@ -54,7 +54,7 @@ export const countdownShutdownEvent = () => {
 };
 
 export const timerShutdown = () => {
-    const selectedTime = new Date(store.getState().appReducer.inputSelectedDateTime);
+    const selectedTime = new Date(store.getState().appReducer.inputSelectedDateTimeString);
     const currentTime = new Date();
 
     if (currentTime > selectedTime) {
