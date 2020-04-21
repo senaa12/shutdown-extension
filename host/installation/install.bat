@@ -10,7 +10,7 @@ REG ADD "HKCU\Software\Google\Chrome\NativeMessagingHosts\shutdown.extension.hos
 
 @echo { > %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
 @echo   "name": "shutdown.extension.host", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
-@echo   "description": "Chrome Shutdown-Extension host app.", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
+@echo   "description": "Chrome Shutdown-Extension native app.", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
 @echo   "path": "run.bat", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
 @echo   "type": "stdio", >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
 @echo   "allowed_origins": [ >> %LOCALAPPDATA%\Chrome-Shutdown-Extension-Host\shutdown.extension.host.chrome.json
