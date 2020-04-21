@@ -1,5 +1,5 @@
-import { Action, AppActionTypeEnum, commandsPerPlatform, initialDateTime, initialTime, PlatformEnum } from 'common';
-import { ApplicationModeEnum, AppReducerState, RootReducerState } from 'common/storeModels';
+import { Action, AppActionTypeEnum, initialDateTime, initialTime, PlatformEnum } from 'common';
+import { ApplicationModeEnum, AppReducerState } from 'common/storeModels';
 
 const initialAppMode = ApplicationModeEnum.VideoPlayer;
 
@@ -41,7 +41,7 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
                 ...state,
                 selectedApplicationMode: newState,
                 inputSelectedDateTimeString: initialDateTime(),
-                inputSelectedTime: newInputTime ?? initialTime,
+                inputSelectedTime: newInputTime,
             };
         }
         case AppActionTypeEnum.ChangeSelectedTime: {

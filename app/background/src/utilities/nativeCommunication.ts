@@ -1,13 +1,12 @@
-import { AppActionTypeEnum, nativeAppTitle } from 'common';
-import { EchoNativeMessage, NativeMessageTypeEnum } from 'common-host';
+import { AppActionTypeEnum, nativeAppTitle, RootReducerState, shutdownCommands } from 'common';
+import { EchoNativeMessage, ExecuteCommandNativeMessage, NativeMessageTypeEnum } from 'common-host';
 import { store } from '../';
 
 export const connecToNativeApp = () => {
     const response = (resp: any) => {
-        const isHostActive = !!resp?.data.isActive;
         store.dispatch({
             type: AppActionTypeEnum.IsHostActiveCheck,
-            data: isHostActive,
+            data: !!resp?.data.isActive,
         });
     };
     const message: EchoNativeMessage = {
@@ -25,7 +24,11 @@ export const connecToNativeApp = () => {
 };
 
 export const shutdownCommand = (sendResponse?: any) => {
-    const message = { text: '#SHUTDOWN#'};
+    const platform = (store.getState() as RootReducerState).appReducer.platformType;
+    const message: ExecuteCommandNativeMessage = {
+        type: NativeMessageTypeEnum.ExecuteCommand,
+        command: shutdownCommands[platform],
+    };
 
     chrome.runtime.sendNativeMessage(
         nativeAppTitle,

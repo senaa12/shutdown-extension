@@ -5,6 +5,7 @@ import {
     actionResultsStrings,
     AppActionTypeEnum,
     ContentScriptMessageTypeEnum,
+    isPopupOpenWrapper,
     isShutdownScheduledSelector,
     Tab,
     TabsActionTypeEnum,
@@ -28,7 +29,7 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
 };
 
 export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdateProperties, tab: Tab) => {
-    const isPopupOpened = chrome.extension.getViews({ type: 'popup' }).length > 0;
+    const isPopupOpened = isPopupOpenWrapper();
     const isShutdownScheduled = isShutdownScheduledSelector(store.getState());
     if (isPopupOpened && !isShutdownScheduled) {
         // tslint:disable-next-line: no-string-literal
@@ -60,9 +61,10 @@ export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdatePropertie
 
 export const onHistoryStateUpdated = (details: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
     const isShutdownScheduled = isShutdownScheduledSelector(store.getState());
+    const isPopupOpen = isPopupOpenWrapper();
 
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webNavigation/transitionQualifier
-    if (!isShutdownScheduled && details.transitionQualifiers.includes('forward_back')) {
+    if (isPopupOpen && !isShutdownScheduled && details.transitionQualifiers.includes('forward_back')) {
         store.dispatch({
             type: TabsActionTypeEnum.ClearAndSetWaitingForFirstLoad,
             _sender: {

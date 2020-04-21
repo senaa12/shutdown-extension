@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useMemo } from 'react';
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
 
@@ -22,12 +22,17 @@ const buttonComponent = (props: CustomButtonProps) => {
         disabled: props.disabled,
         clickable: !props.disabled,
     });
+    const onClick = useMemo(() => {
+        if (!props.disabled && props.onClick) {
+            return props.onClick;
+        }
+    }, [props.onClick, props.disabled]);
 
     return(
         <div
             title={props.tooltip}
             className={className}
-            onClick={(!props.disabled || !props.onClick) ? props.onClick : undefined}
+            onClick={onClick}
         >
             <div>
                 <Icon

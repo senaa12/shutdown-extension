@@ -62,7 +62,9 @@ export const timerShutdown = () => {
     } else {
         const triggerTooltipAndScheduleShutdown = () => {
             triggerOneMinuteWarningNotification();
-            const shutFunc = setTimeout(shutddownCommandWithIconChange, 60000);
+            const diff = selectedTime.getTime() - currentTime.getTime();
+            const oneMinInMs = 60000;
+            const shutFunc = setTimeout(shutddownCommandWithIconChange, diff > oneMinInMs ? oneMinInMs : diff);
             scheduleShutdownAction(true, shutFunc);
         };
 

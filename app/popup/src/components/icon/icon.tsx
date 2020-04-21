@@ -1,6 +1,6 @@
+import classNames from 'classnames';
 import React from 'react';
 import { IconEnum, IconSize } from './iconEnum';
-import classNames from 'classnames';
 
 export interface IconProps {
     iconName: IconEnum;

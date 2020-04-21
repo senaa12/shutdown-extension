@@ -34,7 +34,3 @@ export enum PlatformEnum {
     linux = 'linux',
     openbsd = 'openbsd',
 }
-
-export const commandsPerPlatform = {
-    win: 'shutdown /s /f /t 0',
-};

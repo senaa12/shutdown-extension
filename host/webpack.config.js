@@ -1,12 +1,11 @@
 const path = require("path");
-const webpack = require("webpack");
 
 module.exports = {
     target: 'node',
     entry: './src/index.ts',
      output: {
-        path: path.resolve('dist'),
-        filename: 'index.js'
+        path: path.resolve('public'),
+        filename: 'host.js'
     },
     resolve: {
       alias: {

@@ -4,6 +4,7 @@ import { Action,
     AppActionTypeEnum,
     ApplicationModeEnum,
     convertSecondsToTimeFormat,
+    initialTime,
     RootReducerState } from 'common';
 
 export const changeAppState = (newState: ApplicationModeEnum): any =>
@@ -13,7 +14,8 @@ export const changeAppState = (newState: ApplicationModeEnum): any =>
          dispatch({
             type: AppActionTypeEnum.ChangeApplicationState,
             data: {
-                newInputValue: convertSecondsToTimeFormat(state.activeTabReducer.videoDuration, true),
+                newInputValue: newState === ApplicationModeEnum.VideoPlayer ?
+                    convertSecondsToTimeFormat(state.activeTabReducer.videoDuration, true) : initialTime,
                 newState,
             },
         });

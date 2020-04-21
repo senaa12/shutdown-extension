@@ -29,11 +29,8 @@ const mapDispatchToProps = (dispatch: Dispatch): Partial<MenuButtonsProps> => {
 };
 
 const MenuButtons: React.FunctionComponent<MenuButtonsProps> = (props) => {
-    const onButtonClickCallback = React.useCallback((mode: ApplicationModeEnum) => () => {
-        if (!props.isShutdownScheduled) {
-            return props.changeSelectedMode(mode);
-        }
-    }, [props.isShutdownScheduled]);
+    const onButtonClickCallback = React.useCallback((mode: ApplicationModeEnum) =>
+        () =>  props.changeSelectedMode(mode), []);
 
     return(
         <div className='menu-buttons-wrapper'>
