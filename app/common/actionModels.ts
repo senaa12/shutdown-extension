@@ -34,3 +34,7 @@ export enum TabsActionTypeEnum {
 
 export declare type ActionTypeEnum = TabsActionTypeEnum | ActionResultActionTypeEnum | AppActionTypeEnum;
 export type CallbackFunction = (data?: any) => void;
+
+export type RecursivePartial<T> = {
+    [P in keyof T]?: RecursivePartial<T[P]>;
+};

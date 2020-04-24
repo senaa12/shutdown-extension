@@ -8,6 +8,28 @@ Browser extension project for automatic shutdown; contains host (native) applica
 
 Chrome Web Store: [http://chrome.google.com/webstore/detail/auto-shutdown-extension/heanibacideokneklnfomdlokppmcaam](http://chrome.google.com/webstore/detail/auto-shutdown-extension/heanibacideokneklnfomdlokppmcaam)
 
+## Getting started
+
+Extension and native are two different projects, they have separate `package.json` files so you need to install dependencies separately with:
+
+```
+npm install
+```
+
+as well as building projects with:
+
+```
+npm run build
+```
+
+The project builds in own `root/public` folder. The extension has several other build scripts so you can build each project separately, for example: `npm run build-background` build background page.
+
+To start extension, open your Google Chrome and navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button. When the popup opens, navigate to `//app/public` (the folder where extension build is located) and click `Select folder`. The extension should appear on the screen. **Remember the ID** field on Auto Shutdown Extension tile.
+
+To install the native part first you need to place install script and build an application in the same folder. Than open install script in some editor replace extension ID (line above is commented to highlight where change needs to be made) with the ID you remembered (the one on `chrome://extensions/`). That is all next you just need to run the install script.
+
+**NOTE:** You need to have Nodejs installed for the native host to work.
+
 ## Project structure
 
 **Extension part:** four Typescript projects => Chrome Extension
@@ -30,28 +52,6 @@ Chrome Web Store: [http://chrome.google.com/webstore/detail/auto-shutdown-extens
 * **src** - complete native client code
 
 **Common** - common project for Native host and extension, interfaces for Native Messaging, for extension alias `common-host` is used and for Native `common`. 
-
-## Getting started
-
-Extension and native are two different projects, they have separate `package.json` files so you need to install dependencies separately with:
-
-```
-npm install
-```
-
-as well as building projects with:
-
-```
-npm run build
-```
-
-The project builds in own `root/public` folder. The extension has several other build scripts so you can build each project separately, for example: `npm run build-background` build background page.
-
-To start extension, open your Google Chrome and navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button. When the popup opens, navigate to `//app/public` (the folder where extension build is located) and click `Select folder`. The extension should appear on the screen. **Remember the ID** field on Auto Shutdown Extension tile.
-
-To install the native part first you need to place install script and build an application in the same folder. Than open install script in some editor replace extension ID (line above is commented to highlight where change needs to be made) with the ID you remembered (the one on `chrome://extensions/`). That is all next you just need to run the install script.
-
-**NOTE:** You need to have Nodejs installed for the native host to work.
 
 ## FAQ
 

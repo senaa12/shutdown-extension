@@ -73,7 +73,7 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
                     type='time'
                     step={1}
                     className={'input-style custom-time'}
-                    value={selectedDateTime.toLocaleTimeString()}
+                    value={selectedDateTime.toLocaleTimeString('hr-HR')}
                     onChange={this.setTime}
                     disabled={isShutdownScheduled}
                 />

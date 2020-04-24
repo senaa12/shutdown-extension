@@ -4,19 +4,11 @@
 
 Shutdown Extension is a small browser Extension used for automatic computer shutdown. It has 3 modes: Video Player mode, Countdown and Timer. Video Player mode enables you to shut down your computer at the specific point in the video, with countdown you can select the time to count down from and the timer is for scheduling shutdown in the specific time. For now, the extension only works on Windows computers.
 
-* How shutting down works?
-
-Shutdown Extension triggers the native part of the extension that executes a command to shut down the computer. Command depends on the system:
-
-   *Windows* - `shutdown /s /f /t 0`
-   
-   *Linux* - `shutdown -h now`
-
 * Why do I need the native part to run this extension?
 
 You need the native part installed on your local computer because the browser cannot execute system commands from itself.
 
-* **How do I install the native part?**
+* **HOW DO I INSTALL THE NATIVE PART?**
 
 First, you need to download the native part:
 
@@ -37,6 +29,14 @@ It creates the manifest file and runs the script, copies Nodejs build (if the No
 * Why do I need to run the installation as administrator on Windows?
 
 Because it changes your Registry (inserts one key/value pair that specifies where a manifest file from the native part is located) you need to run it as administrator.
+
+* How shutting down works?
+
+Shutdown Extension triggers the native part of the extension that executes a command to shut down the computer. Command depends on the system:
+
+   *Windows* - `shutdown /s /f /t 0`
+   
+   *Linux* - `shutdown -h now`
 
 * Why do I need to navigate to IFrame when detecting video on specific sites?
 

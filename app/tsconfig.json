@@ -17,9 +17,11 @@
         "noImplicitAny": false,
         "moduleResolution": "Node",
         "baseUrl": "./",
+        "esModuleInterop": true,
         "paths": {
             "common": [ "./common/index" ],
-            "common-host": [ "../common/index" ]
+            "common-host": [ "../common/index" ],
+            "store-config": ["./background/src/reducers/store"]
         }
     },
     "include": [
@@ -35,6 +37,7 @@
         "./background/webpack.config.js",
         "./popup/webpack.config.js",
         "./popup/webpack/plugins.js",
-        "./popup/webpack/rules.js"
+        "./popup/webpack/rules.js",
+        "./popup/test/assetsTransformer.js"
     ]
 }
