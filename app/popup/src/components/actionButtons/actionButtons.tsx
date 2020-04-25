@@ -26,6 +26,7 @@ export interface ActionButtonCustomProps {
     isShutdownButtonDisabled: boolean;
     isCancelButtonDisabled: boolean;
     selectedTime: string;
+    videoDuration?: number;
     isHostAppActive: boolean;
 
     actionResultTooltipContent: React.ReactNode;
@@ -45,11 +46,12 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjec
         isShutdownEventScheduled: isShutdownScheduledSelector(state),
         scheduledShutdownEventData: state.appReducer.shutdownEventScheduleData,
         isShutdownButtonDisabled: isShutdownButtonDisabledCheck(state),
-        isCancelButtonDisabled: isCancelButtonDisabledCheck(state),
+        isCancelButtonDisabled: isCancelButtonDisabledCheck(state, ownProps.currentTabId),
         actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
         selectedTime: state.appReducer.inputSelectedTime,
         actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         isHostAppActive: state.appReducer.isHostAppActive,
+        videoDuration: state.activeTabReducer.videoDuration,
     };
 };
 
@@ -83,7 +85,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     }
 
     private renderShutdownButton = () => {
-        const { appMode, currentTabId, selectedTime,
+        const { appMode, currentTabId, selectedTime, videoDuration,
             isShutdownEventScheduled, isShutdownButtonDisabled,
             actionResultTooltip, actionResultTooltipContent } = this.props;
         const shutdown = () => {
@@ -91,7 +93,7 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                 case ApplicationModeEnum.VideoPlayer: {
                     communicationManager.sendMessageToTab(currentTabId ?? 0, {
                         type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
-                        data: { selectedTime },
+                        data: { selectedTime, videoDuration },
                     } as ChromeApiMessage);
                     break;
                 }

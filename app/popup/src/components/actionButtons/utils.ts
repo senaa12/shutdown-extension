@@ -28,7 +28,7 @@ export const isShutdownButtonDisabledCheck = (state: RootReducerState) => {
     }
 };
 
-export const isCancelButtonDisabledCheck = (state: RootReducerState) => {
+export const isCancelButtonDisabledCheck = (state: RootReducerState, currentTabId?: number) => {
     if (!state.appReducer.isHostAppActive || !isShutdownScheduledSelector(state)) {
         return true;
     }
@@ -36,7 +36,7 @@ export const isCancelButtonDisabledCheck = (state: RootReducerState) => {
     switch (state.appReducer.selectedApplicationMode) {
         case ApplicationModeEnum.VideoPlayer: {
             // when scheduling video shutdown you need to be on the same tab where video is
-            return state.activeTabReducer.tabID === state.appReducer.shutdownEventScheduleData;
+            return currentTabId !== state.appReducer.shutdownEventScheduleData;
         }
         case ApplicationModeEnum.Countdown:
         case ApplicationModeEnum.Timer: {

@@ -1,4 +1,8 @@
-import {  BackgroundMessageTypeEnum, ChromeApiMessage, ContentScriptMessageTypeEnum, TabStateEnum } from 'common';
+import {  BackgroundMessageTypeEnum,
+    ChromeApiMessage,
+    ContentScriptMessageTypeEnum,
+    isShutdownScheduledSelector,
+    RootReducerState } from 'common';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -15,15 +19,18 @@ const storeWithMiddleware = applyMiddleware(store, ...[thunk]);
 
 storeWithMiddleware.ready().then(() => {
     const isHostActive = store.getState().appReducer.isHostAppActive;
+    const isShutdownScheduled = isShutdownScheduledSelector(store.getState() as RootReducerState);
     if (!isHostActive) {
         communicationManager.sendMessageToBackgroundPage({
             type: BackgroundMessageTypeEnum.CheckNativeApp,
         } as ChromeApiMessage);
     }
 
-    communicationManager.sendMessageToActiveTab({
-        type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
-    });
+    if (!isShutdownScheduled) {
+        communicationManager.sendMessageToActiveTab({
+            type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
+        });
+    }
 
     ReactDOM.render(
         <Provider store={store}>

@@ -20,12 +20,16 @@ export const rootReducer = combineReducers({
     actionsResultReducer,
 });
 
-export default (initialStateOverride: RecursivePartial<RootReducerState> = {}, isProduction?: boolean) => {
+export const getMiddleware = (isProd: boolean) => {
+    return !isProd ? [logger] : undefined;
+};
+
+export default (initialStateOverride: RecursivePartial<RootReducerState> = {}, middleware?: Array<any>) => {
     const initialState: RootReducerState = merge(rootReducerInitialState, initialStateOverride);
 
     return createStore(
         rootReducer,
         initialState,
-        !isProduction ? applyMiddleware(logger) : undefined,
+        !!middleware ? applyMiddleware(...middleware) : undefined,
     );
 };

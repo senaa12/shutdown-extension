@@ -42,7 +42,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             if (props.isOpen) {
                 setIsOpen(true);
             } else {
-                setTimeout(hideTooltip, 1500);
+                setTimeout(hideTooltip, 1000);
             }
         }
     }, [props.isOpen]);

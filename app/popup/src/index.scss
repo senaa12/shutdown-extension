@@ -28,8 +28,8 @@
 }    
 
 body { 
-    height: 400px;
-    width: 337px;
+    height: $extension-height;
+    width: $extension-width;
     padding: 10px 5px;
     margin: 0;
     background-color: var(--background-color);

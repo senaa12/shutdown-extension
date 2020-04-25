@@ -11,7 +11,7 @@ import store from '.';
 import { changeInputSelectedTime, sendResultingTabState, triggerTooltipWithMessage } from './actions';
 
 export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFunction) => {
-    const videoTag = document.getElementsByTagName('video');
+    const videoTag: Array<HTMLMediaElement> = Array.from(document.getElementsByTagName('video'));
     const currentState: TabState = getCurrentTabState();
 
     if (videoTag.length) {
@@ -22,13 +22,25 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             // if infinity => delay, possible bug
             setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
         } else {
+            let videoDuration: number;
+            // if there is video on tab and is already scaned iterate throught next
+            if (!!currentState.videoDuration) {
+                // find it by duration, of course if there are 2 videos with same length this will not work
+                // but what are the chances
+                const index = videoTag.findIndex((obj) =>
+                    obj.duration && Math.round(obj.duration) === currentState.videoDuration);
+                videoDuration = videoTag[(index + 1) % videoTag.length].duration;
+            } else {
+                videoDuration = videoTag[0].duration;
+            }
+
             // set input selected time to end
-            changeInputSelectedTime(convertSecondsToTimeFormat(videoTag[0].duration, true));
+            changeInputSelectedTime(convertSecondsToTimeFormat(videoDuration, true));
 
             // set tab state
             sendResultingTabState({
                 state: TabStateEnum.PageContainsVideoTag,
-                videoDuration: Math.round(videoTag[0].duration),
+                videoDuration: Math.round(videoDuration),
             });
 
             // tooltip
@@ -46,10 +58,19 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
             iframe[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {
+            let iframeSrc: string;
+            // same as video tag if there is more iframe sources as before iterate through it
+            if (!!currentState.iframeSource) {
+                const index = iframe.findIndex((obj) => obj.src === currentState.iframeSource);
+                iframeSrc = iframe[(index + 1) % iframe.length].src;
+            } else {
+                iframeSrc = iframe[0].src;
+            }
+
             // set tab state
             sendResultingTabState({
                 state: TabStateEnum.PageContainsIFrameTag,
-                iframeSource: withSrc[0].src,
+                iframeSource: iframeSrc,
             });
 
             // tooltip
@@ -71,6 +92,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
 };
 
+// iframe sources to ignore => mostly ads
 const iframeSourcesToIgnore = [
     'ogs.google.com',
     'comments',
@@ -88,6 +110,6 @@ const getCurrentTabState = () => {
     return {
         state: activeReducer.state,
         iframeSource: activeReducer.iframeSource,
-        videoDuration: activeReducer.iframeSource,
+        videoDuration: activeReducer.videoDuration,
     } as TabState;
 };

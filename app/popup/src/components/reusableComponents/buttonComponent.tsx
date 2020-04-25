@@ -23,7 +23,7 @@ const buttonComponent = (props: CustomButtonProps) => {
         clickable: !props.disabled,
     });
     const onClick = useMemo(() => {
-        if (!props.disabled && props.onClick) {
+        if (!props.disabled) {
             return props.onClick;
         }
     }, [props.onClick, props.disabled]);
@@ -33,6 +33,7 @@ const buttonComponent = (props: CustomButtonProps) => {
             title={props.tooltip}
             className={className}
             onClick={onClick}
+            data-testid={props.label}
         >
             <div>
                 <Icon

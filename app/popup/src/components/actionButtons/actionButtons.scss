@@ -1,7 +1,9 @@
+@import '../../assets/style/variables.scss';
+
 .action-buttons-container {
     align-self: flex-end;
     display: flex;
-    width: 100%;
+    width: $extension-width;
 
     .action-button {
         width: 60px;

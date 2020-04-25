@@ -13,7 +13,7 @@ const messageHandler = (
     sendResponse: CallbackFunction) => {
         switch (request.type) {
             case ContentScriptMessageTypeEnum.SubscribeToVideoEnd: {
-                SubscribeToVideoEnd(request.data.selectedTime);
+                SubscribeToVideoEnd(request.data.selectedTime, request.data.videoDuration);
                 break;
             }
             case ContentScriptMessageTypeEnum.CheckVideoAvailability: {

@@ -5,7 +5,7 @@ const initialAppMode = ApplicationModeEnum.VideoPlayer;
 
 export const appReducerInitialState: AppReducerState = {
     selectedApplicationMode: initialAppMode,
-    isHostAppActive: true,
+    isHostAppActive: false,
     platformType: PlatformEnum.win,
     shutdownEventScheduleData: 0,
     shutdownEvent: undefined,
@@ -30,6 +30,8 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
         case AppActionTypeEnum.RemoveScheduledShutdown: {
             return {
                 ...appReducerInitialState,
+                inputSelectedTime: state.selectedApplicationMode !== ApplicationModeEnum.Timer ?
+                    state.inputSelectedTime : initialTime,
                 selectedApplicationMode: state.selectedApplicationMode,
                 isHostAppActive: state.isHostAppActive,
             };

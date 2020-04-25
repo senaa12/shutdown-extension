@@ -1,3 +1,5 @@
+@import '../../assets/style/variables.scss';
+
 .menu-buttons-wrapper {
     display: flex;
     height: 95px;
@@ -16,8 +18,7 @@
     .triggers-label {
         top: 135px;
         position: absolute;
-        left: 0;
-        right: 0;
+        width: $extension-width;
         text-align: center;
         font-size: var(--small-font-size);
     }
