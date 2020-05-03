@@ -20,7 +20,7 @@
         "esModuleInterop": true,
         "paths": {
             "common": [ "./common/index" ],
-            "common-host": [ "../common/index" ],
+            "common-native-client": [ "./common-native-client/index" ],
             "store-config": ["./background/src/reducers/store"]
         }
     },
@@ -29,7 +29,7 @@
         "./content-script",
         "./popup",
         "./common",
-        "../common"
+        "./common-native-client"
     ],
     "exclude": [
         "node_modules",

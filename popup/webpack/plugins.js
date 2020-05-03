@@ -1,3 +1,4 @@
+const path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -23,7 +24,7 @@ const miniCssExtractPlugin = new MiniCssExtractPlugin({
 
 const copyWebpackPlugin = new CopyPlugin([
     { 
-        from: "resources/manifest.json",
+        from: path.resolve(__dirname, "../../manifest.json"),
         to: "manifest.json",
     },
     {

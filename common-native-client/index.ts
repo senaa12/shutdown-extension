@@ -1,8 +1,9 @@
+// Common for all personal extensions
 // contains models common for app part (extension) and host part (native application)
 
 export enum NativeMessageTypeEnum {
-    Echo, 
-    ExecuteCommand
+    Echo,
+    ExecuteCommand,
 }
 
 export interface NativeMessageBase {

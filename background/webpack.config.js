@@ -12,7 +12,7 @@ module.exports = {
     resolve: {
       alias: {
         common: path.resolve(__dirname, '../common'),
-        'common-host': path.resolve(__dirname, '../../common')
+        'common-native-client': path.resolve(__dirname, '../common-native-client')
       },
       extensions: [ '.ts', '.js', '.tsx' ]
     },

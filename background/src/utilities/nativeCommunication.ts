@@ -1,5 +1,5 @@
 import { AppActionTypeEnum, nativeAppTitle, RootReducerState, shutdownCommands } from 'common';
-import { EchoNativeMessage, ExecuteCommandNativeMessage, NativeMessageTypeEnum } from 'common-host';
+import { EchoNativeMessage, ExecuteCommandNativeMessage, NativeMessageTypeEnum } from 'common-native-client';
 import { store } from '../';
 
 export const connecToNativeApp = () => {

@@ -1,4 +1,4 @@
-import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum, PlatformEnum } from 'common';
+import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum } from 'common';
 import { store } from '..';
 
 /* #region Store actions */
