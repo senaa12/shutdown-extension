@@ -22,9 +22,9 @@ and build project with:
 npm run build
 ```
 
-The project builds in own `root/public` folder. The extension has several other build scripts so you can build each project separately, for example: `npm run build-background` build background page.
+The project builds in own `root/public` folder. The extension has several other build scripts so you can build each Chrome extension project separately, for example: `npm run build-background` builds background page.
 
-To start extension, open your Google Chrome and navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button. When the popup opens, navigate to `//app/public` (the folder where extension build is located) and click `Select folder`. The extension should appear on the screen. **Remember the ID** field on Auto Shutdown Extension tile.
+To start extension, open your Google Chrome and navigate to `chrome://extensions/`, enable developer mode (top right corner) and click on `Load unpacked` button. When the popup opens, navigate to `//public` (the folder where extension build is located) and click `Select folder`. The extension should appear on the screen. **Remember the ID** field on Auto Shutdown Extension tile which should appear if the extension is loaded successfully.
 
 The native client for this extension is [here](https://github.com/senaa12/native-client.git).
 

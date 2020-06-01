@@ -46,7 +46,7 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
 
     private setDate = (e) => {
         const newDate = new Date(e.target.value + ', ' + new Date(this.props.selectedInputDateTime).toTimeString());
-        this.props.changeSelectedDateTime(newDate);
+        this.setState({ selectedDateTime: newDate }, () => this.props.changeSelectedDateTime(newDate));
     }
 
     private setTime = (e) => {
