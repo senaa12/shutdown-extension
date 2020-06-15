@@ -64,7 +64,7 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
                     timerComponentStrings.description(
                         <input
                             type='time'
-                            className='input-style'
+                            className='input-style current-time'
                             value={currentTime.toLocaleTimeString('hr-HR')}
                             disabled={true}
                         />) :
