@@ -13,6 +13,12 @@
 
 .scan-now {
     margin-left: auto;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+
+    &.hide {
+        opacity: 0;
+    }
 }
 
 .action-tooltips {

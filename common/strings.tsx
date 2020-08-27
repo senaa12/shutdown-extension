@@ -2,10 +2,10 @@ import React from 'react';
 import { CallbackFunction } from './actionModels';
 
 export const videoPlayerStrings = {
-    notAvailable: 'This WebPage cannot use this extension, try clicking scan now button to check again',
-    videoAvailable: 'Extension can be used on this WebPage because there is video tag available. Write at what time you want your computer to shut down',
+    notAvailable: 'This web page cannot use this extension, try clicking Scan now button to check again.',
+    videoAvailable: 'Extension can be used on this web page because there is video tag available. Write at what time you want your computer to shut down.',
     iframeAvailable: (onClick: CallbackFunction, hover: string | undefined) => (<div>
-        This WebPage does not contain Video directly but does contain IFrame window
+        This web page does not contain Video directly but does contain IFrame window
         <br />
         <div className='link' onClick={onClick} title={hover}>CLICK HERE TO NAVIGATE TO IT</div>
     </div>),

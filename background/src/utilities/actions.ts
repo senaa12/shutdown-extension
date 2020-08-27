@@ -44,7 +44,7 @@ export const setPlatformType = (type: string) => {
 /* #endregion */
 
 /* #region  Chrome actions */
-export const changeIcon = (shutdownIcon: boolean) => {
+export const changeIcon = (shutdownIcon: boolean = false) => {
     if (shutdownIcon) {
         chrome.browserAction.setIcon({ path: '/icon-shutdown.png' });
     } else {

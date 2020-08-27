@@ -29,7 +29,8 @@ module.exports = {
             rules.styleProdLoader, 
             rules.typescriptLoader, 
             rules.svgLoader,
-            rules.cssLoader
+            rules.cssLoader,
+            rules.fileLoader
         ]
     },
     plugins: [ 

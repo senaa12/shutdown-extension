@@ -1,7 +1,7 @@
 import { wrapStore } from 'webext-redux';
 import messageHandler from './messageHandler';
 import createStore, { getMiddleware } from './reducers/store';
-import { checkSystem } from './utilities/actions';
+import { changeIcon, checkSystem } from './utilities/actions';
 import { connecToNativeApp } from './utilities/nativeCommunication';
 import { onHistoryStateUpdated, onRemoved, onUpdated } from './utilities/tabsManipulation';
 
@@ -23,3 +23,5 @@ chrome.runtime.onMessage.addListener(messageHandler);
 connecToNativeApp();
 
 checkSystem();
+
+changeIcon();

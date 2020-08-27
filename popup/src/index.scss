@@ -3,7 +3,19 @@
 @import "./assets/style/colors-generator.scss";
 
 /* FONT STUFF*/
-@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap');
+// REPLACED WITH FILES IN PROJECT 
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('assets/font/Ubuntu-Regular.ttf'),
+         url('assets/font/Ubuntu-MediumItalic.ttf'),
+         url('assets/font/Ubuntu-Medium.ttf'),
+         url('assets/font/Ubuntu-LightItalic.ttf'),
+         url('assets/font/Ubuntu-Light.ttf'),
+         url('assets/font/Ubuntu-Italic.ttf'),
+         url('assets/font/Ubuntu-BoldItalic.ttf'),
+         url('assets/font/Ubuntu-Bold.ttf');
+}
 
 :root {
     --small-font-size: #{px-to-rem(10px)};
@@ -152,10 +164,18 @@ body {
             display: none;
         }
     
-        &::-webkit-calendar-picker-indicator:hover {
-            cursor: pointer;
-            // background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAYAAAAGABh2xyWQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADCSURBVCiRjdKxTgJBGATg7yISTeg0EaUAmwu2PoVvZeCpfAqpoCFnQ6hoDbnGYDPgSS7hJtnM7uzMP1ssf6hQakeZ+xNm2OPQYe3xDjVGHZtGqItMeMMA3/hpCV017j+Ooc/wJRR4FXM/TygwjeElPI1exnc4hu6wwA2WMa3Dy+iL+E6hPsYxTdLwHJ5EH7c1rTKximkTrqKvzpuu8ZDJw/Dj2Rl6zdA9vnCLbRp24W30f6G6MfUSnuI3z6bLN6ox+wVJfEKbBguaAgAAAABJRU5ErkJggg==') no-repeat;
-            background-color: var(--background-color);
+        &::-webkit-calendar-picker-indicator {
+            // transform: scale(1);
+            // transition: cubic-bezier(0.5, 1, 0.1, 1) .25s;
+            // transform-origin: 50% 50%;
+
+            &:hover {
+                // transform: scale(1.1);
+
+                cursor: pointer;
+                // background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAYAAAAGABh2xyWQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADCSURBVCiRjdKxTgJBGATg7yISTeg0EaUAmwu2PoVvZeCpfAqpoCFnQ6hoDbnGYDPgSS7hJtnM7uzMP1ssf6hQakeZ+xNm2OPQYe3xDjVGHZtGqItMeMMA3/hpCV017j+Ooc/wJRR4FXM/TygwjeElPI1exnc4hu6wwA2WMa3Dy+iL+E6hPsYxTdLwHJ5EH7c1rTKximkTrqKvzpuu8ZDJw/Dj2Rl6zdA9vnCLbRp24W30f6G6MfUSnuI3z6bLN6ox+wVJfEKbBguaAgAAAABJRU5ErkJggg==') no-repeat;
+                background-color: var(--background-color);
+            }
         }
     }
 }

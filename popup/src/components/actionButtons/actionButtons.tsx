@@ -138,9 +138,6 @@ class ActionButtons extends React.Component<ActionButtonProps> {
     private renderScanNowButton = () => {
         const { appMode, currentTabId, isShutdownEventScheduled,
             actionResultTooltip, actionResultTooltipContent } = this.props;
-        if (appMode !== ApplicationModeEnum.VideoPlayer) {
-            return null;
-        }
 
         const onClick = () => {
                 communicationManager.sendMessageToActiveTab({
@@ -148,13 +145,15 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     data: { tabID: currentTabId, showResponse: true },
                 } as ChromeApiMessage);
         };
-
+        const className = classNames('scan-now', {
+            hide: appMode !== ApplicationModeEnum.VideoPlayer,
+        });
         return(
             <SimpleTooltipComponent
                 content={actionResultTooltipContent}
                 isOpen={actionResultTooltip === ActionResultEnum.Scan}
                 trigger={'manual'}
-                wrapperClassname={'scan-now'}
+                wrapperClassname={className}
                 tooltipClassname={this.actionTooltipsBaseClassName}
             >
                 <ButtonComponent

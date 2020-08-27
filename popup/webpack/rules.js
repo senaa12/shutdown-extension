@@ -15,8 +15,13 @@ const styleProdLoader = {
 const cssLoader = {
     test: /\.css$/,
     loader: ["css-loader"]
-}
+};
 
+const fileLoader = {
+    test: /\.(ttf|woff|woff2|png|jpe?g|gif)$/,
+    exclude: /node_modules/,
+    loader: 'file-loader'
+}
 
 const typescriptLoader = {
     test: /\.(ts|tsx)$/,
@@ -39,5 +44,6 @@ module.exports = {
     styleProdLoader: styleProdLoader,
     typescriptLoader: typescriptLoader,
     svgLoader: svgLoader,
-    cssLoader: cssLoader
+    cssLoader: cssLoader,
+    fileLoader: fileLoader
 }
