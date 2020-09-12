@@ -8,6 +8,12 @@
             display: none;
         }
     }
+
+    .shutdownScheduled {
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    }
     
     .custom-time {
         width: 200px;

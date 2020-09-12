@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { formatDate, isShutdownScheduledSelector, RootReducerState, timerComponentStrings } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -58,6 +59,13 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
         const { isShutdownScheduled } = this.props;
         const { currentTime, selectedDateTime } = this.state;
 
+        const timeClassname = classNames('input-style', 'custom-time', {
+            shutdownScheduled: isShutdownScheduled,
+        });
+        const dateClassname = classNames('custom-date', 'input-style', {
+            shutdownScheduled: isShutdownScheduled,
+        });
+
         return (
             <div className={'flex-column timer-component'}>
                 {!isShutdownScheduled ?
@@ -72,14 +80,14 @@ class TimerComponent extends React.Component<TimerComponentProps, TimerComponent
                 <input
                     type='time'
                     step={1}
-                    className={'input-style custom-time'}
+                    className={timeClassname}
                     value={selectedDateTime.toLocaleTimeString('hr-HR')}
                     onChange={this.setTime}
                     disabled={isShutdownScheduled}
                 />
                 <input
                     type='date'
-                    className={'custom-date input-style'}
+                    className={dateClassname}
                     value={formatDate(selectedDateTime)}
                     min={new Date().toLocaleDateString()}
                     onChange={this.setDate}
