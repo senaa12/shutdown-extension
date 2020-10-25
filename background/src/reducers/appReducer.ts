@@ -23,15 +23,17 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 shutdownEvent: action.data.event,
-                shutdownEventScheduleData:  state.selectedApplicationMode === ApplicationModeEnum.VideoPlayer ?
-                    (action._sender?.tab.id ? action._sender.tab.id : 0) : -1,
+                shutdownEventScheduleData:  state.selectedApplicationMode === ApplicationModeEnum.VideoPlayer
+                    ? (action._sender?.tab.id ? action._sender.tab.id : 0) // tab id if video player shutdown
+                    : -1, // -1 otherwise
             };
         }
         case AppActionTypeEnum.RemoveScheduledShutdown: {
             return {
                 ...appReducerInitialState,
-                inputSelectedTime: state.selectedApplicationMode !== ApplicationModeEnum.Timer ?
-                    state.inputSelectedTime : initialTime,
+                inputSelectedTime: state.selectedApplicationMode !== ApplicationModeEnum.Timer
+                    ? state.inputSelectedTime
+                    : initialTime,
                 selectedApplicationMode: state.selectedApplicationMode,
                 isHostAppActive: state.isHostAppActive,
             };

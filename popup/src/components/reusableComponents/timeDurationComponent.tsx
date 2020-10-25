@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { calculateSeconds, convertSecondsToTimeFormat } from 'common';
-import React from 'react';
+import React, { useEffect } from 'react';
 import './timeDurationComponent.scss';
 
 export interface TimeDurationComponentProps {
@@ -50,8 +50,15 @@ export interface TimeDurationInputProps {
 // custom time input component
 // because standard input time reads time format from computer
 const TimeDurationInput = (props: TimeDurationInputProps) => {
-    const inputRef = React.useRef(null);
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const [ value, setValue ] = React.useState(props.value);
+
+    const [ initialRender, setInitialRender ] = React.useState(false);
+    useEffect(() => {
+        if (!initialRender) {
+            setInitialRender(true);
+        }
+    }, [initialRender]);
 
     // used for correction on backspace
     const [ onSelectVal, setOnSelectVal ] = React.useState<undefined | number>(undefined);
@@ -83,8 +90,8 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
         const select = e.currentTarget.selectionStart;
         if (e.key === 'ArrowLeft' && select !== 0) {
             // jedino back ne radi dobro
-            (inputRef.current as unknown as HTMLInputElement).selectionStart = select - 1;
-            (inputRef.current as unknown as HTMLInputElement).selectionEnd = select - 1;
+            inputRef.current!.selectionStart = select - 1;
+            inputRef.current!.selectionEnd = select - 1;
         } else if (e.key === 'Backspace') {
             e.preventDefault();
             setOnSelectVal(select);
@@ -121,51 +128,77 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
 
         e.preventDefault();
         const select = onSelectVal ?? e.currentTarget.selectionStart;
+
         // backspace control
-        if (onSelectVal) {
+        if (onSelectVal !== undefined) {
             if (select === 3 || select === 6) {
-                (inputRef.current as unknown as HTMLInputElement).selectionStart = select - 1;
-                (inputRef.current as unknown as HTMLInputElement).selectionEnd = select - 1;
+                inputRef.current!.selectionStart = select - 1;
+                inputRef.current!.selectionEnd = select - 1;
             } else if (select === 0) {
-                (inputRef.current as unknown as HTMLInputElement).selectionStart = 0;
-                (inputRef.current as unknown as HTMLInputElement).selectionEnd = 1;
+                inputRef.current!.selectionStart = 0;
+                inputRef.current!.selectionEnd = 1;
             } else {
-                (inputRef.current as unknown as HTMLInputElement).selectionStart = select;
-                (inputRef.current as unknown as HTMLInputElement).selectionEnd = select + 1;
+                inputRef.current!.selectionStart = select;
+                inputRef.current!.selectionEnd = select + 1;
             }
             setOnSelectVal(undefined);
         } else if (select === 2 || select === 5) {
             // ako je kod ":" u ispisu broja
-            (inputRef.current as unknown as HTMLInputElement).selectionStart = select + 1;
-            (inputRef.current as unknown as HTMLInputElement).selectionEnd = select + 2;
+            inputRef.current!.selectionStart = select + 1;
+            inputRef.current!.selectionEnd = select + 2;
         } else if (select === 8) {
             // ako je kraj inputa selektiran
-            (inputRef.current as unknown as HTMLInputElement).selectionStart = 7;
-            (inputRef.current as unknown as HTMLInputElement).selectionEnd = 8;
+            inputRef.current!.selectionStart = 7;
+            inputRef.current!.selectionEnd = 8;
         } else {
-            (inputRef.current as unknown as HTMLInputElement).selectionEnd = select + 1;
+            inputRef.current!.selectionEnd = select + 1;
         }
     };
+
+    useEffect(() => {
+        if (props.disabled) {
+            inputRef.current!.selectionStart = 0;
+            inputRef.current!.selectionEnd = 0;
+        }
+    }, [props.disabled]);
+
+    const inputClientRect = React.useMemo(() => {
+        if (inputRef.current) {
+            return inputRef.current!.getBoundingClientRect();
+        } else {
+            return undefined;
+        }
+    }, [inputRef, inputRef.current]);
 
     const className = classNames('input-style', props.className, {
         disabled: props.disabled,
     });
     return (
-        <input
-            ref={inputRef}
-            className={className}
-            style={width}
-            type={'text'}
-            maxLength={8}
-            value={value}
-            onChange={onChange}
-            onSelect={onSelect}
-            onKeyDown={detectArrows}
-            onMouseMove={prevetDefault}
-            onMouseMoveCapture={prevetDefault}
-            onDoubleClick={prevetDefault}
-            onDoubleClickCapture={prevetDefault}
-        />
+        <>
+            {(props.disabled && inputClientRect) &&
+                <div style={{
+                    position: 'absolute',
+                    height: inputClientRect.height,
+                    width: inputClientRect.width,
+                    top: inputClientRect.top,
+                    left: inputClientRect.left,
+                }}/>}
+            <input
+                ref={inputRef}
+                className={className}
+                style={width}
+                type={'text'}
+                maxLength={8}
+                value={value}
+                onChange={onChange}
+                onSelect={onSelect}
+                onKeyDown={detectArrows}
+                onMouseMove={prevetDefault}
+                onMouseMoveCapture={prevetDefault}
+                onDoubleClick={prevetDefault}
+                onDoubleClickCapture={prevetDefault}
+            />
+        </>
     );
 };
 

@@ -28,6 +28,12 @@
      width: 50px;
      height: 50px;
      margin: auto;
+
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     -ms-transform: translate(-50%, -50%);
+     transform: translate(-50%, -50%);
  }
  .la-ball-spin > div {
      position: absolute;

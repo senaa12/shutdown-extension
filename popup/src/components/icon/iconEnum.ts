@@ -1,4 +1,5 @@
 export enum IconEnum {
+    Correct = 'correct',
     VideoPlayer = 'video-player',
     Countdown = 'countdown',
     Logo = 'extension-logo',
@@ -8,6 +9,7 @@ export enum IconEnum {
     OpenDocs = 'docs',
     Arrow = 'drop-down-arrow',
     AlarmClock = 'alarm-clock',
+    Sports = 'football',
 }
 
 export enum IconSize {

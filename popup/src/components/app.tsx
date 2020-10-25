@@ -1,4 +1,4 @@
-import { ApplicationModeEnum, extensionWillNotWork, hostNotActive, links, RootReducerState, TabState } from 'common';
+import { ApplicationModeEnum, extensionWillNotWork, links, RootReducerState } from 'common';
 import React from 'react';
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import { ActiveTabReaderInjectedProps } from './activeTabReader/activeTabReader'
 import CountdownComponent from './countdownComponent/countdownComponent';
 import Header from './header/header';
 import MenuButtons from './menuButtons/menuButtons';
+import SportEndingsComponent from './sportEndingsComponent/sportEndingsComponent';
 import TimerComponent from './timerComponent/timerComponent';
 import VideoEndComponent from './videoEndComponent/videoEndComponent';
 
@@ -40,6 +41,9 @@ class App extends React.Component<AppProps> {
             }
             case ApplicationModeEnum.Timer: {
                 return <TimerComponent key={'third'} />;
+            }
+            case ApplicationModeEnum.SportEvent: {
+                return <SportEndingsComponent key={'fourth'} />;
             }
             default: {
                 const exhaustingCheck: never = this.props.selectedAppMode;

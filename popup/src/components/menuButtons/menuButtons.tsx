@@ -60,6 +60,14 @@ const MenuButtons: React.FunctionComponent<MenuButtonsProps> = (props) => {
                 className={'tile custom-button'}
                 disabled={props.isShutdownScheduled}
             />
+            <ButtonComponent
+                isSelected={props.selectedMode === ApplicationModeEnum.SportEvent}
+                label={'Sports'}
+                onClick={onButtonClickCallback(ApplicationModeEnum.SportEvent)}
+                icon={IconEnum.Sports}
+                className={'tile custom-button'}
+                disabled={props.isShutdownScheduled}
+            />
             <div className={'triggers-label'}>{'Choose Trigger'}</div>
         </div>
     );

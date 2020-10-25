@@ -10,6 +10,7 @@ import thunk from 'redux-thunk';
 import { applyMiddleware, Store } from 'webext-redux';
 import ActiveTabReader from './components/activeTabReader/activeTabReader';
 import App from './components/app';
+import Snowfall, { SnowfallDensity } from './components/snowfall/snowfall';
 import communicationManager from './utilities/communicationManager';
 
 import './index.scss';
@@ -34,6 +35,7 @@ storeWithMiddleware.ready().then(() => {
 
     ReactDOM.render(
         <Provider store={store}>
+            <Snowfall density={SnowfallDensity.Least} />
             <ActiveTabReader>
                 <App />
             </ActiveTabReader>

@@ -22,6 +22,11 @@ export const isShutdownButtonDisabledCheck = (state: RootReducerState) => {
             // if input selected datetime is smaller than current time
             return new Date(state.appReducer.inputSelectedDateTimeString).getTime() < new Date().getTime();
         }
+        case ApplicationModeEnum.SportEvent: {
+            // if sport event is not selected and sport api is disabled
+            return state.sportsModeReducer.selectedSportEventForShutdown === undefined
+                || !state.sportsModeReducer.isSportsApiEnabled;
+        }
         default: {
             throw new Error(`Shutdown disability check is not defined for ${state.appReducer.selectedApplicationMode}`);
         }
@@ -39,7 +44,8 @@ export const isCancelButtonDisabledCheck = (state: RootReducerState, currentTabI
             return currentTabId !== state.appReducer.shutdownEventScheduleData;
         }
         case ApplicationModeEnum.Countdown:
-        case ApplicationModeEnum.Timer: {
+        case ApplicationModeEnum.Timer:
+        case ApplicationModeEnum.SportEvent: {
             return false;
         }
         default: {

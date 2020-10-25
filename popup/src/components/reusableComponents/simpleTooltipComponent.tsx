@@ -11,8 +11,11 @@ export interface TooltipComponentProps {
     isOpen?: boolean;
     trigger?: 'hover' | 'manual';
     tooltipStyle?: React.CSSProperties;
-    wrapperClassname?: string;
     position?: 'bottom' | 'top';
+    /** in miliseconds, default is 1000, works only in Manual mode */
+    tooltipHideAnimationDuration?: number;
+    /** reference where you want tooltip to show */
+    parentRef: React.RefObject<any>;
 }
 
 type PropsWithChildren<P> = P & { children: React.ReactNode };
@@ -21,28 +24,47 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
     const [ forceRerender, disableRerender ] = useState(false);
 
     const [isOpen, setIsOpen] = useState<boolean>(props.isOpen !== undefined ? props.isOpen : false);
+    const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(props.content);
+    const [tooltipClassName, setTooltipClassName] = useState<string | undefined>(props.tooltipClassname);
     const [transitionInProgress, setTransitionInProgress] = useState(false);
-    const setTransitionToFalse = useCallback(() => setTransitionInProgress(false), []);
-    const hideTooltip = useCallback(() => { setTransitionInProgress(true); setIsOpen(false); }, []);
 
-    const parentRef = useRef(null);
-    const tooltipRef = useRef(null);
+    const setTransitionToFalse = () => {
+        setTransitionInProgress(false);
+        // first transition is when tooltip appears
+        if (!isOpen) {
+            setTooltipContent(undefined);
+            setTooltipClassName(undefined);
+        }
+    };
+
+    const hideTooltip = useCallback(() => {
+        setTransitionInProgress(true);
+        setIsOpen(false);
+    }, []);
+
+    const showTooltip = () => {
+        setTooltipContent(props.content);
+        setTooltipClassName(props.tooltipClassname);
+        setIsOpen(true);
+    };
+
+    const tooltipRef = useRef<HTMLDivElement>(null);
 
     // default trigger is hover
     useEffect(() => {
-        if ((!props.trigger || props.trigger === 'hover') && parentRef.current) {
-            (parentRef.current as unknown as HTMLElement).addEventListener('mouseenter', () => setIsOpen(true));
-            (parentRef.current as unknown as HTMLElement).addEventListener('mouseleave', hideTooltip);
+        if ((!props.trigger || props.trigger === 'hover') && props.parentRef && props.parentRef.current) {
+            props.parentRef.current.addEventListener('mouseenter', showTooltip);
+            props.parentRef.current.addEventListener('mouseleave', hideTooltip);
         }
-    }, [props.trigger, parentRef.current] );
+    }, [props.trigger, props.parentRef] );
 
     // maual triggering
     useEffect(() => {
         if (props.trigger === 'manual' && props.isOpen !== undefined) {
             if (props.isOpen) {
-                setIsOpen(true);
+                showTooltip();
             } else {
-                setTimeout(hideTooltip, 1000);
+                setTimeout(hideTooltip, props.tooltipHideAnimationDuration ?? 1000);
             }
         }
     }, [props.isOpen]);
@@ -60,16 +82,16 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             pointerEvents: 'none',
         };
 
-        if (!tooltipRef.current || !parentRef.current) {
+        if (!tooltipRef.current || !props.parentRef || !props.parentRef.current) {
             // first render
             if (isOpen && !forceRerender) { disableRerender(true); }
 
             return hidden;
         }
 
-        const parentPosition = (parentRef.current as unknown as HTMLElement).getBoundingClientRect();
-        const renderedTooltiop = (tooltipRef.current as unknown as HTMLElement).getBoundingClientRect();
-        const currentStyle = (tooltipRef.current as unknown as HTMLElement).style;
+        const parentPosition = props.parentRef.current.getBoundingClientRect();
+        const renderedTooltiop = tooltipRef.current.getBoundingClientRect();
+        const currentStyle = tooltipRef.current.style;
         if (!isOpen) {
             return {
                 ...hidden,
@@ -88,7 +110,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
                     flexDirection: 'column-reverse',
                     opacity: 1,
                     left: parentPosition.left + (parentPosition.width / 2) - (renderedTooltiop.width / 2),
-                    top: parentPosition.bottom - 10,
+                    top: parentPosition.bottom - 8,
                 } as React.CSSProperties;
             case 'top':
             default:
@@ -98,7 +120,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
                     flexDirection: 'column',
                     opacity: 1,
                     left: parentPosition.left + (parentPosition.width / 2) - (renderedTooltiop.width / 2),
-                    top: parentPosition.top - (renderedTooltiop.height) + 10,
+                    top: parentPosition.top - (renderedTooltiop.height) + 8,
                 } as React.CSSProperties;
         }
     };
@@ -115,15 +137,15 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             default:
                 return {
                     position: 'relative',
-                    bottom: 4,
+                    bottom: 6,
                 } as React.CSSProperties;
         }
     };
 
-    const className = classNames(props.tooltipClassname, 'flex-column', 'tooltip-base');
+    const className = classNames(tooltipClassName, 'flex-column', 'tooltip-base');
     return (
     <>
-        <div ref={parentRef} className={props.wrapperClassname}>{props.children}</div>
+        {props.children}
         {(isOpen || transitionInProgress) &&
             <div
                 ref={tooltipRef}
@@ -131,7 +153,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
                 onTransitionEnd={setTransitionToFalse}
                 className={className}
             >
-                    <div className={' content'}>{props.content}</div>
+                    <div className={'content'}>{tooltipContent}</div>
                     <Icon
                         iconName={IconEnum.Arrow}
                         iconSize={IconSize.Smallest}

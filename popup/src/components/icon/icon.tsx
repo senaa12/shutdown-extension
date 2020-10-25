@@ -5,7 +5,7 @@ import { IconEnum, IconSize } from './iconEnum';
 export interface IconProps {
     iconName: IconEnum;
     className?: string;
-    iconSize?: IconSize;
+    iconSize?: IconSize | number;
     style?: React.CSSProperties;
 }
 

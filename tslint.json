@@ -6,7 +6,7 @@
         "semicolon": [ true, "always" ],
         "space-before-function-paren": [ true, "never" ],
         "quotemark": [ true, "single" ],
-        "no-console": true,
+        "no-console": false,
         "interface-name": false,
         "only-arrow-functions": false,
         "object-literal-sort-keys": false,

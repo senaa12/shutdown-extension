@@ -33,6 +33,7 @@
   "author": "Luka Senicic",
   "license": "MIT",
   "dependencies": {
+    "@types/react-transition-group": "^4.4.0",
     "react": "^16.13.1",
     "react-css-transition-replace": "^4.0.2",
     "react-dom": "^16.13.1"
@@ -62,7 +63,9 @@
     "jest-webextension-mock": "^3.6.1",
     "mini-css-extract-plugin": "^0.8.2",
     "node-sass": "^4.14.1",
+    "react-particles-js": "^3.4.0",
     "react-redux": "^7.2.1",
+    "react-transition-group": "^4.4.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",

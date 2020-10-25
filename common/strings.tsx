@@ -38,6 +38,18 @@ export const timerComponentStrings = {
     scheduled: () => <div style={{ marginTop: 15 }}>Shutdown scheduled at:</div>,
 };
 
+export const sportEndingsComponentStrings = {
+    apiDisabled: () => <>placeholder description</>,
+    usageInstructions: 'For this mode to work, first, you need to select a sporting event after the end' +
+        ' of which you want your computer to shut down. Additionally, you can select delay in shutting down (if your broadcast is late)',
+    noSportEvents: 'There are no sport events in play',
+    selectSportEvent: 'Select sport event',
+    sportShutdownScheduledAfterEnd: (matchLabel: React.ReactNode) =>
+        <>Your computer will shut down when match {matchLabel} game is finished.</>,
+    sportShutdownWithDelayScheduled: (delayString: React.ReactNode, matchLabel: React.ReactNode) =>
+        <>Your computer will shut down {delayString} after {matchLabel} game is finished.</>,
+};
+
 export const title = 'AUTO SHUTDOWN';
 export const nativeAppTitle = 'shutdown.extension.host';
 

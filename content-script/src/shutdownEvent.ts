@@ -54,7 +54,6 @@ export const SubscribeToVideoEnd = (selectedTime: string, duration: number) => {
             data: true,
         } as ChromeApiMessage);
     } catch (e) {
-        // tslint:disable-next-line: no-console
         console.error(e);
 
         scheduleShutdownAction({ success: false });

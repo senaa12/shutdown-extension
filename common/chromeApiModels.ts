@@ -18,6 +18,8 @@ export enum BackgroundMessageTypeEnum {
     RemoveShutdownEvent,
     ChangeIcon,
     TriggerNotification,
+    SportsApiFetch,
+    SportEventShutdown,
 }
 
 export declare type ChromeApiMessageTypeEnum = ContentScriptMessageTypeEnum | BackgroundMessageTypeEnum;

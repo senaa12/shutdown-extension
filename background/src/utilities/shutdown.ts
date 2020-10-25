@@ -3,12 +3,18 @@ import {
     actionResultsStrings,
     ApplicationModeEnum,
     calculateSeconds,
-    convertSecondsToTimeFormat } from 'common';
+    convertSecondsToTimeFormat,
+    SportApiMatchModel,
+    SportsApiFetchRequestType} from 'common';
 import { store } from '..';
 import { changeIcon, changeSelectedTimeAction,
     removeScheduleShutdownAction, scheduleShutdownAction,
     triggerOneMinuteWarningNotification, triggerTooltipWithMessage } from './actions';
 import { shutdownCommand } from './nativeCommunication';
+import sportsApiFetcher from './sportsApiFetcher';
+
+const oneSecInMs = 1000;
+const sportApiDelayInSeconds = 60;
 
 const shutddownCommandWithIconChange = () => {
     removeShutdownEvent();
@@ -20,7 +26,7 @@ export const removeShutdownEvent = () => {
     const appMode = store.getState().appReducer.selectedApplicationMode;
     if (appMode === ApplicationModeEnum.Timer) {
         clearTimeout(event);
-    } else {
+    } else if (appMode === ApplicationModeEnum.Countdown) {
         clearInterval(event);
     }
 
@@ -46,7 +52,7 @@ export const countdownShutdownEvent = () => {
     if (calculateSeconds(time) < 60) {
         triggerTooltipWithMessage(actionResultsStrings.shutdown.failedCountdown, ActionResultEnum.Shutdown);
     } else {
-        const func = setInterval(countdownInterval, 1000);
+        const func = setInterval(countdownInterval, oneSecInMs);
         scheduleShutdownAction(true, func);
         triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
         changeIcon(true);
@@ -63,15 +69,54 @@ export const timerShutdown = () => {
         const triggerTooltipAndScheduleShutdown = () => {
             triggerOneMinuteWarningNotification();
             const diff = selectedTime.getTime() - currentTime.getTime();
-            const oneMinInMs = 60000;
-            const shutFunc = setTimeout(shutddownCommandWithIconChange, diff > oneMinInMs ? oneMinInMs : diff);
+            const shutFunc = setTimeout(
+                shutddownCommandWithIconChange, diff > (60 * oneSecInMs) ? (60 * oneSecInMs) : diff,
+            );
             scheduleShutdownAction(true, shutFunc);
         };
 
         const delay = selectedTime.getTime() - currentTime.getTime();
-        const func = setTimeout(triggerTooltipAndScheduleShutdown, delay - 60000);
+        const func = setTimeout(triggerTooltipAndScheduleShutdown, delay - (60 + oneSecInMs));
         scheduleShutdownAction(true, func);
         triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
         changeIcon(true);
     }
+};
+
+export const sportEventShutdown = () => {
+    const checkEventEndShutdown = async() => {
+        const isStillScheduled = store.getState().appReducer.shutdownEventScheduleData;
+        if (!isStillScheduled) {
+            return;
+        }
+
+        const matches = await sportsApiFetcher.Fetch(SportsApiFetchRequestType.GetLiveMatches);
+        const selectedMatch = store.getState().sportsModeReducer.selectedSportEventForShutdown!;
+
+        if (!(matches as Array<SportApiMatchModel>).find((x) => x.id === selectedMatch?.id)) {
+            const additionalDelay = store.getState().sportsModeReducer.addDelayToShutdown;
+
+            if (additionalDelay) {
+                let seconds = calculateSeconds(store.getState().appReducer.inputSelectedTime)
+                seconds -= sportApiDelayInSeconds;
+
+                if (seconds < 0) {
+                    shutddownCommandWithIconChange();
+                } else {
+                    const delayFunc = setTimeout(shutddownCommandWithIconChange, seconds * oneSecInMs);
+                    scheduleShutdownAction(true, delayFunc);
+                }
+            } else {
+                shutddownCommandWithIconChange();
+            }
+        } else {
+            setTimeout(checkEventEndShutdown, 10 * oneSecInMs);
+        }
+    };
+
+    // set interval does not work good with async function
+    const func = setTimeout(checkEventEndShutdown, 10 * oneSecInMs);
+    scheduleShutdownAction(true, func);
+    triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
+    changeIcon(true);
 };

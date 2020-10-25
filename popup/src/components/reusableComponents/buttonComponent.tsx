@@ -16,7 +16,7 @@ export interface CustomButtonProps {
     disabled?: boolean;
 }
 
-const buttonComponent = (props: CustomButtonProps) => {
+const buttonComponent = React.forwardRef((props: CustomButtonProps, ref: any) => {
     const className = classNames('flex-column', 'button-base', props.className, {
         selected: props.isSelected,
         disabled: props.disabled,
@@ -30,6 +30,7 @@ const buttonComponent = (props: CustomButtonProps) => {
 
     return(
         <div
+            ref={ref}
             title={props.tooltip}
             className={className}
             onClick={onClick}
@@ -45,6 +46,6 @@ const buttonComponent = (props: CustomButtonProps) => {
             <div className={'label'}>{props.label}</div>
         </div>
     );
-};
+});
 
 export default buttonComponent;

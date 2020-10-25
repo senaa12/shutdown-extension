@@ -16,8 +16,9 @@ import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader
 import { IconEnum, IconSize } from '../icon/iconEnum';
 import ButtonComponent from '../reusableComponents/buttonComponent';
 import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent';
-import './actionButtons.scss';
 import { isCancelButtonDisabledCheck, isShutdownButtonDisabledCheck } from './utils';
+
+import './actionButtons.scss';
 
 export interface ActionButtonCustomProps {
     appMode: ApplicationModeEnum;
@@ -39,6 +40,10 @@ export interface ActionButtonDispatchProps {
 
 declare type ActionButtonStateProps = ActionButtonCustomProps & ActiveTabReaderInjectedProps;
 declare type ActionButtonProps = ActionButtonStateProps & ActionButtonDispatchProps;
+
+export interface ActionButtonState {
+    shutdownButtonRef?: React.MutableRefObject<any>;
+}
 
 const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjectedProps): ActionButtonStateProps => {
     return {
@@ -62,10 +67,18 @@ const mapDispatchToProps = (dispatch: Dispatch): Partial<ActionButtonProps> => {
     };
 };
 
-class ActionButtons extends React.Component<ActionButtonProps> {
+class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState> {
     constructor(props: ActionButtonProps) {
         super(props);
+
+        this.shutdownButtonRef = React.createRef();
+        this.cancelButtonRef = React.createRef();
+        this.scanNowButtonRef = React.createRef();
     }
+
+    private shutdownButtonRef: React.RefObject<any>;
+    private cancelButtonRef: React.RefObject<any>;
+    private scanNowButtonRef: React.RefObject<any>;
 
     private baseClassName = 'action-button';
     private actionTooltipsBaseClassName = 'action-tooltips';
@@ -103,10 +116,20 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     } as ChromeApiMessage);
                     break;
                 }
-                default: {
+                case ApplicationModeEnum.Timer: {
                     communicationManager.sendMessageToBackgroundPage({
                         type: BackgroundMessageTypeEnum.TimerShutdown,
                     } as ChromeApiMessage);
+                    break;
+                }
+                case ApplicationModeEnum.SportEvent: {
+                    communicationManager.sendMessageToBackgroundPage({
+                        type: BackgroundMessageTypeEnum.SportEventShutdown,
+                    } as ChromeApiMessage);
+                    break;
+                }
+                default: {
+                    const exhaustiveCheck: never = appMode;
                 }
             }
         };
@@ -116,20 +139,22 @@ class ActionButtons extends React.Component<ActionButtonProps> {
             'sucess-tooltip':  isShutdownEventScheduled,
             'error-tooltip': !isShutdownEventScheduled,
         });
-        return(
+        return (
             <SimpleTooltipComponent
                 content={actionResultTooltipContent}
                 isOpen={actionResultTooltip === ActionResultEnum.Shutdown}
                 trigger={'manual'}
                 tooltipClassname={tooltipClassName}
+                parentRef={this.shutdownButtonRef}
             >
                 <ButtonComponent
-                        className={this.baseClassName}
-                        label={'Shutdown'}
-                        onClick={onClick}
-                        icon={IconEnum.PowerButton}
-                        iconSize={IconSize.Smallest}
-                        disabled={isShutdownButtonDisabled}
+                    ref={this.shutdownButtonRef}
+                    className={this.baseClassName}
+                    label={'Shutdown'}
+                    onClick={onClick}
+                    icon={IconEnum.PowerButton}
+                    iconSize={IconSize.Smallest}
+                    disabled={isShutdownButtonDisabled}
                 />
             </SimpleTooltipComponent>
         );
@@ -145,19 +170,20 @@ class ActionButtons extends React.Component<ActionButtonProps> {
                     data: { tabID: currentTabId, showResponse: true },
                 } as ChromeApiMessage);
         };
-        const className = classNames('scan-now', {
+        const className = classNames('scan-now', this.baseClassName, {
             hide: appMode !== ApplicationModeEnum.VideoPlayer,
         });
         return(
             <SimpleTooltipComponent
+                parentRef={this.scanNowButtonRef}
                 content={actionResultTooltipContent}
-                isOpen={actionResultTooltip === ActionResultEnum.Scan}
+                isOpen={actionResultTooltip === ActionResultEnum.Scan && appMode === ApplicationModeEnum.VideoPlayer}
                 trigger={'manual'}
-                wrapperClassname={className}
                 tooltipClassname={this.actionTooltipsBaseClassName}
             >
                 <ButtonComponent
-                    className={this.baseClassName}
+                    ref={this.scanNowButtonRef}
+                    className={className}
                     label={'Scan now'}
                     onClick={onClick}
                     icon={IconEnum.ScanNow}
@@ -188,12 +214,14 @@ class ActionButtons extends React.Component<ActionButtonProps> {
         });
         return (
             <SimpleTooltipComponent
+                parentRef={this.cancelButtonRef}
                 content={actionResultTooltipContent}
                 isOpen={actionResultTooltip === ActionResultEnum.Canceled}
                 trigger={'manual'}
                 tooltipClassname={'action-tooltips cancel error-tooltip'}
             >
                 <ButtonComponent
+                    ref={this.cancelButtonRef}
                     className={className}
                     label={'Cancel'}
                     onClick={onClick}

@@ -1,3 +1,5 @@
+import { SportApiMatchModel } from './sportApiModels';
+
 export const calculateSeconds = (selectedTime: string) => {
     const values =  selectedTime.split(':');
     let numberOfSeconds = 0;
@@ -5,6 +7,22 @@ export const calculateSeconds = (selectedTime: string) => {
     numberOfSeconds += parseInt(values[1]) * 60;
     numberOfSeconds += values[2] ? parseInt(values[2]) : 0;
     return numberOfSeconds;
+};
+
+export const getSelectedTimeLabel = (selectedTime: string) => {
+    const values = selectedTime.split(':').map((x) => ( parseInt(x) ));
+    let timeLabel = '';
+    timeLabel += values[0] > 0
+        ? values[0] > 1 ? `${values[0]} hours ` : `${values[0]} hour `
+        : '';
+    timeLabel += values[1] > 0
+        ? values[1] > 1 ? `${values[1]} minutes ` : `${values[1]} minute `
+        : '';
+    timeLabel += (timeLabel !== '' && values[2]) ? 'and ' : '';
+    timeLabel += values[2] > 0
+        ? values[2] > 1 ? `${values[2]} seconds ` : `${values[2]} second `
+        : '';
+    return timeLabel;
 };
 
 export const convertSecondsToTimeFormat = (totalSeconds?: number, fullTime: boolean = false) => {
@@ -44,3 +62,7 @@ export const formatDate = (d: Date) => {
 
     return [year, month, day].join('-');
 };
+
+export const getMatchLabelFromMatchModel = (match: SportApiMatchModel) => (
+    `${match.homeTeam} : ${match.awayTeam}`
+);

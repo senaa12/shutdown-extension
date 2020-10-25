@@ -1,7 +1,8 @@
 import { BackgroundMessageTypeEnum, CallbackFunction, ChromeApiMessage, MessageSender } from 'common';
 import { changeIcon, triggerOneMinuteWarningNotification } from './utilities/actions';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
-import { countdownShutdownEvent, removeShutdownEvent, timerShutdown } from './utilities/shutdown';
+import { countdownShutdownEvent, removeShutdownEvent, sportEventShutdown, timerShutdown } from './utilities/shutdown';
+import sportsApiFetcher from './utilities/sportsApiFetcher';
 
 const messageHandler = (
     request: ChromeApiMessage,
@@ -32,9 +33,21 @@ const messageHandler = (
                 changeIcon(request.data);
                 break;
             }
+            case BackgroundMessageTypeEnum.SportEventShutdown: {
+                sportEventShutdown();
+                break;
+            }
             case BackgroundMessageTypeEnum.TriggerNotification: {
                 triggerOneMinuteWarningNotification();
                 break;
+            }
+            case BackgroundMessageTypeEnum.SportsApiFetch: {
+                sportsApiFetcher
+                    .Fetch(request.data?.requestType ?? request.data, request.data?.token)
+                    .then(sendResponse);
+
+                // return true keeps channel open and waits when sendResponse will be called (async actions)
+                return true;
             }
         }
 };

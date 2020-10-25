@@ -1,25 +1,37 @@
 import { PlatformEnum } from './chromeApiModels';
+import { SportApiMatchModel } from './sportApiModels';
 
 export const isShutdownScheduledSelector = (state: RootReducerState) =>
     state.appReducer.shutdownEventScheduleData !== 0;
+
+export const isSportsApiEnabledSelector = (state: RootReducerState) => state.sportsModeReducer.isSportsApiEnabled;
 
 export interface RootReducerState {
     appReducer: AppReducerState;
     activeTabReducer: ActiveTabReducerState;
     actionsResultReducer: ActionsResultState;
+    sportsModeReducer: SportsModeReducerState;
 }
 
 export interface AppReducerState {
     selectedApplicationMode: ApplicationModeEnum;
     isHostAppActive: boolean;
-    // tslint:disable-next-line: max-line-length
-    /** -1 represents if countdown is scheduled, 0 if no event is scheduled, and >0 represents tabID from scheduled event */
+    /** -1  = represents if countdown, timer or sport is scheduled,
+     * 0   = NO EVENT IS SCHEDULED,
+     * >0  = represents tabID from scheduled event
+     */
     shutdownEventScheduleData: number;
     /** shutdown function */
     shutdownEvent: any;
     inputSelectedTime: string;
     inputSelectedDateTimeString: string;
     platformType: PlatformEnum;
+}
+
+export interface SportsModeReducerState {
+    addDelayToShutdown: boolean;
+    isSportsApiEnabled: boolean;
+    selectedSportEventForShutdown?: SportApiMatchModel;
 }
 
 export interface ActionsResultState {
@@ -48,6 +60,7 @@ export enum ApplicationModeEnum {
     VideoPlayer,
     Countdown,
     Timer,
+    SportEvent,
 }
 
 export enum ActionResultEnum {
@@ -55,4 +68,5 @@ export enum ActionResultEnum {
     Scan,
     Canceled,
     Shutdown,
+    WrongToken,
 }
