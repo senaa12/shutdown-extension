@@ -24,8 +24,7 @@ export const isShutdownButtonDisabledCheck = (state: RootReducerState) => {
         }
         case ApplicationModeEnum.SportEvent: {
             // if sport event is not selected and sport api is disabled
-            return state.sportsModeReducer.selectedSportEventForShutdown === undefined
-                || !state.sportsModeReducer.isSportsApiEnabled;
+            return state.sportsModeReducer.selectedSportEventForShutdown === undefined;
         }
         default: {
             throw new Error(`Shutdown disability check is not defined for ${state.appReducer.selectedApplicationMode}`);

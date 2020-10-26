@@ -4,17 +4,16 @@ import {
     ApplicationModeEnum,
     calculateSeconds,
     convertSecondsToTimeFormat,
-    SportApiMatchModel,
-    SportsApiFetchRequestType} from 'common';
+    SportsApiRequestType} from 'common';
 import { store } from '..';
 import { changeIcon, changeSelectedTimeAction,
     removeScheduleShutdownAction, scheduleShutdownAction,
     triggerOneMinuteWarningNotification, triggerTooltipWithMessage } from './actions';
 import { shutdownCommand } from './nativeCommunication';
-import sportsApiFetcher from './sportsApiFetcher';
+import sportsApiFetcher from './sportsApiFetcher/sportsApiFetcher';
 
 const oneSecInMs = 1000;
-const sportApiDelayInSeconds = 60;
+const sportApiDelayInSeconds = 20;
 
 const shutddownCommandWithIconChange = () => {
     removeShutdownEvent();
@@ -90,14 +89,17 @@ export const sportEventShutdown = () => {
             return;
         }
 
-        const matches = await sportsApiFetcher.Fetch(SportsApiFetchRequestType.GetLiveMatches);
         const selectedMatch = store.getState().sportsModeReducer.selectedSportEventForShutdown!;
+        const isEventCompleted = await sportsApiFetcher.Fetch({
+            type: SportsApiRequestType.IsEventCompleted,
+            data: selectedMatch,
+        });
 
-        if (!(matches as Array<SportApiMatchModel>).find((x) => x.id === selectedMatch?.id)) {
+        if (isEventCompleted) {
             const additionalDelay = store.getState().sportsModeReducer.addDelayToShutdown;
 
             if (additionalDelay) {
-                let seconds = calculateSeconds(store.getState().appReducer.inputSelectedTime)
+                let seconds = calculateSeconds(store.getState().appReducer.inputSelectedTime);
                 seconds -= sportApiDelayInSeconds;
 
                 if (seconds < 0) {

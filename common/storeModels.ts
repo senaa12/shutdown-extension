@@ -4,8 +4,6 @@ import { SportApiMatchModel } from './sportApiModels';
 export const isShutdownScheduledSelector = (state: RootReducerState) =>
     state.appReducer.shutdownEventScheduleData !== 0;
 
-export const isSportsApiEnabledSelector = (state: RootReducerState) => state.sportsModeReducer.isSportsApiEnabled;
-
 export interface RootReducerState {
     appReducer: AppReducerState;
     activeTabReducer: ActiveTabReducerState;
@@ -30,7 +28,6 @@ export interface AppReducerState {
 
 export interface SportsModeReducerState {
     addDelayToShutdown: boolean;
-    isSportsApiEnabled: boolean;
     selectedSportEventForShutdown?: SportApiMatchModel;
 }
 

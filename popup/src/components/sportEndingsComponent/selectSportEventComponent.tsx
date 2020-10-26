@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { BackgroundMessageTypeEnum, getMatchLabelFromMatchModel, isShutdownScheduledSelector, RootReducerState,
-    SportApiMatchModel, sportEndingsComponentStrings,
-    SportsApiFetchRequestType } from 'common';
+    SportApiMatchModel, sportEndingsComponentStrings, SportsApiRequestType, SportsEnum, sportsLabel } from 'common';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -52,7 +51,9 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
         if (isSelectSportEventDialogOpen) {
             communication.sendMessageToBackgroundPage({
                 type: BackgroundMessageTypeEnum.SportsApiFetch,
-                data: SportsApiFetchRequestType.GetLiveMatches,
+                data: {
+                    type: SportsApiRequestType.GetLiveGames
+                },
             }, setAvailableEvents);
         }
     }, [isSelectSportEventDialogOpen]);
@@ -64,22 +65,54 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
             props.setSelectedSportEvent(match);
         }
     };
-
-    const renderSportsEvent = (match: SportApiMatchModel) => (
-        <div className={'sport-event-tile'}>
-            <CheckboxComponent
-                checkboxClassname={'sport-event-checkbox'}
-                checked={props.selectedSportEvent?.id === match.id}
-                label={
-                    <div className={'flex-column sport-event-checkbox-label'}>
-                        <div className={'sport-event-league-name'}>{match.competitionName}</div>
-                        <div className={'sport-event-teams'}>{match.homeTeam} : {match.awayTeam}</div>
-                    </div>
-                }
-                handleOnCheckboxChange={checkSportEvent(match)}
-            />
-        </div>
+    
+    const renderSportsEvent = (match: SportApiMatchModel, renderSportLabel: boolean) => (
+        <>
+            {renderSportLabel && <div className={'sports-label'}>{sportsLabel[match.sport]}</div>}
+            <div className={'sport-event-tile'}>
+                <CheckboxComponent
+                    checkboxClassname={'sport-event-checkbox'}
+                    checked={props.selectedSportEvent?.id === match.id}
+                    label={
+                        <div className={'flex-column sport-event-checkbox-label'}>
+                            <div className={'sport-event-league-name'}>{match.competitionName}</div>
+                            <div className={'sport-event-teams'}>{match.homeTeam} : {match.awayTeam}</div>
+                        </div>
+                    }
+                    handleOnCheckboxChange={checkSportEvent(match)}
+                />
+            </div>
+        </>
     );
+
+    const renderDialogMenuWithEvents = () => {
+        let includedSports = new Array<SportsEnum>();
+
+        // sort by sport and next sort by league
+        const sortingFunction = (x: SportApiMatchModel, y: SportApiMatchModel) => {
+            if(x.sport > y.sport) {
+                return 1;
+            } else if (x.sport < y.sport) {
+                return -1;
+            } else {
+                return x.league < y.league ? 1 : -1;
+            }
+        }
+
+        return (
+            <>
+                {availableEvents!.sort(sortingFunction).map((event) => {
+                    let renderSportLabel = false;
+                    if(!includedSports.includes(event.sport)) {
+                        includedSports.push(event.sport);
+                        renderSportLabel = true;
+                    }
+
+                    return renderSportsEvent(event, renderSportLabel);
+                })}
+            </>
+        )
+    }
 
     const labelClassName = classNames({
         'select-sport-button': !props.selectedSportEvent || props.isShutdownScheduled,
@@ -102,16 +135,14 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
                 onClose={closeDialog}
                 dialogClassName={'sport-event-select-dialog'}
             >
-                {!availableEvents &&
+                {(!availableEvents && availableEvents === undefined) &&
                     <LoadingComponent />}
                 {(availableEvents && !availableEvents.length) &&
                     <div className={'center-vertically select-sport-button'}>
                         {sportEndingsComponentStrings.noSportEvents}
                     </div>}
                 {(availableEvents && !!availableEvents.length) &&
-                    <>
-                        {availableEvents.map(renderSportsEvent)}
-                    </>}
+                    renderDialogMenuWithEvents()}
             </Dialog>
         </div>
     );

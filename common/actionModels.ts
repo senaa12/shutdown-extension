@@ -24,9 +24,8 @@ export enum AppActionTypeEnum {
 }
 
 export enum SportsModeActionTypeEnum {
-    SetIsSportsApiEnabledParameter = '@Sport/SET_IS_SPORTS_API_ENABLED_PARAMETER',
     SetSelectedSportEventForShutdown = '@Sport/SET_SELECTED_SPORT_EVENT_FOR_SHUTDOWN',
-    SetAddDelayToShutdownCheckbox = '@Sport/SET_ADD_DELAY_TO_SHUTDOWN',
+    SetAddDelayToShutdownCheckbox = '@Sport/SET_ADD_DELAY_TO_SHUTDOWN'
 }
 
 export enum ActionResultActionTypeEnum {
@@ -47,8 +46,3 @@ export type CallbackFunction = (data?: any) => void;
 export type RecursivePartial<T> = {
     [P in keyof T]?: RecursivePartial<T[P]>;
 };
-
-export enum SportsApiFetchRequestType {
-    Test,
-    GetLiveMatches,
-}

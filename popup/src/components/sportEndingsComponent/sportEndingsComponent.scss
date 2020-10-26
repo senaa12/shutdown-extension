@@ -33,6 +33,10 @@
 
 .usage-description {
     padding: 15px 0 25px 0;
+
+    &.host-disabled {
+        padding: 5px 0 15px 0;
+    }
 }
 
 .select-sport-button {
@@ -101,4 +105,12 @@
 .shutdown-scheduled {
     font-size: var(--big-font-size);
     padding: 30px;
+}
+
+.sports-label {
+    margin-bottom: 15px;
+
+    &:hover {
+        cursor: default;
+    }
 }

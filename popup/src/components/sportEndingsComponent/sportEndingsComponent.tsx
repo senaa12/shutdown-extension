@@ -1,24 +1,25 @@
-import { ActionResultEnum, BackgroundMessageTypeEnum, getMatchLabelFromMatchModel, getSelectedTimeLabel, isShutdownScheduledSelector,
-    isSportsApiEnabledSelector, RootReducerState,
+import { ActionResultEnum, 
+    getMatchLabelFromMatchModel, 
+    getSelectedTimeLabel,
+    isShutdownScheduledSelector,
+    RootReducerState,
     SportApiMatchModel,
-    sportEndingsComponentStrings, SportsApiFetchRequestType } from 'common';
-import React, { useCallback, useRef } from 'react';
+    sportEndingsComponentStrings } from 'common';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { changeTimeSelected, setAddDelayToSportShutdown, setIsSportsApiEnabledState, triggerActionResultTooltip } from '../../actions/actions';
-import communication from '../../utilities/communicationManager';
+import { changeTimeSelected, setAddDelayToSportShutdown, triggerActionResultTooltip } from '../../actions/actions';
 import Checkbox from '../reusableComponents/checkboxComponent';
-import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
 import SelectSportEventComponent from './selectSportEventComponent';
+import classNames from 'classnames';
 
 import './sportEndingsComponent.scss';
 
 export interface SportEndingsComponentProps {
     selectedSportEvent?: SportApiMatchModel;
     isShutdownScheduled: boolean;
-    isSportsApiEnabled: boolean;
-    setIsSportsApiEnabled: (enabled: boolean) => void;
+    isHostappActive: boolean;
     triggerActionResultTooltip: (newState: ActionResultEnum, mess?: React.ReactNode) => void;
 
     inputSelectedTime: string;
@@ -33,9 +34,9 @@ export interface SportEndingsComponentProps {
 
 const mapStateToProps = (state: RootReducerState): Partial<SportEndingsComponentProps> => {
     return {
+        isHostappActive: state.appReducer.isHostAppActive,
         selectedSportEvent: state.sportsModeReducer.selectedSportEventForShutdown,
         isShutdownScheduled: isShutdownScheduledSelector(state),
-        isSportsApiEnabled: isSportsApiEnabledSelector(state),
         actionResultTooltip: state.actionsResultReducer.actionResultTooltip,
         actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         inputSelectedTime: state.appReducer.inputSelectedTime,
@@ -45,7 +46,6 @@ const mapStateToProps = (state: RootReducerState): Partial<SportEndingsComponent
 
 const mapDispatchToProps = (dispatch: Dispatch): Partial<SportEndingsComponentProps> => {
     return {
-        setIsSportsApiEnabled: (enabled: boolean) => dispatch(setIsSportsApiEnabledState(enabled)),
         triggerActionResultTooltip: (newState: ActionResultEnum, mess?: React.ReactNode) =>
             dispatch(triggerActionResultTooltip(newState, mess)),
         changeInputTime: (newTime: string) => dispatch(changeTimeSelected(newTime)),
@@ -55,58 +55,13 @@ const mapDispatchToProps = (dispatch: Dispatch): Partial<SportEndingsComponentPr
 };
 
 const sportEndingsComponent = (props: SportEndingsComponentProps) => {
-    const [apiKey, setapiKey] = React.useState<undefined | string>(undefined);
-    const tooltipParentRef = useRef<HTMLDivElement>(null);
-
-    const onClickTestApiKeyButton = useCallback(() => communication.sendMessageToBackgroundPage({
-        type: BackgroundMessageTypeEnum.SportsApiFetch,
-        data: {
-            requestType: SportsApiFetchRequestType.Test,
-            token: apiKey,
-        },
-    }, (result) => {
-        if (result.success) {
-            props.setIsSportsApiEnabled(true);
-        } else {
-            props.triggerActionResultTooltip(ActionResultEnum.WrongToken, result.errorMsg);
-        }
-    }), [props.setIsSportsApiEnabled, apiKey]);
-
-    const apiDisabledComponent = () => {
-        const onChangeInput = (e) => setapiKey(e.target.value);
-
+    const shutdownNotScheduled = () => {
+        const descriptionClassname = classNames('usage-description', {
+            'host-disabled': !props.isHostappActive
+        })
         return (
             <>
-                <div className={'disabled-description'}>{sportEndingsComponentStrings.apiDisabled()}</div>
-                <SimpleTooltipComponent
-                    parentRef={tooltipParentRef}
-                    content={props.actionResultTooltipContent}
-                    isOpen={props.actionResultTooltip === ActionResultEnum.WrongToken}
-                    trigger={'manual'}
-                    tooltipClassname={'sports-error-tooltip error-tooltip'}
-                    position={'bottom'}
-                    tooltipHideAnimationDuration={1500}
-                >
-                    <div className={'api-input-wrapper'} ref={tooltipParentRef}>
-                        <input
-                            onChange={onChangeInput}
-                            className={'input-style override-style'}
-                            placeholder={'Paste your token here'}
-                        />
-                        <button
-                            onClick={onClickTestApiKeyButton}
-                            className={'button-base tile clickable override-button-style'}
-                        >Test key</button>
-                    </div>
-                </SimpleTooltipComponent>
-            </>
-        );
-    };
-
-    const apiEnabledComponent = () => {
-        return (
-            <>
-                <div className={'usage-description'}>{sportEndingsComponentStrings.usageInstructions}</div>
+                <div className={descriptionClassname}>{sportEndingsComponentStrings.usageInstructions}</div>
                 <SelectSportEventComponent />
                 <div className={'optional-delay'}>
                     <Checkbox
@@ -126,7 +81,7 @@ const sportEndingsComponent = (props: SportEndingsComponentProps) => {
         );
     };
 
-    const sportEventShutdownScheduled = () => {
+    const shutdownScheduled = () => {
         const inputTimeLabel = getSelectedTimeLabel(props.inputSelectedTime);
         return (
             <>
@@ -146,12 +101,9 @@ const sportEndingsComponent = (props: SportEndingsComponentProps) => {
 
     return (
         <div className={'flex-column'}>
-            {!props.isSportsApiEnabled &&
-                apiDisabledComponent()}
-            {(props.isSportsApiEnabled && !props.isShutdownScheduled) &&
-                apiEnabledComponent()}
-            {props.isShutdownScheduled &&
-                sportEventShutdownScheduled()}
+            {!props.isShutdownScheduled 
+                ? shutdownNotScheduled()
+                : shutdownScheduled()}
         </div>
     );
 };

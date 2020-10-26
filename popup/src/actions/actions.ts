@@ -33,11 +33,6 @@ export const changeSelectedDateTime = (newDate: Date) => ({
     data: newDate,
 });
 
-export const setIsSportsApiEnabledState = (enabled: boolean) => ({
-    type: SportsModeActionTypeEnum.SetIsSportsApiEnabledParameter,
-    data: enabled,
-});
-
 export const setSelectedSportEventForShutdown = (event?: SportApiMatchModel) => ({
     type: SportsModeActionTypeEnum.SetSelectedSportEventForShutdown,
     data: event,

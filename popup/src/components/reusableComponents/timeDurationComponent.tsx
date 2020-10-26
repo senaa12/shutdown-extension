@@ -97,6 +97,9 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
             setOnSelectVal(select);
 
             const newVal = value.substr(0, select) + '0' + value.substr(select + 1);
+            if(props.onChange) {
+                props.onChange(newVal);
+            }
             setValue(newVal);
         }
     };
