@@ -3,6 +3,7 @@ import { Action, SportsModeActionTypeEnum, SportsModeReducerState } from 'common
 export const sportsModerReducerInitialState: SportsModeReducerState = {
     addDelayToShutdown: false,
     selectedSportEventForShutdown: undefined,
+    isSelectSportDialogOpen: false
 };
 
 export default (state = sportsModerReducerInitialState, action: Action): SportsModeReducerState => {
@@ -18,6 +19,12 @@ export default (state = sportsModerReducerInitialState, action: Action): SportsM
                 ...state,
                 addDelayToShutdown: action.data,
             };
+        }
+        case SportsModeActionTypeEnum.SetIsSportDialogOpen: {
+            return {
+                ...state, 
+                isSelectSportDialogOpen: action.data
+            }
         }
         default: {
             return state;

@@ -15,12 +15,14 @@ import './sportEndingsComponent.scss';
 export interface SelectSportEventComponentProps {
     selectedSportEvent?: SportApiMatchModel;
     isShutdownScheduled: boolean;
+    isHostAppActive: boolean;
 
     setSelectedSportEvent: (event?: SportApiMatchModel) => void;
 }
 
 const mapStateToProps = (state: RootReducerState): Partial<SelectSportEventComponentProps> => {
     return {
+        isHostAppActive: state.appReducer.isHostAppActive,
         isShutdownScheduled: isShutdownScheduledSelector(state),
         selectedSportEvent: state.sportsModeReducer.selectedSportEventForShutdown,
     };
@@ -117,10 +119,12 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
     const labelClassName = classNames({
         'select-sport-button': !props.selectedSportEvent || props.isShutdownScheduled,
         'sport-event-selected': props.selectedSportEvent,
+        'host-disabled': props.isHostAppActive
     });
 
     const inputClassName = classNames('input-style input-style-fixes', {
         disabled: props.isShutdownScheduled,
+        'host-disabled': props.isHostAppActive
     });
 
     return (
@@ -129,11 +133,10 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
                 {!props.selectedSportEvent
                     ? sportEndingsComponentStrings.selectSportEvent
                     : getMatchLabelFromMatchModel(props.selectedSportEvent)}
-            </span>
+            </span> 
             <Dialog
                 isOpen={isSelectSportEventDialogOpen}
                 onClose={closeDialog}
-                dialogClassName={'sport-event-select-dialog'}
             >
                 {(!availableEvents && availableEvents === undefined) &&
                     <LoadingComponent />}

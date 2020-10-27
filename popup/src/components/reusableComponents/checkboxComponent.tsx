@@ -1,11 +1,9 @@
 import classNames from 'classnames';
-import { Console } from 'console';
 import React, { useCallback } from 'react';
 import Icon from '../icon/icon';
 import { IconEnum } from '../icon/iconEnum';
 
 import './checkboxComponent.scss';
-import dialog from './dialogComponent';
 
 interface CheckboxProps {
     checkboxClassname?: string;
@@ -13,11 +11,12 @@ interface CheckboxProps {
     disabled?: boolean;
     label?: React.ReactNode;
     checked?: boolean;
+    style?: React.CSSProperties;
     handleOnCheckboxChange?: (value: any) => void;
 }
 
 const CheckboxComponent = ({
-    checked, disabled, handleOnCheckboxChange, label, labelClassname, checkboxClassname,
+    checked, disabled, handleOnCheckboxChange, label, labelClassname, checkboxClassname, style
 }: CheckboxProps) => {
     const checkboxOnClick = useCallback(() => {
         if (!disabled && handleOnCheckboxChange) {
@@ -25,14 +24,16 @@ const CheckboxComponent = ({
         }
     }, [checked, disabled, handleOnCheckboxChange]);
 
-    const checkboxclassname = classNames('checkbox-base', checkboxClassname);
+    const checkboxclassname = classNames('checkbox-base', checkboxClassname, {
+        'disabled-checkbox': disabled,
+    });
     const labelclassname = classNames('label-base', labelClassname, {
         checked,
-        'disabled-checkbox': disabled,
     });
 
     return (
         <div
+            style={style}
             className={checkboxclassname}
         >
             <label className={labelclassname} onClick={checkboxOnClick}>

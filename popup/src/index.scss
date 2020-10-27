@@ -128,6 +128,30 @@ body {
         text-shadow: -1px 0 var(--black), 0 1px var(--black), 1px 0 var(--black), 0 -1px var(--black);
     }
 
+    .shutdown-animation {
+        &-enter {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+
+          &-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+          }
+          
+          &-exit {
+            opacity: 1;
+            transform: scale(1);
+          }
+
+          &-exit-active {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 300ms, transform 300ms;
+          }
+    }
+
     .scrollbar {
         overflow-y: auto;
         &::-webkit-scrollbar {
@@ -185,6 +209,7 @@ body {
             background: var(--disabled-color);
             -webkit-user-select: none !important;
             user-select: none !important;
+            pointer-events: none;
 
             &:hover {
                 cursor: default;
@@ -226,6 +251,11 @@ body {
                 cursor: pointer;
                 // background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAYAAAAGABh2xyWQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADCSURBVCiRjdKxTgJBGATg7yISTeg0EaUAmwu2PoVvZeCpfAqpoCFnQ6hoDbnGYDPgSS7hJtnM7uzMP1ssf6hQakeZ+xNm2OPQYe3xDjVGHZtGqItMeMMA3/hpCV017j+Ooc/wJRR4FXM/TygwjeElPI1exnc4hu6wwA2WMa3Dy+iL+E6hPsYxTdLwHJ5EH7c1rTKximkTrqKvzpuu8ZDJw/Dj2Rl6zdA9vnCLbRp24W30f6G6MfUSnuI3z6bLN6ox+wVJfEKbBguaAgAAAABJRU5ErkJggg==') no-repeat;
                 background-color: var(--background-color);
+            }
+
+            &:focus {
+                outline: none;
+                -webkit-appearance:none;
             }
         }
     }

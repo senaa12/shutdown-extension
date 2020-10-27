@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { triggerActionResultTooltip } from '../../actions/actions';
+import { triggerActionResultTooltip, toggleIsSportDialogOpen } from '../../actions/actions';
 import communicationManager from '../../utilities/communicationManager';
 import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -19,6 +19,7 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 import { isCancelButtonDisabledCheck, isShutdownButtonDisabledCheck } from './utils';
 
 import './actionButtons.scss';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 export interface ActionButtonCustomProps {
     appMode: ApplicationModeEnum;
@@ -36,6 +37,7 @@ export interface ActionButtonCustomProps {
 
 export interface ActionButtonDispatchProps {
     triggerActionResultTooltip(newState: ActionResultEnum): void;
+    openSelectSportDialog(): void;
 }
 
 declare type ActionButtonStateProps = ActionButtonCustomProps & ActiveTabReaderInjectedProps;
@@ -60,10 +62,11 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjec
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Partial<ActionButtonProps> => {
+const mapDispatchToProps = (dispatch: Dispatch): ActionButtonDispatchProps => {
     return {
         triggerActionResultTooltip: (newState: ActionResultEnum, mess?: React.ReactNode) =>
             dispatch(triggerActionResultTooltip(newState, mess)),
+        openSelectSportDialog: () => dispatch(toggleIsSportDialogOpen(true))
     };
 };
 
@@ -170,9 +173,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                     data: { tabID: currentTabId, showResponse: true },
                 } as ChromeApiMessage);
         };
-        const className = classNames('scan-now', this.baseClassName, {
-            hide: appMode !== ApplicationModeEnum.VideoPlayer,
-        });
+
         return(
             <SimpleTooltipComponent
                 parentRef={this.scanNowButtonRef}
@@ -183,7 +184,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
             >
                 <ButtonComponent
                     ref={this.scanNowButtonRef}
-                    className={className}
+                    className={this.baseClassName}
                     label={'Scan now'}
                     onClick={onClick}
                     icon={IconEnum.ScanNow}
@@ -192,6 +193,21 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                 />
             </SimpleTooltipComponent>
         );
+    }
+
+    private renderAddSportsButton = () => {
+        const { isShutdownEventScheduled, openSelectSportDialog } = this.props;
+
+        return (
+            <ButtonComponent
+                className={this.baseClassName}
+                label={'Add sports'}
+                onClick={openSelectSportDialog}
+                icon={IconEnum.Plus}
+                iconSize={IconSize.Smallest}
+                disabled={isShutdownEventScheduled}
+            />
+        )
     }
 
     private renderClearButton = () => {
@@ -234,11 +250,24 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
     }
 
     public render() {
+        const { appMode } = this.props;
+
         return(
             <div className='action-buttons-container'>
                 {this.renderShutdownButton()}
                 {this.renderClearButton()}
-                {this.renderScanNowButton()}
+                <TransitionGroup className={'right-buttons'} >
+                    {appMode === ApplicationModeEnum.VideoPlayer && 
+                        <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
+                            {this.renderScanNowButton()}
+                        </CSSTransition>
+                    }
+                    {appMode == ApplicationModeEnum.SportEvent && 
+                        <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
+                            {this.renderAddSportsButton()}
+                        </CSSTransition>
+                    }
+                </TransitionGroup>
             </div>
         );
     }

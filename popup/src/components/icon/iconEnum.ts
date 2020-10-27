@@ -6,7 +6,7 @@ export enum IconEnum {
     PowerButton = 'power-button',
     Cancel = 'cancel',
     ScanNow = 'scan',
-    OpenDocs = 'docs',
+    Plus = 'plus',
     Arrow = 'drop-down-arrow',
     AlarmClock = 'alarm-clock',
     Sports = 'football',

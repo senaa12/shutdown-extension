@@ -25,7 +25,8 @@ export enum AppActionTypeEnum {
 
 export enum SportsModeActionTypeEnum {
     SetSelectedSportEventForShutdown = '@Sport/SET_SELECTED_SPORT_EVENT_FOR_SHUTDOWN',
-    SetAddDelayToShutdownCheckbox = '@Sport/SET_ADD_DELAY_TO_SHUTDOWN'
+    SetAddDelayToShutdownCheckbox = '@Sport/SET_ADD_DELAY_TO_SHUTDOWN',
+    SetIsSportDialogOpen = '@Sport/SET_IS_SPORT_DIALOG_OPEN'
 }
 
 export enum ActionResultActionTypeEnum {

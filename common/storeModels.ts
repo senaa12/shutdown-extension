@@ -29,6 +29,7 @@ export interface AppReducerState {
 export interface SportsModeReducerState {
     addDelayToShutdown: boolean;
     selectedSportEventForShutdown?: SportApiMatchModel;
+    isSelectSportDialogOpen: boolean;
 }
 
 export interface ActionsResultState {

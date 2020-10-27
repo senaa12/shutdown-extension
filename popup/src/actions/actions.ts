@@ -43,6 +43,11 @@ export const setAddDelayToSportShutdown = (value: boolean) => ({
     data: value,
 });
 
+export const toggleIsSportDialogOpen = (open: boolean) => ({
+    type: SportsModeActionTypeEnum.SetIsSportDialogOpen,
+    data: open
+})
+
 export const triggerActionResultTooltip = (newState: ActionResultEnum, mess?: React.ReactNode) => ({
     type: ActionResultActionTypeEnum.TriggerTooltip,
     data: {

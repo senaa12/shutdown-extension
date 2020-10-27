@@ -13,6 +13,7 @@ import Checkbox from '../reusableComponents/checkboxComponent';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
 import SelectSportEventComponent from './selectSportEventComponent';
 import classNames from 'classnames';
+import SelectSportDialog from './selectSportDialog/selectSportDialog';
 
 import './sportEndingsComponent.scss';
 
@@ -59,22 +60,29 @@ const sportEndingsComponent = (props: SportEndingsComponentProps) => {
         const descriptionClassname = classNames('usage-description', {
             'host-disabled': !props.isHostappActive
         })
+        const checkboxWrapperClassname = classNames('optional-delay', {
+            'host-disabled': !props.isHostappActive
+        });
+
         return (
             <>
                 <div className={descriptionClassname}>{sportEndingsComponentStrings.usageInstructions}</div>
                 <SelectSportEventComponent />
-                <div className={'optional-delay'}>
+                <div className={checkboxWrapperClassname}>
                     <Checkbox
                         label={'Add additional delay'}
                         checked={props.addDelayToShutdown}
                         handleOnCheckboxChange={props.setAddDelayToShutdown}
                         disabled={!props.selectedSportEvent || props.isShutdownScheduled}
+                        style={{ paddingLeft: 0 }}
                     />
                     <TimeDurationComponent
+                        inputClassName={'time-input-fix'}
                         value={props.inputSelectedTime}
                         onChange={props.changeInputTime}
                         fontSize={20}
                         isDisabled={!props.addDelayToShutdown || props.isShutdownScheduled || !props.selectedSportEvent}
+                        style={{ marginRight: 0, marginLeft: 'auto'  }}
                     />
                 </div>
             </>
@@ -101,6 +109,7 @@ const sportEndingsComponent = (props: SportEndingsComponentProps) => {
 
     return (
         <div className={'flex-column'}>
+            <SelectSportDialog />
             {!props.isShutdownScheduled 
                 ? shutdownNotScheduled()
                 : shutdownScheduled()}

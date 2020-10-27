@@ -12,7 +12,7 @@ export interface DialogProps {
 }
 
 const dialog = ({ isOpen, children, onClose, dialogClassName }: DialogProps) => {
-    const className = classNames('dialog', dialogClassName);
+    const className = classNames('dialog', 'sport-event-select-dialog'); // custom
 
     return (
         <CSSTransition

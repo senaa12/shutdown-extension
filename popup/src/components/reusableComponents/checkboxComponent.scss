@@ -9,7 +9,6 @@
     .label-base {
         font-size: 14px;
         display: inline-block;
-        cursor: pointer;
         line-height: 16px;
         user-select: none;
         position: relative;
@@ -28,6 +27,7 @@
             transition-timing-function: cubic-bezier(0.4, 0, 0.23, 1);
             top: 50%;
             transform: translate(-50%, -50%);
+            left: 7px;
         }
         
         &:hover {
@@ -57,7 +57,7 @@
         }
     }
 
-    .disabled-checkbox {
+    &.disabled-checkbox {
         -webkit-text-stroke: 0.2px var(--font-color);
         color: var(--selected-tile-color) !important;
 
@@ -65,7 +65,11 @@
             cursor: default;
         }
 
-        &::before {
+        .label-base:hover {
+            cursor: default;
+        }
+
+        .label-base::before {
             background-color: var(--selected-tile-color);
             border-color: var(--selected-tile-color);
             transition-duration: 0ms;

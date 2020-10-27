@@ -1,6 +1,5 @@
 import { ApplicationModeEnum, extensionWillNotWork, links, RootReducerState } from 'common';
 import React from 'react';
-import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import { connect } from 'react-redux';
 import ActionButtons from './actionButtons/actionButtons';
 import { ActiveTabReaderInjectedProps } from './activeTabReader/activeTabReader';
@@ -10,6 +9,7 @@ import MenuButtons from './menuButtons/menuButtons';
 import SportEndingsComponent from './sportEndingsComponent/sportEndingsComponent';
 import TimerComponent from './timerComponent/timerComponent';
 import VideoEndComponent from './videoEndComponent/videoEndComponent';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './app.scss';
 
@@ -31,40 +31,34 @@ class App extends React.Component<AppProps> {
         super(props);
     }
 
-    public renderAppContent = () => {
-        switch (this.props.selectedAppMode) {
-            case ApplicationModeEnum.VideoPlayer: {
-                return <VideoEndComponent key={'first'} currentTabId={this.props.currentTabId} />;
-            }
-            case ApplicationModeEnum.Countdown: {
-                return <CountdownComponent key={'second'} />;
-            }
-            case ApplicationModeEnum.Timer: {
-                return <TimerComponent key={'third'} />;
-            }
-            case ApplicationModeEnum.SportEvent: {
-                return <SportEndingsComponent key={'fourth'} />;
-            }
-            default: {
-                const exhaustingCheck: never = this.props.selectedAppMode;
-                return null;
-            }
-        }
-    }
-
     private readMoreAbout = () => window.open(links.FAQ, '_blank');
 
+    private renderAppContentComponent = (content: React.ReactNode) => (
+        <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
+            <div className="app-content-component">{content}</div>
+        </CSSTransition>
+    )
+
     public render() {
+        const { selectedAppMode } = this.props;
         return(
             <>
                 <Header />
                 <MenuButtons />
-                    <ReactCSSTransitionReplace
-                        transitionName='cross-fade'
-                        className='app-content'
-                    >
-                        {this.renderAppContent()}
-                    </ReactCSSTransitionReplace>
+                    <TransitionGroup className='app-content'>
+                            {selectedAppMode === ApplicationModeEnum.VideoPlayer && 
+                                this.renderAppContentComponent(<VideoEndComponent currentTabId={this.props.currentTabId} />)
+                            }
+                            {selectedAppMode === ApplicationModeEnum.Timer &&
+                                this.renderAppContentComponent(<TimerComponent />)
+                            }
+                            {selectedAppMode === ApplicationModeEnum.Countdown &&
+                                this.renderAppContentComponent(<CountdownComponent />)   
+                            }
+                            {selectedAppMode === ApplicationModeEnum.SportEvent &&
+                                this.renderAppContentComponent(<SportEndingsComponent />) 
+                            }
+                    </TransitionGroup>
                 <ActionButtons currentTabId={this.props.currentTabId} />
                 {!this.props.isHostAppActive &&
                     <div className='extension-will-not-work'>{extensionWillNotWork(this.readMoreAbout)}</div>}

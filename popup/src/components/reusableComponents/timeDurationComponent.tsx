@@ -165,43 +165,27 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
         }
     }, [props.disabled]);
 
-    const inputClientRect = React.useMemo(() => {
-        if (inputRef.current) {
-            return inputRef.current!.getBoundingClientRect();
-        } else {
-            return undefined;
-        }
-    }, [inputRef, inputRef.current]);
-
     const className = classNames('input-style', props.className, {
         disabled: props.disabled,
     });
+
     return (
-        <>
-            {(props.disabled && inputClientRect) &&
-                <div style={{
-                    position: 'absolute',
-                    height: inputClientRect.height,
-                    width: inputClientRect.width,
-                    top: inputClientRect.top,
-                    left: inputClientRect.left,
-                }}/>}
-            <input
-                ref={inputRef}
-                className={className}
-                style={width}
-                type={'text'}
-                maxLength={8}
-                value={value}
-                onChange={onChange}
-                onSelect={onSelect}
-                onKeyDown={detectArrows}
-                onMouseMove={prevetDefault}
-                onMouseMoveCapture={prevetDefault}
-                onDoubleClick={prevetDefault}
-                onDoubleClickCapture={prevetDefault}
-            />
-        </>
+        <input
+            ref={inputRef}
+            className={className}
+            disabled={props.disabled}
+            style={width}
+            type={'text'}
+            maxLength={8}
+            value={value}
+            onChange={onChange}
+            onSelect={onSelect}
+            onKeyDown={detectArrows}
+            onMouseMove={prevetDefault}
+            onMouseMoveCapture={prevetDefault}
+            onDoubleClick={prevetDefault}
+            onDoubleClickCapture={prevetDefault}
+        />
     );
 };
 
