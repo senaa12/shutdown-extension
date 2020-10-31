@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useMouseHoverOverElement, useMousePosition } from '../../utilities/customHooks';
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
 
@@ -28,6 +29,8 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
     const [tooltipClassName, setTooltipClassName] = useState<string | undefined>(props.tooltipClassname);
     const [transitionInProgress, setTransitionInProgress] = useState(false);
 
+    const tooltipRef = useRef<HTMLDivElement>(null);
+
     const setTransitionToFalse = () => {
         setTransitionInProgress(false);
         // first transition is when tooltip appears
@@ -42,13 +45,11 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
         setIsOpen(false);
     }, []);
 
-    const showTooltip = () => {
+    const showTooltip = useCallback(() => {
         setTooltipContent(props.content);
         setTooltipClassName(props.tooltipClassname);
         setIsOpen(true);
-    };
-
-    const tooltipRef = useRef<HTMLDivElement>(null);
+    }, [props.content, props.tooltipClassname]);
 
     // default trigger is hover
     useEffect(() => {
@@ -56,7 +57,12 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             props.parentRef.current.addEventListener('mouseenter', showTooltip);
             props.parentRef.current.addEventListener('mouseleave', hideTooltip);
         }
-    }, [props.trigger, props.parentRef] );
+
+        return () => {
+            props.parentRef.current.removeEventListener('mouseenter', showTooltip);
+            props.parentRef.current.removeEventListener('mouseleave', hideTooltip);
+        };
+    }, [props.trigger, props.parentRef, props.content, props.tooltipClassname]);
 
     // maual triggering
     useEffect(() => {
@@ -67,7 +73,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
                 setTimeout(hideTooltip, props.tooltipHideAnimationDuration ?? 1000);
             }
         }
-    }, [props.isOpen]);
+    }, [props.isOpen, props.trigger]);
 
     // first render
     useEffect(() => {
@@ -150,6 +156,8 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             <div
                 ref={tooltipRef}
                 style={calculatePosition()}
+                onMouseEnter={showTooltip}
+                onMouseLeave={hideTooltip}
                 onTransitionEnd={setTransitionToFalse}
                 className={className}
             >

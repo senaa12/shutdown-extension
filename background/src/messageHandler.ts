@@ -1,4 +1,5 @@
-import { BackgroundMessageTypeEnum, CallbackFunction, ChromeApiMessage, MessageSender } from 'common';
+import { BackgroundMessageTypeEnum, CallbackFunction, ChromeApiMessage,
+    getStorageLocal, MessageSender, setStorageLocal } from 'common';
 import { changeIcon, triggerOneMinuteWarningNotification } from './utilities/actions';
 import { connecToNativeApp, shutdownCommand } from './utilities/nativeCommunication';
 import { countdownShutdownEvent, removeShutdownEvent, sportEventShutdown, timerShutdown } from './utilities/shutdown';
@@ -9,6 +10,20 @@ const messageHandler = (
     sender: MessageSender,
     sendResponse: CallbackFunction) => {
         switch (request.type) {
+            case BackgroundMessageTypeEnum.LoadStorageLocal: {
+                getStorageLocal(request.data)
+                    .then(sendResponse)
+                    .catch(console.error);
+
+                return true;
+            }
+            case BackgroundMessageTypeEnum.SetStorageLocal: {
+                setStorageLocal(request.data.type, request.data.data)
+                    .then(sendResponse)
+                    .catch(console.error);
+
+                return true;
+            }
             case BackgroundMessageTypeEnum.ShutdownComputer: {
                 shutdownCommand(sendResponse);
                 break;

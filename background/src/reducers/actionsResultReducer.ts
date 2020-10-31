@@ -11,7 +11,8 @@ export default (state = actionsResultInitialState, action: Action) => {
             return {
                 ...state,
                 actionResultTooltip: action.data.type,
-                actionResultTooltipMessage: action.data?.message ?? state.actionResultTooltipMessage,
+                actionResultTooltipMessage: action.data.type !== ActionResultEnum.None
+                    ? action.data?.message ?? state.actionResultTooltipMessage : undefined,
             };
         }
         default: {

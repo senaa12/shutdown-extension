@@ -8,6 +8,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { applyMiddleware, Store } from 'webext-redux';
+import { toggleIsSportDialogOpen } from './actions/actions';
 import ActiveTabReader from './components/activeTabReader/activeTabReader';
 import App from './components/app';
 import Snowfall, { SnowfallDensity } from './components/snowfall/snowfall';
@@ -19,6 +20,8 @@ const store = new Store();
 const storeWithMiddleware = applyMiddleware(store, ...[thunk]);
 
 storeWithMiddleware.ready().then(() => {
+    store.dispatch(toggleIsSportDialogOpen(false));
+
     const isHostActive = store.getState().appReducer.isHostAppActive;
     const isShutdownScheduled = isShutdownScheduledSelector(store.getState() as RootReducerState);
     if (!isHostActive) {

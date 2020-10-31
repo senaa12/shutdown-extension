@@ -2,6 +2,8 @@ import {
     ActionResultEnum,
     actionResultsStrings,
     ActiveTabReducerState,
+    AppActionTypeEnum,
+    ApplicationModeEnum,
     CallbackFunction,
     convertSecondsToTimeFormat,
     TabState,
@@ -34,8 +36,12 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
                 videoDuration = videoTag[0].duration;
             }
 
-            // set input selected time to end
-            changeInputSelectedTime(convertSecondsToTimeFormat(videoDuration, true));
+            // only change input state if application mode is video player
+            const currentAppMode = store.getState().appReducer.selectedApplicationMode;
+            if (currentAppMode === ApplicationModeEnum.VideoPlayer) {
+                // set input selected time to end
+                changeInputSelectedTime(convertSecondsToTimeFormat(videoDuration, true));
+            }
 
             // set tab state
             sendResultingTabState({

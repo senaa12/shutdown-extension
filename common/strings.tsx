@@ -45,9 +45,11 @@ export const sportEndingsComponentStrings = {
     noSportEvents: 'There are no sport events in play',
     selectSportEvent: 'Select sport event',
     sportShutdownScheduledAfterEnd: (matchLabel: React.ReactNode) =>
-        <>Your computer will shut down when match {matchLabel} game is finished.</>,
+        <>Your computer will shut down when {matchLabel} game is finished.</>,
     sportShutdownWithDelayScheduled: (delayString: React.ReactNode, matchLabel: React.ReactNode) =>
         <>Your computer will shut down {delayString} after {matchLabel} game is finished.</>,
+    noResults: 'No Results',
+    loadingTime: 'Number of selected leagues affects loading time',
 };
 
 export const title = 'AUTO SHUTDOWN';
@@ -92,6 +94,7 @@ export const actionResultsStrings = {
         failed: 'Failed',
         failedCountdown: 'Not supported less than 60 seconds',
         failedTimer: 'Cannot select date in the past',
+        failedSport: 'Game is already finished',
     },
     cancel: {
         canceledInBackground: 'Tab was Closed and Shutdown is canceled',

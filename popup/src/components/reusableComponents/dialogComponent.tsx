@@ -7,18 +7,18 @@ import './dialogComponent.scss';
 export interface DialogProps {
     isOpen: boolean;
     children: React.ReactNode;
-    onClose(): void;
-    dialogClassName?: string;
+    onClose?(): void;
+    customFooter?: React.ReactNode;
 }
 
-const dialog = ({ isOpen, children, onClose, dialogClassName }: DialogProps) => {
+const dialog = ({ isOpen, children, onClose, customFooter }: DialogProps) => {
     const className = classNames('dialog', 'sport-event-select-dialog'); // custom
 
     return (
         <CSSTransition
             id={Math.round(Math.random() * 10000)}
             in={isOpen}
-            timeout={150}
+            timeout={0} // css has 150ms animation
             unmountOnExit
             mountOnEnter
         >
@@ -28,10 +28,13 @@ const dialog = ({ isOpen, children, onClose, dialogClassName }: DialogProps) => 
                         {children}
                     </div>
                     <div className='dialog-footer'>
-                        <button
-                            onClick={onClose}
-                            className={'button-base tile clickable override-button-style'}
-                        >close</button>
+                        {!!customFooter
+                            ? customFooter
+                            :
+                            <button
+                                onClick={onClose}
+                                className={'button-base tile clickable override-button-style'}
+                            >close</button>}
                     </div>
                 </div>
             </div>

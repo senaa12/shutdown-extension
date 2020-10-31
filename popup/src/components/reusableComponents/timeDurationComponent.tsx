@@ -97,7 +97,7 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
             setOnSelectVal(select);
 
             const newVal = value.substr(0, select) + '0' + value.substr(select + 1);
-            if(props.onChange) {
+            if (props.onChange) {
                 props.onChange(newVal);
             }
             setValue(newVal);
@@ -160,8 +160,8 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
 
     useEffect(() => {
         if (props.disabled) {
-            inputRef.current!.selectionStart = 0;
-            inputRef.current!.selectionEnd = 0;
+            inputRef.current!.selectionStart = 8;
+            inputRef.current!.selectionEnd = 8;
         }
     }, [props.disabled]);
 

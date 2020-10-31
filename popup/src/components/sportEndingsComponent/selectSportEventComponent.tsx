@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { BackgroundMessageTypeEnum, getMatchLabelFromMatchModel, isShutdownScheduledSelector, RootReducerState,
     SportApiMatchModel, sportEndingsComponentStrings, SportsApiRequestType, SportsEnum, sportsLabel } from 'common';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { setSelectedSportEventForShutdown } from '../../actions/actions';
@@ -39,7 +39,16 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
     const [ isSelectSportEventDialogOpen, setSelectSportEventDialogOpen ] = React.useState(false);
     const [ availableEvents, setAvailableEvents ] = React.useState<Array<SportApiMatchModel> | undefined>();
 
+    const sortingFunction = useCallback((x: SportApiMatchModel, y: SportApiMatchModel) => {
+        if (x.sport >= y.sport) {
+            return 1;
+        } else if (x.sport < y.sport) {
+            return -1;
+        }
+    }, []);
+
     const closeDialog = () => {
+        setAvailableEvents(undefined);
         setSelectSportEventDialogOpen(false);
     };
 
@@ -54,9 +63,9 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
             communication.sendMessageToBackgroundPage({
                 type: BackgroundMessageTypeEnum.SportsApiFetch,
                 data: {
-                    type: SportsApiRequestType.GetLiveGames
+                    type: SportsApiRequestType.GetLiveGames,
                 },
-            }, setAvailableEvents);
+            }, (res) => setAvailableEvents(res.sort(sortingFunction)));
         }
     }, [isSelectSportEventDialogOpen]);
 
@@ -67,7 +76,7 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
             props.setSelectedSportEvent(match);
         }
     };
-    
+
     const renderSportsEvent = (match: SportApiMatchModel, renderSportLabel: boolean) => (
         <>
             {renderSportLabel && <div className={'sports-label'}>{sportsLabel[match.sport]}</div>}
@@ -88,24 +97,13 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
     );
 
     const renderDialogMenuWithEvents = () => {
-        let includedSports = new Array<SportsEnum>();
-
-        // sort by sport and next sort by league
-        const sortingFunction = (x: SportApiMatchModel, y: SportApiMatchModel) => {
-            if(x.sport > y.sport) {
-                return 1;
-            } else if (x.sport < y.sport) {
-                return -1;
-            } else {
-                return x.league < y.league ? 1 : -1;
-            }
-        }
+        const includedSports = new Array<SportsEnum>();
 
         return (
             <>
-                {availableEvents!.sort(sortingFunction).map((event) => {
+                {availableEvents!.map((event) => {
                     let renderSportLabel = false;
-                    if(!includedSports.includes(event.sport)) {
+                    if (!includedSports.includes(event.sport)) {
                         includedSports.push(event.sport);
                         renderSportLabel = true;
                     }
@@ -113,18 +111,18 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
                     return renderSportsEvent(event, renderSportLabel);
                 })}
             </>
-        )
-    }
+        );
+    };
 
     const labelClassName = classNames({
         'select-sport-button': !props.selectedSportEvent || props.isShutdownScheduled,
         'sport-event-selected': props.selectedSportEvent,
-        'host-disabled': props.isHostAppActive
+        'host-disabled': props.isHostAppActive,
     });
 
     const inputClassName = classNames('input-style input-style-fixes', {
-        disabled: props.isShutdownScheduled,
-        'host-disabled': props.isHostAppActive
+        'disabled': props.isShutdownScheduled,
+        'host-disabled': props.isHostAppActive,
     });
 
     return (
@@ -133,7 +131,7 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
                 {!props.selectedSportEvent
                     ? sportEndingsComponentStrings.selectSportEvent
                     : getMatchLabelFromMatchModel(props.selectedSportEvent)}
-            </span> 
+            </span>
             <Dialog
                 isOpen={isSelectSportEventDialogOpen}
                 onClose={closeDialog}

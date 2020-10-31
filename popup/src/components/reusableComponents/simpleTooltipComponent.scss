@@ -1,4 +1,5 @@
 .tooltip-base {
+    pointer-events: none;
     transition: opacity .15s ease-out;
     text-align: center;
 

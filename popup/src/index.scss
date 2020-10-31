@@ -33,6 +33,7 @@
     --box-shadow-color: var(--black-40-light);
     --font-color: var(--black);
 
+    @include color-pallete($blue, "blue");
     @include color-pallete($green, "green");
     @include color-pallete($red, "red");
     @include color-pallete($yellow, "yellow");

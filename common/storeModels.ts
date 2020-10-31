@@ -1,5 +1,5 @@
 import { PlatformEnum } from './chromeApiModels';
-import { SportApiMatchModel } from './sportApiModels';
+import { SportApiMatchModel, SportLeagueModel } from './sportApiModels';
 
 export const isShutdownScheduledSelector = (state: RootReducerState) =>
     state.appReducer.shutdownEventScheduleData !== 0;
@@ -67,4 +67,5 @@ export enum ActionResultEnum {
     Canceled,
     Shutdown,
     WrongToken,
+    SelectLeagues,
 }

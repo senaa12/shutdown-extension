@@ -1,6 +1,7 @@
 import { ApplicationModeEnum, extensionWillNotWork, links, RootReducerState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ActionButtons from './actionButtons/actionButtons';
 import { ActiveTabReaderInjectedProps } from './activeTabReader/activeTabReader';
 import CountdownComponent from './countdownComponent/countdownComponent';
@@ -9,7 +10,6 @@ import MenuButtons from './menuButtons/menuButtons';
 import SportEndingsComponent from './sportEndingsComponent/sportEndingsComponent';
 import TimerComponent from './timerComponent/timerComponent';
 import VideoEndComponent from './videoEndComponent/videoEndComponent';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './app.scss';
 
@@ -35,7 +35,7 @@ class App extends React.Component<AppProps> {
 
     private renderAppContentComponent = (content: React.ReactNode) => (
         <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
-            <div className="app-content-component">{content}</div>
+            <div className='app-content-component'>{content}</div>
         </CSSTransition>
     )
 
@@ -46,17 +46,17 @@ class App extends React.Component<AppProps> {
                 <Header />
                 <MenuButtons />
                     <TransitionGroup className='app-content'>
-                            {selectedAppMode === ApplicationModeEnum.VideoPlayer && 
+                            {selectedAppMode === ApplicationModeEnum.VideoPlayer &&
                                 this.renderAppContentComponent(<VideoEndComponent currentTabId={this.props.currentTabId} />)
                             }
                             {selectedAppMode === ApplicationModeEnum.Timer &&
                                 this.renderAppContentComponent(<TimerComponent />)
                             }
                             {selectedAppMode === ApplicationModeEnum.Countdown &&
-                                this.renderAppContentComponent(<CountdownComponent />)   
+                                this.renderAppContentComponent(<CountdownComponent />)
                             }
                             {selectedAppMode === ApplicationModeEnum.SportEvent &&
-                                this.renderAppContentComponent(<SportEndingsComponent />) 
+                                this.renderAppContentComponent(<SportEndingsComponent />)
                             }
                     </TransitionGroup>
                 <ActionButtons currentTabId={this.props.currentTabId} />

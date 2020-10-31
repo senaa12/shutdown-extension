@@ -1,8 +1,10 @@
-import { SportApiMatchModel, SportsApiRequest, SportsApiRequestType, SportsEnum } from 'common';
+import { getStorageLocal, SportApiMatchModel, SportLeagueModel,
+    SportsApiRequest, SportsApiRequestType, SportsEnum, StorageLocalKeys } from 'common';
+import apiEndpointsMap from './apiEndpointsMap';
 import sportEndpointsMap from './apiEndpointsMap';
 
 class SportsApiFetcher {
-    private sportsApiEndpointBase = 'http://site.api.espn.com/apis/site/v2/sports/';
+    private sportsApiEndpointBase = 'http://site.api.espn.com/apis/site/v2/';
     private matchInGameKeyWord = 'in';
 
     private isThrottled: boolean = false;
@@ -25,10 +27,37 @@ class SportsApiFetcher {
             case SportsApiRequestType.GetLiveGames: {
                 return await this.getLiveMathes();
             }
+            case SportsApiRequestType.GetLeaguesInSports: {
+                return await this.getLeaguesFromSports();
+            }
             default:
                 const exhaustiveCheck: never = requestType.type;
                 break;
         }
+    }
+
+    private getLeaguesFromSports = async(): Promise<any> => {
+        const sports = Object.keys(SportsEnum).filter((x) => !isNaN(parseInt(x)));
+
+        const leagues: Array<SportLeagueModel> = new Array<SportLeagueModel>();
+
+        await Promise.all(sports.map(async(sp) => {
+            const uri = `leagues/dropdown?sport=${apiEndpointsMap[sp].baseEndpoint}`;
+            const result = await this.executeRequest(uri);
+
+            result.leagues.forEach((r) => {
+                leagues.push({
+                    sport: parseInt(sp) as SportsEnum,
+                    leagueId: parseInt(r.id),
+                    name: r.name,
+                    endpoint: r[apiEndpointsMap[sp].endpointKey],
+                } as SportLeagueModel);
+            });
+
+            return Promise.resolve();
+        }));
+
+        return leagues;
     }
 
     private getLiveMathes = async(): Promise<Array<SportApiMatchModel>> => {
@@ -37,38 +66,36 @@ class SportsApiFetcher {
 
         const matches: Array<SportApiMatchModel> = new Array<SportApiMatchModel>();
 
-        const sports = Object.keys(SportsEnum).filter((x) => !isNaN(parseInt(x)));
+        const selectedLeagues = await getStorageLocal<Array<SportLeagueModel>>(StorageLocalKeys.SelectedSports);
 
         // parallel async operation, map needs to be instead of forEach because map returns
         // promise that you can await, while forEach is void
-        await Promise.all(sports.map(async(sport) => {
-            const leagues = Object.keys(sportEndpointsMap[sport].leaguesEnum).filter((x) => !isNaN(parseInt(x)));
+        await Promise.all(selectedLeagues!.map(async(league) => {
+            const uri = `sports/${sportEndpointsMap[league.sport].baseEndpoint}/${[league.endpoint]}/scoreboard?dates=${dateQueryLabel}`;
 
-            await Promise.all(leagues.map(async (league) => {
-                const uri = `${sportEndpointsMap[sport].baseEndpoint}/${sportEndpointsMap[sport].leagues[league]}/scoreboard?dates=${dateQueryLabel}`;
-
-                const result = await this.executeRequest(uri);
-                result.events
+            const result = await this.executeRequest(uri);
+            result.events
                     .filter((x) => x.status.type.state === this.matchInGameKeyWord)
                     .forEach((event) => {
                     const competitors = event.competitions[0].competitors;
                     matches.push({
-                        id: event.id,
-                        sport: parseInt(sport) as SportsEnum,
-                        league: parseInt(league) as any,
-                        competitionName: result.leagues[0].name,
-                        awayTeam: competitors.find((x) => x.homeAway === 'away').team.displayName,
-                        homeTeam: competitors.find((x) => x.homeAway === 'home').team.displayName,
+                            id: event.id,
+                            sport: league.sport,
+                            leagueEndpoint: league.endpoint,
+                            competitionName: result.leagues[0].name,
+                            awayTeam: competitors.find((x) => x.homeAway === 'away').team.displayName,
+                            homeTeam: competitors.find((x) => x.homeAway === 'home').team.displayName,
+                        });
                     });
-                });
-            }));
+
+            return Promise.resolve();
         }));
 
         return matches;
     }
 
     private isEventCompleted = async(event: SportApiMatchModel) => {
-        const uri = `${sportEndpointsMap[event.sport].baseEndpoint}/${sportEndpointsMap[event.sport].leagues[event.league]}/scoreboard/${event.id}`;
+        const uri = `sports/${sportEndpointsMap[event.sport].baseEndpoint}/${event.leagueEndpoint}/scoreboard/${event.id}`;
 
         const result = await this.executeRequest(uri);
 
@@ -89,12 +116,13 @@ class SportsApiFetcher {
     }
 
     private executeRequest = async(uri: string): Promise<any> => {
+        console.log(`${this.sportsApiEndpointBase}${uri}`);
+
         const resp = await fetch(`${this.sportsApiEndpointBase}${uri}`);
 
         const data = await resp.json();
         if (resp.ok) {
 
-            console.log(`${this.sportsApiEndpointBase}${uri}`);
             console.log(data);
             return Promise.resolve(data);
         } else {

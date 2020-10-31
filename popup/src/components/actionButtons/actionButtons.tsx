@@ -9,8 +9,9 @@ import {
     RootReducerState } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Dispatch } from 'redux';
-import { triggerActionResultTooltip, toggleIsSportDialogOpen } from '../../actions/actions';
+import { toggleIsSportDialogOpen, triggerActionResultTooltip } from '../../actions/actions';
 import communicationManager from '../../utilities/communicationManager';
 import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader';
 import { IconEnum, IconSize } from '../icon/iconEnum';
@@ -19,7 +20,6 @@ import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent
 import { isCancelButtonDisabledCheck, isShutdownButtonDisabledCheck } from './utils';
 
 import './actionButtons.scss';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 export interface ActionButtonCustomProps {
     appMode: ApplicationModeEnum;
@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch: Dispatch): ActionButtonDispatchProps => {
     return {
         triggerActionResultTooltip: (newState: ActionResultEnum, mess?: React.ReactNode) =>
             dispatch(triggerActionResultTooltip(newState, mess)),
-        openSelectSportDialog: () => dispatch(toggleIsSportDialogOpen(true))
+        openSelectSportDialog: () => dispatch(toggleIsSportDialogOpen(true)),
     };
 };
 
@@ -95,7 +95,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
     }
 
     private checkToHideTooltip = () => {
-        if (this.props.actionResultTooltip) {
+        if (this.props.actionResultTooltip && this.props.actionResultTooltip !== ActionResultEnum.SelectLeagues) {
             this.props.triggerActionResultTooltip(ActionResultEnum.None);
         }
     }
@@ -207,7 +207,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                 iconSize={IconSize.Smallest}
                 disabled={isShutdownEventScheduled}
             />
-        )
+        );
     }
 
     private renderClearButton = () => {
@@ -257,12 +257,12 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                 {this.renderShutdownButton()}
                 {this.renderClearButton()}
                 <TransitionGroup className={'right-buttons'} >
-                    {appMode === ApplicationModeEnum.VideoPlayer && 
+                    {appMode === ApplicationModeEnum.VideoPlayer &&
                         <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
                             {this.renderScanNowButton()}
                         </CSSTransition>
                     }
-                    {appMode == ApplicationModeEnum.SportEvent && 
+                    {appMode == ApplicationModeEnum.SportEvent &&
                         <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
                             {this.renderAddSportsButton()}
                         </CSSTransition>

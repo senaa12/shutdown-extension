@@ -14,6 +14,7 @@ import sportsApiFetcher from './sportsApiFetcher/sportsApiFetcher';
 
 const oneSecInMs = 1000;
 const sportApiDelayInSeconds = 20;
+const pingApiIfSportEventIsFinished = 7;
 
 const shutddownCommandWithIconChange = () => {
     removeShutdownEvent();
@@ -82,7 +83,7 @@ export const timerShutdown = () => {
     }
 };
 
-export const sportEventShutdown = () => {
+export const sportEventShutdown = async() => {
     const checkEventEndShutdown = async() => {
         const isStillScheduled = store.getState().appReducer.shutdownEventScheduleData;
         if (!isStillScheduled) {
@@ -112,12 +113,22 @@ export const sportEventShutdown = () => {
                 shutddownCommandWithIconChange();
             }
         } else {
-            setTimeout(checkEventEndShutdown, 10 * oneSecInMs);
+            setTimeout(checkEventEndShutdown, pingApiIfSportEventIsFinished * oneSecInMs);
         }
     };
 
+    const match = store.getState().sportsModeReducer.selectedSportEventForShutdown!;
+    const isCompleted = await sportsApiFetcher.Fetch({
+        type: SportsApiRequestType.IsEventCompleted,
+        data: match,
+    });
+    if (isCompleted) {
+        triggerTooltipWithMessage(actionResultsStrings.shutdown.failedCountdown, ActionResultEnum.Shutdown);
+        return;
+    }
+
     // set interval does not work good with async function
-    const func = setTimeout(checkEventEndShutdown, 10 * oneSecInMs);
+    const func = setTimeout(checkEventEndShutdown, pingApiIfSportEventIsFinished * oneSecInMs);
     scheduleShutdownAction(true, func);
     triggerTooltipWithMessage(actionResultsStrings.shutdown.success, ActionResultEnum.Shutdown);
     changeIcon(true);
