@@ -3,7 +3,6 @@ import apiEndpointsMap from './sportsApiFetcher/apiEndpointsMap';
 import sportsApiFetcher from './sportsApiFetcher/sportsApiFetcher';
 
 export const loadInitialSportLeaguesToCollect = async() => {
-    await setStorageLocal(StorageLocalKeys.SelectedSports, '');
     const currentState = await getStorageLocal(StorageLocalKeys.SelectedSports);
 
     if (!Object.keys(currentState).length) {

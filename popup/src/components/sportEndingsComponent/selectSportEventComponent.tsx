@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { BackgroundMessageTypeEnum, getMatchLabelFromMatchModel, isShutdownScheduledSelector, RootReducerState,
     SportApiMatchModel, sportEndingsComponentStrings, SportsApiRequestType, SportsEnum, sportsLabel } from 'common';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { setSelectedSportEventForShutdown } from '../../actions/actions';
@@ -114,6 +114,31 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
         );
     };
 
+    const refreshLiveEvents = () => {
+        setAvailableEvents(undefined);
+        communication.sendMessageToBackgroundPage({
+            type: BackgroundMessageTypeEnum.SportsApiFetch,
+            data: {
+                type: SportsApiRequestType.GetLiveGames,
+            },
+        }, (res) => setAvailableEvents(res.sort(sortingFunction)));
+    };
+
+    const customDialogFooter = useMemo(() => {
+        return (
+            <>
+                <button
+                    onClick={refreshLiveEvents}
+                    className={'button-base tile clickable override-button-style margin-left-auto'}
+                >refresh</button>
+                <button
+                    onClick={closeDialog}
+                    className={'button-base tile clickable override-button-style margin-left'}
+                >{'close'}</button>
+            </>
+        );
+    }, []);
+
     const labelClassName = classNames({
         'select-sport-button': !props.selectedSportEvent || props.isShutdownScheduled,
         'sport-event-selected': props.selectedSportEvent,
@@ -135,6 +160,7 @@ const selectSportEventComponentProps = (props: SelectSportEventComponentProps) =
             <Dialog
                 isOpen={isSelectSportEventDialogOpen}
                 onClose={closeDialog}
+                customFooter={customDialogFooter}
             >
                 {(!availableEvents && availableEvents === undefined) &&
                     <LoadingComponent />}

@@ -100,6 +100,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
 // iframe sources to ignore => mostly ads
 const iframeSourcesToIgnore = [
+    'https://clients5.google.com/pagead/drt/dn/',
     'ogs.google.com',
     'comments',
     'google_ads_iframe',

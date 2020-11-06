@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { ActionResultEnum, 
     getMatchLabelFromMatchModel, 
     getSelectedTimeLabel,
@@ -11,9 +12,8 @@ import { Dispatch } from 'redux';
 import { changeTimeSelected, setAddDelayToSportShutdown, triggerActionResultTooltip } from '../../actions/actions';
 import Checkbox from '../reusableComponents/checkboxComponent';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
-import SelectSportEventComponent from './selectSportEventComponent';
-import classNames from 'classnames';
 import SelectSportDialog from './selectSportDialog/selectSportDialog';
+import SelectSportEventComponent from './selectSportEventComponent';
 
 import './sportEndingsComponent.scss';
 
@@ -58,10 +58,10 @@ const mapDispatchToProps = (dispatch: Dispatch): Partial<SportEndingsComponentPr
 const sportEndingsComponent = (props: SportEndingsComponentProps) => {
     const shutdownNotScheduled = () => {
         const descriptionClassname = classNames('usage-description', {
-            'host-disabled': !props.isHostappActive
-        })
+            'host-disabled': !props.isHostappActive,
+        });
         const checkboxWrapperClassname = classNames('optional-delay', {
-            'host-disabled': !props.isHostappActive
+            'host-disabled': !props.isHostappActive,
         });
 
         return (
@@ -110,7 +110,7 @@ const sportEndingsComponent = (props: SportEndingsComponentProps) => {
     return (
         <div className={'flex-column'}>
             <SelectSportDialog />
-            {!props.isShutdownScheduled 
+            {!props.isShutdownScheduled
                 ? shutdownNotScheduled()
                 : shutdownScheduled()}
         </div>

@@ -50,6 +50,7 @@ export const sportEndingsComponentStrings = {
         <>Your computer will shut down {delayString} after {matchLabel} game is finished.</>,
     noResults: 'No Results',
     loadingTime: 'Number of selected leagues affects loading time',
+    failedFetch: 'Failed Fetch'
 };
 
 export const title = 'AUTO SHUTDOWN';
@@ -99,6 +100,9 @@ export const actionResultsStrings = {
     cancel: {
         canceledInBackground: 'Tab was Closed and Shutdown is canceled',
         canceled: 'Canceled',
+    },
+    addSport: {
+        saved: 'Changes saved',
     },
 };
 

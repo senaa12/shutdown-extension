@@ -173,7 +173,6 @@ const TimeDurationInput = (props: TimeDurationInputProps) => {
         <input
             ref={inputRef}
             className={className}
-            disabled={props.disabled}
             style={width}
             type={'text'}
             maxLength={8}

@@ -8,10 +8,11 @@ export interface DialogProps {
     isOpen: boolean;
     children: React.ReactNode;
     onClose?(): void;
+    closeButtonText?: string;
     customFooter?: React.ReactNode;
 }
 
-const dialog = ({ isOpen, children, onClose, customFooter }: DialogProps) => {
+const dialog = ({ isOpen, children, onClose, customFooter, closeButtonText }: DialogProps) => {
     const className = classNames('dialog', 'sport-event-select-dialog'); // custom
 
     return (
@@ -34,7 +35,7 @@ const dialog = ({ isOpen, children, onClose, customFooter }: DialogProps) => {
                             <button
                                 onClick={onClose}
                                 className={'button-base tile clickable override-button-style'}
-                            >close</button>}
+                            >{closeButtonText ?? 'close'}</button>}
                     </div>
                 </div>
             </div>

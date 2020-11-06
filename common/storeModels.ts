@@ -68,4 +68,5 @@ export enum ActionResultEnum {
     Shutdown,
     WrongToken,
     SelectLeagues,
+    Saved,
 }

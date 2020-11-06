@@ -78,3 +78,80 @@ export const groupBy = (array, key) => {
       return result;
     }, {}); // empty object is the initial value for result object
   };
+
+/** same as Equal function but for arrays, expensive operation */
+export function arrayDeepEqual<T>(object1: Array<T>, object2: Array<T>, byKey?: Array<keyof T>) {
+    const compare = (obj1: T, obj2: T) => {
+        const compareFunc = (a: T, b: T, keys: Array<keyof T>, iterator: number) => {
+            if (a[keys[iterator]] < b[keys[iterator]]) {
+                return -1;
+            }
+
+            if (a[keys[iterator]] > b[keys[iterator]]) {
+                return 1;
+            }
+
+            if (keys.length <= 1 + iterator) {
+                return 0;
+            } else {
+                const newIterator = iterator + 1;
+                return compareFunc(a, b, keys, newIterator);
+            }
+        };
+
+        return compareFunc(obj1, obj2, byKey !== undefined ? byKey : Object.keys(obj1) as any, 0);
+    };
+
+    if (object2.length === 0 && object1.length === 0) {
+        return true;
+    }
+
+    if (object2.length !== object1.length) {
+        return false;
+    }
+
+    if (JSON.stringify(Object.keys(object1[0]).sort()) !== JSON.stringify(Object.keys(object2[0]).sort())) {
+        return false;
+    }
+
+    const compareKeys = byKey !== undefined ? byKey : Object.keys(object2[0]) as any;
+    const sortedObj1 = object1.sort(compare);
+    const sortedObj2 = object2.sort(compare);
+
+    for (let i = 0; i < sortedObj2.length; i++) {
+        if (!deepEqual(sortedObj1[i], sortedObj2[i], compareKeys)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export function deepEqual<T>(object1: T, object2: T, byKey?: Array<keyof T>) {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+
+    const compareKeys = byKey !== undefined
+        ? byKey
+        : keys1;
+    for (const key of compareKeys) {
+      const val1 = object1[key as any];
+      const val2 = object2[key as any];
+      const areObjects = isObject(val1) && isObject(val2);
+      if (
+        areObjects && !deepEqual(val1, val2, byKey) ||
+        !areObjects && val1 !== val2
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+}
+
+export function isObject(object) {
+    return object != null && typeof object === 'object';
+}

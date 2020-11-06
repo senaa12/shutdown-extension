@@ -107,9 +107,10 @@ body {
     .disabled {
         background-color: var(--disabled-color) !important;
         user-select: none !important;
+        pointer-events: none !important;
 
         &:hover {
-            cursor: default;
+            cursor: default !important;
             box-shadow: none;
         }
     }

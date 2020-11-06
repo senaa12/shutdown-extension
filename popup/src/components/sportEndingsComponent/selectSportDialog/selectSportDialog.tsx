@@ -1,5 +1,5 @@
-import { ActionResultActionTypeEnum, ActionResultEnum, BackgroundMessageTypeEnum, groupBy, RootReducerState,
-    sportEndingsComponentStrings,
+import { ActionResultEnum, actionResultsStrings, arrayDeepEqual, BackgroundMessageTypeEnum,
+    groupBy, RootReducerState, sportEndingsComponentStrings,
     SportLeagueModel, SportsApiRequestType, SportsEnum, sportsLabel, StorageLocalKeys } from 'common';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
@@ -14,7 +14,7 @@ import SimpleTooltipComponent from '../../reusableComponents/simpleTooltipCompon
 
 import './selectSportDialog.scss';
 
-const numberOfLeaguesWarningMessage = 20;
+const numberOfLeaguesWarningMessage = 30;
 
 export interface SelectSportDialogProps {
     isOpen: boolean;
@@ -22,7 +22,7 @@ export interface SelectSportDialogProps {
     tooltipType: ActionResultEnum;
     tooltipMessage: React.ReactNode;
 
-    triggerCloseHoverableTooltip(tooltipType: ActionResultEnum, msg?: React.ReactNode): void;
+    triggerTooltip(tooltipType: ActionResultEnum, msg?: React.ReactNode): void;
     closeDialog(): void;
 }
 
@@ -37,7 +37,7 @@ const mapStateToProps = (state: RootReducerState): Partial<SelectSportDialogProp
 const mapDispatchToProps = (dispatch: Dispatch): Partial<SelectSportDialogProps> => {
     return {
         closeDialog: () => dispatch(toggleIsSportDialogOpen(false)),
-        triggerCloseHoverableTooltip: (tooltipType: ActionResultEnum, msg?: React.ReactNode) =>
+        triggerTooltip: (tooltipType: ActionResultEnum, msg?: React.ReactNode) =>
             dispatch(triggerActionResultTooltip(tooltipType, msg)),
     };
 };
@@ -45,6 +45,7 @@ const mapDispatchToProps = (dispatch: Dispatch): Partial<SelectSportDialogProps>
 const selectSportDialog = (props: SelectSportDialogProps) => {
     const [ availableLeagues, setAvailableLeagues ] = React.useState<Array<SportLeagueModel> | undefined>();
     const [ collectingLeagues, setCollectingLeagues ] = React.useState<Array<SportLeagueModel> | undefined>();
+    const [ currentCollectingState, setCurrentCollectingState ] = React.useState<Array<SportLeagueModel> | undefined>();
 
     const [ isLoading, setIsLoading ] = React.useState<boolean>(false);
 
@@ -73,22 +74,32 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
             communication.sendMessageToBackgroundPage({
                 type: BackgroundMessageTypeEnum.LoadStorageLocal,
                 data: StorageLocalKeys.SelectedSports,
-            }, setCollectingLeagues);
+            }, (res) => { setCollectingLeagues(res); setCurrentCollectingState(res); });
         }
     }, [props.isOpen]);
 
     const closeDialog = () => {
-        props.triggerCloseHoverableTooltip(ActionResultEnum.None);
-        communication.sendMessageToBackgroundPage({
-            type: BackgroundMessageTypeEnum.SetStorageLocal,
-            data: {
-                type: StorageLocalKeys.SelectedSports,
-                data: collectingLeagues,
-            },
-        });
+        if (collectingLeagues?.length && currentCollectingState?.length) {
+            const isStateEqual = arrayDeepEqual<SportLeagueModel>(
+                    collectingLeagues,
+                    currentCollectingState,
+                    ['sport', 'leagueId'],
+                );
 
-        setAvailableLeagues(undefined);
-        setCollectingLeagues(undefined);
+            if (!isStateEqual) {
+                communication.sendMessageToBackgroundPage({
+                    type: BackgroundMessageTypeEnum.SetStorageLocal,
+                    data: {
+                        type: StorageLocalKeys.SelectedSports,
+                        data: collectingLeagues,
+                    },
+                }, () => props.triggerTooltip(ActionResultEnum.Saved, actionResultsStrings.addSport.saved));
+            }
+
+            setAvailableLeagues(undefined);
+            setCollectingLeagues(undefined);
+        }
+
         props.closeDialog();
     };
 
@@ -96,7 +107,7 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
         const handleOnCheckboxChange = (val: boolean) => {
             if (val) {
                 if ((collectingLeagues!.length + 1 ) > numberOfLeaguesWarningMessage) {
-                    props.triggerCloseHoverableTooltip(
+                    props.triggerTooltip(
                         ActionResultEnum.SelectLeagues,
                         sportEndingsComponentStrings.loadingTime,
                     );
@@ -104,7 +115,7 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
                 setCollectingLeagues([...collectingLeagues!, league]);
             } else {
                 if ((collectingLeagues!.length -  1) <= numberOfLeaguesWarningMessage) {
-                    props.triggerCloseHoverableTooltip(ActionResultEnum.None);
+                    props.triggerTooltip(ActionResultEnum.None);
                 }
                 setCollectingLeagues(collectingLeagues?.filter((lg) => lg.leagueId !== league.leagueId));
             }
@@ -118,7 +129,7 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
                 handleOnCheckboxChange={handleOnCheckboxChange}
             />
         );
-    }, [collectingLeagues, setCollectingLeagues, props.triggerCloseHoverableTooltip, props.tooltipType]);
+    }, [collectingLeagues, setCollectingLeagues, props.triggerTooltip, props.tooltipType]);
 
     const renderFilteredList = () => {
         const includedSports = new Array<SportsEnum>();
@@ -180,7 +191,7 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
                     <button
                         ref={closeButtonRef}
                         onClick={closeDialog}
-                        className={'button-base tile clickable override-button-style'}
+                        className={'button-base tile clickable override-button-style margin-left-auto'}
                     >close</button>
                 </SimpleTooltipComponent>
             </>
@@ -218,6 +229,7 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
         <Dialog
             isOpen={props.isOpen}
             customFooter={customDialogFooter()}
+            closeButtonText={'save'}
         >
             {(availableLeagues === undefined || collectingLeagues === undefined) ?
                 <LoadingComponent /> :
@@ -237,7 +249,11 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
                                 :   <div className={'center-vertically select-sport-button no-result'}>
                                         {sportEndingsComponentStrings.noResults}
                                     </div>)
-                            : renderAllLeagues()}
+                            : (availableLeagues.length > 0
+                                    ? renderAllLeagues()
+                                    : <div className={'center-vertically select-sport-button no-result'}>
+                                        {sportEndingsComponentStrings.failedFetch}
+                                      </div>)}
                 </div>
             }
         </Dialog>

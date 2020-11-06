@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import {
     ActionResultEnum,
+    actionResultsStrings,
     ApplicationModeEnum,
     BackgroundMessageTypeEnum,
     ChromeApiMessage,
@@ -77,11 +78,13 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
         this.shutdownButtonRef = React.createRef();
         this.cancelButtonRef = React.createRef();
         this.scanNowButtonRef = React.createRef();
+        this.addSportButtonRef = React.createRef();
     }
 
     private shutdownButtonRef: React.RefObject<any>;
     private cancelButtonRef: React.RefObject<any>;
     private scanNowButtonRef: React.RefObject<any>;
+    private addSportButtonRef: React.RefObject<any>;
 
     private baseClassName = 'action-button';
     private actionTooltipsBaseClassName = 'action-tooltips';
@@ -168,7 +171,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
             actionResultTooltip, actionResultTooltipContent } = this.props;
 
         const onClick = () => {
-                communicationManager.sendMessageToActiveTab({
+            communicationManager.sendMessageToActiveTab({
                     type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
                     data: { tabID: currentTabId, showResponse: true },
                 } as ChromeApiMessage);
@@ -196,17 +199,28 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
     }
 
     private renderAddSportsButton = () => {
-        const { isShutdownEventScheduled, openSelectSportDialog } = this.props;
+        const { isShutdownEventScheduled, openSelectSportDialog ,
+            actionResultTooltip, actionResultTooltipContent} = this.props;
 
+        const tooltipClassName = classNames(this.actionTooltipsBaseClassName, 'sucess-tooltip');
         return (
-            <ButtonComponent
-                className={this.baseClassName}
-                label={'Add sports'}
-                onClick={openSelectSportDialog}
-                icon={IconEnum.Plus}
-                iconSize={IconSize.Smallest}
-                disabled={isShutdownEventScheduled}
-            />
+            <SimpleTooltipComponent
+                parentRef={this.addSportButtonRef}
+                content={actionResultTooltipContent}
+                isOpen={actionResultTooltip === ActionResultEnum.Saved}
+                trigger={'manual'}
+                tooltipClassname={tooltipClassName}
+            >
+                <ButtonComponent
+                    ref={this.addSportButtonRef}
+                    className={this.baseClassName}
+                    label={'Add sports'}
+                    onClick={openSelectSportDialog}
+                    icon={IconEnum.Plus}
+                    iconSize={IconSize.Smallest}
+                    disabled={isShutdownEventScheduled}
+                />
+            </SimpleTooltipComponent>
         );
     }
 
@@ -262,7 +276,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                             {this.renderScanNowButton()}
                         </CSSTransition>
                     }
-                    {appMode == ApplicationModeEnum.SportEvent &&
+                    {appMode === ApplicationModeEnum.SportEvent &&
                         <CSSTransition id={Math.round(Math.random() * 10000)} timeout={300} classNames={'shutdown-animation'}>
                             {this.renderAddSportsButton()}
                         </CSSTransition>

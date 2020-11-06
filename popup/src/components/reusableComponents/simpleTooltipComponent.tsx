@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useMouseHoverOverElement, useMousePosition } from '../../utilities/customHooks';
+import { useMouseHoverOverElement } from '../../utilities/customHooks';
 import Icon from '../icon/icon';
 import { IconEnum, IconSize } from '../icon/iconEnum';
 
@@ -17,11 +17,14 @@ export interface TooltipComponentProps {
     tooltipHideAnimationDuration?: number;
     /** reference where you want tooltip to show */
     parentRef: React.RefObject<any>;
+    /** on hover tooltip keep it visible */
+    keepShowingTooltipOnHover?: boolean;
 }
 
 type PropsWithChildren<P> = P & { children: React.ReactNode };
 
 const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>) => {
+    // to set tooltip ref => force rerender
     const [ forceRerender, disableRerender ] = useState(false);
 
     const [isOpen, setIsOpen] = useState<boolean>(props.isOpen !== undefined ? props.isOpen : false);
@@ -31,14 +34,18 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
 
     const tooltipRef = useRef<HTMLDivElement>(null);
 
-    const setTransitionToFalse = () => {
+    const isMouseOverTooltip = useMouseHoverOverElement(tooltipRef);
+    const isMouseOverParentRef = useMouseHoverOverElement(props.parentRef);
+
+    const setTransitionToFalse = useCallback(() => {
         setTransitionInProgress(false);
-        // first transition is when tooltip appears
+
+        // first transition is when tooltip appears so we do not want to close it
         if (!isOpen) {
             setTooltipContent(undefined);
             setTooltipClassName(undefined);
         }
-    };
+    }, [isOpen]);
 
     const hideTooltip = useCallback(() => {
         setTransitionInProgress(true);
@@ -51,29 +58,28 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
         setIsOpen(true);
     }, [props.content, props.tooltipClassname]);
 
-    // default trigger is hover
+    // hover trigger control
     useEffect(() => {
-        if ((!props.trigger || props.trigger === 'hover') && props.parentRef && props.parentRef.current) {
-            props.parentRef.current.addEventListener('mouseenter', showTooltip);
-            props.parentRef.current.addEventListener('mouseleave', hideTooltip);
+        if (!props.trigger || props.trigger === 'hover') {
+            if (isMouseOverParentRef && !isOpen) {
+                showTooltip();
+            } else if (!isMouseOverParentRef && isOpen &&
+                (!props.keepShowingTooltipOnHover || !isMouseOverTooltip)) {
+                hideTooltip();
+            }
         }
-
-        return () => {
-            props.parentRef.current.removeEventListener('mouseenter', showTooltip);
-            props.parentRef.current.removeEventListener('mouseleave', hideTooltip);
-        };
-    }, [props.trigger, props.parentRef, props.content, props.tooltipClassname]);
+    }, [isMouseOverParentRef, isOpen, isMouseOverTooltip, props.trigger, props.keepShowingTooltipOnHover]);
 
     // maual triggering
     useEffect(() => {
         if (props.trigger === 'manual' && props.isOpen !== undefined) {
-            if (props.isOpen) {
+            if (props.isOpen && !isOpen) {
                 showTooltip();
-            } else {
+            } else if (!props.isOpen && isOpen) {
                 setTimeout(hideTooltip, props.tooltipHideAnimationDuration ?? 1000);
             }
         }
-    }, [props.isOpen, props.trigger]);
+    }, [props.isOpen, isOpen, props.trigger]);
 
     // first render
     useEffect(() => {
@@ -92,12 +98,14 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             // first render
             if (isOpen && !forceRerender) { disableRerender(true); }
 
+            // first render - ref is not set
             return hidden;
         }
 
         const parentPosition = props.parentRef.current.getBoundingClientRect();
         const renderedTooltiop = tooltipRef.current.getBoundingClientRect();
         const currentStyle = tooltipRef.current.style;
+
         if (!isOpen) {
             return {
                 ...hidden,
@@ -156,12 +164,10 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             <div
                 ref={tooltipRef}
                 style={calculatePosition()}
-                onMouseEnter={showTooltip}
-                onMouseLeave={hideTooltip}
                 onTransitionEnd={setTransitionToFalse}
                 className={className}
             >
-                    <div className={'content'}>{tooltipContent}</div>
+                    <div className={'content'} style={{ width: '100%' }}>{tooltipContent}</div>
                     <Icon
                         iconName={IconEnum.Arrow}
                         iconSize={IconSize.Smallest}
