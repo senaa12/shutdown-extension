@@ -186,7 +186,7 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
                     position={'top'}
                     trigger={tooltipType === ActionResultEnum.SelectLeagues ? 'hover' : 'manual'}
                     parentRef={closeButtonRef}
-                    tooltipClassname={'info-tooltip'}
+                    tooltipClassname={'info-tooltip action-tooltips'}
                 >
                     <button
                         ref={closeButtonRef}

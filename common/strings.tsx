@@ -50,7 +50,7 @@ export const sportEndingsComponentStrings = {
         <>Your computer will shut down {delayString} after {matchLabel} game is finished.</>,
     noResults: 'No Results',
     loadingTime: 'Number of selected leagues affects loading time',
-    failedFetch: 'Failed Fetch'
+    failedFetch: 'Failed Fetch',
 };
 
 export const title = 'AUTO SHUTDOWN';
@@ -86,9 +86,10 @@ export const extensionWillNotWork = (faqOnClick: CallbackFunction) => (
 
 export const actionResultsStrings = {
     scanNow: {
-        noChanges: 'Nothing found',
+        nothingFound: 'Nothing found',
         iFrameFound: 'New IFrame found',
         videoFound: 'Video Found!',
+        noChanges: 'No changes',
     },
     shutdown: {
         success: 'Success',

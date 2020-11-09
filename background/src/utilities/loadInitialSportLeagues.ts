@@ -12,7 +12,7 @@ export const loadInitialSportLeaguesToCollect = async() => {
 
         const selectedLeagues = new Array<SportLeagueModel>();
 
-        // get first 10 elements from each sport
+        // get first 10 leagues from each sport
         Object.keys(SportsEnum).map((x) => parseInt(x)).filter((x) => !isNaN(x)).forEach((s) => {
             selectedLeagues.push(
                 ...leagues.filter((l) => l.sport === s).splice(0, apiEndpointsMap[s].initialSelectionLength),
@@ -22,4 +22,3 @@ export const loadInitialSportLeaguesToCollect = async() => {
         await setStorageLocal(StorageLocalKeys.SelectedSports, selectedLeagues);
     }
 };
-

@@ -5,4 +5,4 @@ export * from './functions';
 export * from './strings';
 export * from './commands';
 export * from './sportApiModels';
-export * from './storageLocal';
+export * from './chromeApiPromises';

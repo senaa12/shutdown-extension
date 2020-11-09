@@ -1,5 +1,8 @@
+import { ChromeApiMessage } from './chromeApiModels';
+
 export enum StorageLocalKeys {
     SelectedSports = 'LEAGUES',
+    IframeAdsSources = 'IFRAME_ADS_SOURCES',
 }
 
 /**
@@ -32,6 +35,18 @@ export function getStorageLocal<T = any>(key: StorageLocalKeys): Promise<T | und
                 const data = JSON.parse(items[key] ?? '{}') as T;
 
                 resolve(data);
+            });
+        } catch (ex) {
+            reject(ex);
+        }
+    });
+}
+
+export function sendMessageToBackgroundPage<T>(message: ChromeApiMessage): Promise<T> {
+    return new Promise((resolve, reject) => {
+        try {
+            chrome.runtime.sendMessage(message, (result: any) => {
+                resolve(result);
             });
         } catch (ex) {
             reject(ex);

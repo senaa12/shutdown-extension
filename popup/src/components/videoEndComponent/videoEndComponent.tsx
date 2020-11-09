@@ -63,13 +63,13 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
     private setTabTitle = () =>
         chrome.tabs.get(this.props.subscribedTab, (tabs) => this.setState({ tabTitle: tabs.title }))
     private navigateToSelectedTab = () => chrome.tabs.update(this.props.subscribedTab, { active: true });
-    private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.iframeSource });
+    private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.src });
     private readMoreAbout = () => window.open(links.FAQ, '_blank');
 
     private renderContent = () => {
         const {
             state,
-            iframeSource,
+            src,
             subscribedTab,
             currentTabId,
         } = this.props;
@@ -104,7 +104,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
             case TabStateEnum.PageContainsIFrameTag : {
                 return (
                     <>
-                        {videoPlayerStrings.iframeAvailable(this.navigateToIframeSource, iframeSource)}
+                        {videoPlayerStrings.iframeAvailable(this.navigateToIframeSource, src)}
                         <div className={'read-more'}>{videoPlayerStrings.readMore(this.readMoreAbout)}</div>
                     </>
                 );

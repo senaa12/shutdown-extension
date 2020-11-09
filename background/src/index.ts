@@ -2,8 +2,9 @@ import { wrapStore } from 'webext-redux';
 import messageHandler from './messageHandler';
 import createStore, { getMiddleware } from './reducers/store';
 import { changeIcon, checkSystem } from './utilities/actions';
+import { fetchIframeAdsSources } from './utilities/iframeAds';
+import { loadInitialSportLeaguesToCollect } from './utilities/loadInitialSportLeagues';
 import { connecToNativeApp } from './utilities/nativeCommunication';
-import { loadInitialSportLeaguesToCollect } from './utilities/storageLocalManipulation';
 import { onHistoryStateUpdated, onRemoved, onUpdated } from './utilities/tabsManipulation';
 
 const isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : false;
@@ -22,6 +23,8 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(onHistoryStateUpdated);
 chrome.runtime.onMessage.addListener(messageHandler);
 
 loadInitialSportLeaguesToCollect();
+
+fetchIframeAdsSources();
 
 connecToNativeApp();
 

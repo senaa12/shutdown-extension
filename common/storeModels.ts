@@ -40,7 +40,7 @@ export interface ActionsResultState {
 export interface TabState {
     state: TabStateEnum;
     videoDuration?: number;
-    iframeSource?: string;
+    src?: string;
 }
 
 export interface ActiveTabReducerState extends TabState {

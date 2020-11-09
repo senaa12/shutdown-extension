@@ -11,6 +11,7 @@ import {
     TabsActionTypeEnum,
     TabStateEnum} from 'common';
 import { store } from '..';
+import { changeIcon } from './actions';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
     const subscribedTabID: number = store.getState().appReducer.shutdownEventScheduleData;
@@ -25,6 +26,7 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
                 message: actionResultsStrings.cancel.canceledInBackground,
             },
         } as Action);
+        changeIcon();
     }
 };
 

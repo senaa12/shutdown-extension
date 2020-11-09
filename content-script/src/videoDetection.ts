@@ -2,10 +2,12 @@ import {
     ActionResultEnum,
     actionResultsStrings,
     ActiveTabReducerState,
-    AppActionTypeEnum,
     ApplicationModeEnum,
+    BackgroundMessageTypeEnum,
     CallbackFunction,
     convertSecondsToTimeFormat,
+    sendMessageToBackgroundPage,
+    StorageLocalKeys,
     TabState,
     TabStateEnum,
 } from 'common';
@@ -25,15 +27,19 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
         } else {
             let videoDuration: number;
+            let videoSource: string;
             // if there is video on tab and is already scaned iterate throught next
             if (!!currentState.videoDuration) {
-                // find it by duration, of course if there are 2 videos with same length this will not work
-                // but what are the chances
+                // find it by duration and video source
                 const index = videoTag.findIndex((obj) =>
-                    obj.duration && Math.round(obj.duration) === currentState.videoDuration);
+                                    obj.duration
+                                    && Math.round(obj.duration) === currentState.videoDuration
+                                    && obj.src === currentState.src);
                 videoDuration = videoTag[(index + 1) % videoTag.length].duration;
+                videoSource = videoTag[(index + 1) % videoTag.length].src;
             } else {
                 videoDuration = videoTag[0].duration;
+                videoSource = videoTag[0].src;
             }
 
             // only change input state if application mode is video player
@@ -47,13 +53,27 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             sendResultingTabState({
                 state: TabStateEnum.PageContainsVideoTag,
                 videoDuration: Math.round(videoDuration),
+                src: videoSource,
             });
 
             // tooltip
-            triggerTooltipWithMessage(actionResultsStrings.scanNow.videoFound, ActionResultEnum.Scan);
+            if (currentState.src !== videoSource) {
+                triggerTooltipWithMessage(actionResultsStrings.scanNow.videoFound, ActionResultEnum.Scan);
+            } else if (!!data?.showResponse) {
+                triggerTooltipWithMessage(actionResultsStrings.scanNow.noChanges, ActionResultEnum.Scan);
+            }
+
         }
         return;
     }
+
+    const iframeSourcesToIgnore = await sendMessageToBackgroundPage<Array<string>>({
+        type: BackgroundMessageTypeEnum.LoadStorageLocal,
+        data: StorageLocalKeys.IframeAdsSources,
+    });
+    const isSourceInIgnoredIframeSources = (src: string): boolean => (
+        iframeSourcesToIgnore.filter((val) => src.includes(val)).length > 0
+    );
 
     // maybe video tag does not exist but IFrame exists on page
     const iframe = Array.from(document.getElementsByTagName('iframe'))
@@ -61,26 +81,30 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
     if (iframe.length) {
         // has Iframe source but lets filter it
         const withSrc = iframe.filter((ifr) => ifr.src);
-        if (!withSrc.length || withSrc[0]?.src === currentState?.iframeSource) {
+        if (!withSrc.length || (withSrc[0]?.src === currentState?.src && !currentState?.src)) {
             iframe[0].onload = () => checkVideoAvailability({ showResponse: true, ...data });
         } else {
             let iframeSrc: string;
             // same as video tag if there is more iframe sources as before iterate through it
-            if (!!currentState.iframeSource) {
-                const index = iframe.findIndex((obj) => obj.src === currentState.iframeSource);
-                iframeSrc = iframe[(index + 1) % iframe.length].src;
+            if (!!currentState.src) {
+                const index = withSrc.findIndex((obj) => obj.src === currentState.src);
+                iframeSrc = withSrc[(index + 1) % withSrc.length].src;
             } else {
-                iframeSrc = iframe[0].src;
+                iframeSrc = withSrc[0].src;
             }
 
             // set tab state
             sendResultingTabState({
                 state: TabStateEnum.PageContainsIFrameTag,
-                iframeSource: iframeSrc,
+                src: iframeSrc,
             });
 
             // tooltip
-            triggerTooltipWithMessage(actionResultsStrings.scanNow.iFrameFound, ActionResultEnum.Scan);
+            if (iframeSrc !== currentState.src) {
+                triggerTooltipWithMessage(actionResultsStrings.scanNow.iFrameFound, ActionResultEnum.Scan);
+            } else if (!!data?.showResponse) {
+                triggerTooltipWithMessage(actionResultsStrings.scanNow.noChanges, ActionResultEnum.Scan);
+            }
         }
         return;
     }
@@ -90,7 +114,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         sendResultingTabState({ state: TabStateEnum.PageCannotUseThisExtension });
 
         // tooltip
-        triggerTooltipWithMessage(actionResultsStrings.scanNow.noChanges, ActionResultEnum.Scan);
+        triggerTooltipWithMessage(actionResultsStrings.scanNow.nothingFound, ActionResultEnum.Scan);
     } else {
         // if nothing is found and it is first check => check again
         setTimeout(() => checkVideoAvailability({ showResponse: true }), 2500);
@@ -98,25 +122,11 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
 
 };
 
-// iframe sources to ignore => mostly ads
-const iframeSourcesToIgnore = [
-    'https://clients5.google.com/pagead/drt/dn/',
-    'ogs.google.com',
-    'comments',
-    'google_ads_iframe',
-    'googleads',
-    'googlesyndication.com',
-    'facebook.com/v2.0/,plugins',
-];
-const isSourceInIgnoredIframeSources = (src: string): boolean => {
-    return iframeSourcesToIgnore.filter((val) => src.includes(val)).length > 0;
-};
-
 const getCurrentTabState = () => {
     const activeReducer: ActiveTabReducerState = store.getState().activeTabReducer;
     return {
         state: activeReducer.state,
-        iframeSource: activeReducer.iframeSource,
+        src: activeReducer.src,
         videoDuration: activeReducer.videoDuration,
     } as TabState;
 };
