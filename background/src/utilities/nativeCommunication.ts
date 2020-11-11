@@ -1,5 +1,5 @@
 import { AppActionTypeEnum, nativeAppTitle, RootReducerState, shutdownCommands } from 'common';
-import { EchoNativeMessage, ExecuteCommandNativeMessage, NativeMessageTypeEnum } from 'common-native-client';
+import { NativeMessage, NativeMessageTypeEnum } from 'common-native-client';
 import { store } from '../';
 
 export const connecToNativeApp = () => {
@@ -9,7 +9,7 @@ export const connecToNativeApp = () => {
             data: !!resp?.data.isActive,
         });
     };
-    const message: EchoNativeMessage = {
+    const message: NativeMessage = {
         type: NativeMessageTypeEnum.Echo,
         data: {
             isActive: true,
@@ -25,9 +25,9 @@ export const connecToNativeApp = () => {
 
 export const shutdownCommand = (sendResponse?: any) => {
     const platform = (store.getState() as RootReducerState).appReducer.platformType;
-    const message: ExecuteCommandNativeMessage = {
+    const message: NativeMessage = {
         type: NativeMessageTypeEnum.ExecuteCommand,
-        command: shutdownCommands[platform],
+        data: shutdownCommands[platform],
     };
 
     chrome.runtime.sendNativeMessage(

@@ -1,5 +1,4 @@
 import {  BackgroundMessageTypeEnum,
-    ChromeApiMessage,
     ContentScriptMessageTypeEnum,
     isShutdownScheduledSelector,
     RootReducerState } from 'common';
@@ -22,14 +21,11 @@ const storeWithMiddleware = applyMiddleware(store, ...[thunk]);
 storeWithMiddleware.ready().then(() => {
     store.dispatch(toggleIsSportDialogOpen(false));
 
-    const isHostActive = store.getState().appReducer.isHostAppActive;
-    const isShutdownScheduled = isShutdownScheduledSelector(store.getState() as RootReducerState);
-    if (!isHostActive) {
-        communicationManager.sendMessageToBackgroundPage({
-            type: BackgroundMessageTypeEnum.CheckNativeApp,
-        } as ChromeApiMessage);
-    }
+    communicationManager.sendMessageToBackgroundPage({
+        type: BackgroundMessageTypeEnum.CheckNativeApp,
+    });
 
+    const isShutdownScheduled = isShutdownScheduledSelector(store.getState() as RootReducerState);
     if (!isShutdownScheduled) {
         communicationManager.sendMessageToActiveTab({
             type: ContentScriptMessageTypeEnum.CheckVideoAvailability,
