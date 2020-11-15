@@ -24,7 +24,7 @@ module.exports = {
           include: [
              path.resolve(__dirname, 'src'), 
              path.resolve(__dirname, '../common'),
-             path.resolve(__dirname, '../../common')
+             path.resolve(__dirname, '../common-native-client')
           ],
           loader: "awesome-typescript-loader"
         }

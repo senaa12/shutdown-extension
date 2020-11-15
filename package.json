@@ -6,11 +6,12 @@
   "scripts": {
     "build-popup": "cross-env ENV=dev webpack --config ./popup/webpack.config.js --mode production",
     "build-popup-prod": "webpack --config ./popup/webpack.config.js --mode production",
-    "build-content-script": "webpack --config ./content-script/webpack.config.js --mode production",
+    "build-content-script": "cross-env ENV=dev webpack --config ./content-script/webpack.config.js --mode production",
+    "build-content-script-prod": "webpack --config ./content-script/webpack.config.js --mode production",
     "build-background": "cross-env ENV=dev webpack --config ./background/webpack.config.js --mode production",
     "build-background-prod": "webpack --config ./background/webpack.config.js --mode production",
     "build": "npm run build-popup && npm run build-content-script && npm run build-background",
-    "build-prod": "npm run build-popup-prod && npm run build-content-script && npm run build-background-prod",
+    "build-prod": "npm run build-popup-prod && npm run build-content-script-prod && npm run build-background-prod",
     "test": "jest"
   },
   "browser": {

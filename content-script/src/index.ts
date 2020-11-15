@@ -2,10 +2,13 @@ import {
     CallbackFunction,
     ChromeApiMessage,
     ContentScriptMessageTypeEnum,
+    logger,
     MessageSender} from 'common';
 import { Store } from 'webext-redux';
 import { removeShutdown, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
+
+const isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : false;
 
 const messageHandler = (
     request: ChromeApiMessage,
@@ -30,6 +33,6 @@ const messageHandler = (
 const store = new Store();
 store.ready().then(() => {
     // when tab opens register message handler
-    chrome.runtime.onMessage.addListener(messageHandler);
+    chrome.runtime.onMessage.addListener(logger(messageHandler, isProduction));
 });
 export default store;

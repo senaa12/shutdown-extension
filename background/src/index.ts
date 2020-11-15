@@ -1,3 +1,4 @@
+import { logger } from 'common';
 import { wrapStore } from 'webext-redux';
 import messageHandler from './messageHandler';
 import createStore, { getMiddleware } from './reducers/store';
@@ -20,7 +21,7 @@ chrome.tabs.onRemoved.addListener(onRemoved);
 // browser back button
 chrome.webNavigation.onHistoryStateUpdated.addListener(onHistoryStateUpdated);
 
-chrome.runtime.onMessage.addListener(messageHandler);
+chrome.runtime.onMessage.addListener(logger(messageHandler, isProduction));
 
 loadInitialSportLeaguesToCollect();
 

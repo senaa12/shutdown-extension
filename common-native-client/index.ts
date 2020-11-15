@@ -3,12 +3,8 @@
 // contains models common for app part (extension) and host part (native application)
 
 export enum NativeMessageTypeEnum {
-    Echo,
-    ExecuteCommand,
-}
-
-export interface NativeMessageBase {
-    type: NativeMessageTypeEnum;
+    Echo = 'ECHO',
+    ExecuteCommand = 'EXECUTE_COMMAND',
 }
 
 export interface NativeMessagePayloadMapper {
@@ -16,14 +12,14 @@ export interface NativeMessagePayloadMapper {
     [NativeMessageTypeEnum.ExecuteCommand]: string;
 }
 
-export interface NativeMessageTypings<P extends {}, T extends keyof P> {
+export interface NativeMessageTypings<T extends keyof NativeMessagePayloadMapper> {
     type: T;
-    data: P[T];
+    data: NativeMessagePayloadMapper[T];
 }
 
 export declare type NativeMessage =
-    NativeMessageTypings<NativeMessagePayloadMapper, NativeMessageTypeEnum.Echo> |
-    NativeMessageTypings<NativeMessagePayloadMapper, NativeMessageTypeEnum.ExecuteCommand>;
+    NativeMessageTypings<NativeMessageTypeEnum.Echo> |
+    NativeMessageTypings<NativeMessageTypeEnum.ExecuteCommand>;
 
 export declare type Push = (mess: NativeMessage) => void;
 export declare type Done = () => void;
