@@ -9,9 +9,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
-import { changeTimeSelected } from '../../actions/actions';
+import { changeTimeSelected, toggleShutdownIfVideoChanges } from '../../actions/actions';
 import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader';
+import CheckBox from '../reusableComponents/checkboxComponent';
 import LoadingComponent from '../reusableComponents/loadingComponent';
+import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
 import './VideoEndComponent.scss';
 
@@ -21,9 +23,11 @@ interface VideoEndComponentState {
 }
 
 interface VideoEndShutdownComponenStateProps {
+    shutdownIfVideoChanges: boolean;
     subscribedTab: number;
     selectedTime: string;
     timeChange(newTime: string): void;
+    toggleShutdownIfVideoChangesAction(val: boolean): void;
 }
 
 declare type VideoEndComponentProps = ActiveTabReducerState
@@ -36,12 +40,14 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjec
         ...state.activeTabReducer,
         subscribedTab: state.appReducer.shutdownEventScheduleData,
         selectedTime: state.appReducer.inputSelectedTime,
+        shutdownIfVideoChanges: state.appReducer.shutdownIfVideoChanges,
     };
 };
 
 const dispatchStateToProps = (dispatch: Dispatch): Partial<VideoEndComponentProps> => {
     return {
         timeChange: (newTime: string) => dispatch(changeTimeSelected(newTime)),
+        toggleShutdownIfVideoChangesAction: (val: boolean) => dispatch(toggleShutdownIfVideoChanges(val)),
     };
 };
 
@@ -52,7 +58,11 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
             tabTitle: '',
             selectedTime: '00:00:00',
         };
+
+        this.checkboxRef = React.createRef();
     }
+
+    private checkboxRef: any;
 
     public componentDidMount() {
         if (this.props.subscribedTab) {
@@ -65,6 +75,12 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
     private navigateToSelectedTab = () => chrome.tabs.update(this.props.subscribedTab, { active: true });
     private navigateToIframeSource = () => chrome.tabs.update({ url: this.props.src });
     private readMoreAbout = () => window.open(links.FAQ, '_blank');
+    private tooltipMessage = (
+        <>
+            Check this option if you want your computer to shutdown even if the video does not
+            reach the selected time<br />(eg. Netflix plays the next episode)
+        </>
+    );
 
     private renderContent = () => {
         const {
@@ -72,6 +88,8 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
             src,
             subscribedTab,
             currentTabId,
+            shutdownIfVideoChanges,
+            toggleShutdownIfVideoChangesAction,
         } = this.props;
         const shutdownIsSubscribed = subscribedTab > 0;
 
@@ -98,6 +116,19 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
                             labelClassname={'small-label'}
                             label={`Computer will shut down at ${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`}
                         />
+                        <SimpleTooltipComponent
+                            parentRef={this.checkboxRef}
+                            content={this.tooltipMessage}
+                            tooltipClassname={'video-shutdown-tooltip'}
+                        >
+                            <CheckBox
+                                ref={this.checkboxRef}
+                                checkboxClassname={'video-checkbox'}
+                                checked={shutdownIfVideoChanges}
+                                handleOnCheckboxChange={toggleShutdownIfVideoChangesAction}
+                                label={'Shutdown if video changes'}
+                            />
+                        </SimpleTooltipComponent>
                     </>
                 );
             }

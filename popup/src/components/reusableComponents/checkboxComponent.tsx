@@ -15,9 +15,9 @@ interface CheckboxProps {
     handleOnCheckboxChange?: (value: any) => void;
 }
 
-const CheckboxComponent = ({
-    checked, disabled, handleOnCheckboxChange, label, labelClassname, checkboxClassname, style
-}: CheckboxProps) => {
+const CheckboxComponent = React.forwardRef(({
+    checked, disabled, handleOnCheckboxChange, label, labelClassname, checkboxClassname, style,
+}: CheckboxProps,                           ref: any) => {
     const checkboxOnClick = useCallback(() => {
         if (!disabled && handleOnCheckboxChange) {
             handleOnCheckboxChange(!checked);
@@ -33,6 +33,7 @@ const CheckboxComponent = ({
 
     return (
         <div
+            ref={ref}
             style={style}
             className={checkboxclassname}
         >
@@ -44,6 +45,6 @@ const CheckboxComponent = ({
             </label>
         </div>
     );
-};
+});
 
 export default CheckboxComponent;

@@ -30,6 +30,7 @@ export interface ActionButtonCustomProps {
     isCancelButtonDisabled: boolean;
     selectedTime: string;
     videoDuration?: number;
+    videoSrc?: string;
     isHostAppActive: boolean;
 
     actionResultTooltipContent: React.ReactNode;
@@ -60,6 +61,7 @@ const mapStateToProps = (state: RootReducerState, ownProps: ActiveTabReaderInjec
         actionResultTooltipContent: state.actionsResultReducer.actionResultTooltipMessage,
         isHostAppActive: state.appReducer.isHostAppActive,
         videoDuration: state.activeTabReducer.videoDuration,
+        videoSrc: state.activeTabReducer.src,
     };
 };
 
@@ -104,7 +106,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
     }
 
     private renderShutdownButton = () => {
-        const { appMode, currentTabId, selectedTime, videoDuration,
+        const { appMode, currentTabId, selectedTime, videoDuration, videoSrc,
             isShutdownEventScheduled, isShutdownButtonDisabled,
             actionResultTooltip, actionResultTooltipContent } = this.props;
         const shutdown = () => {
@@ -112,7 +114,7 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                 case ApplicationModeEnum.VideoPlayer: {
                     communicationManager.sendMessageToTab(currentTabId ?? 0, {
                         type: ContentScriptMessageTypeEnum.SubscribeToVideoEnd,
-                        data: { selectedTime, videoDuration },
+                        data: { selectedTime, videoDuration, videoSrc },
                     } as ChromeApiMessage);
                     break;
                 }

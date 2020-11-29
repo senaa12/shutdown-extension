@@ -94,6 +94,7 @@ export const actionResultsStrings = {
     shutdown: {
         success: 'Success',
         failed: 'Failed',
+        failedVideoDisappeared: 'Video you scheduled shutdown dissape disappeared',
         failedCountdown: 'Not supported less than 60 seconds',
         failedTimer: 'Cannot select date in the past',
         failedSport: 'Game is already finished',

@@ -90,7 +90,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
     const calculatePosition = (): Partial<React.CSSProperties> => {
         const hidden: React.CSSProperties = {
             opacity: 0,
-            position: 'absolute',
+            position: 'fixed',
             pointerEvents: 'none',
         };
 
@@ -119,7 +119,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
         switch (props.position) {
             case 'bottom':
                 return {
-                    position: 'absolute',
+                    position: 'fixed',
                     display: 'flex',
                     flexDirection: 'column-reverse',
                     opacity: 1,
@@ -129,7 +129,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             case 'top':
             default:
                 return {
-                    position: 'absolute',
+                    position: 'fixed',
                     display: 'flex',
                     flexDirection: 'column',
                     opacity: 1,

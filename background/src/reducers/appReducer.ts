@@ -11,6 +11,7 @@ export const appReducerInitialState: AppReducerState = {
     shutdownEvent: undefined,
     inputSelectedDateTimeString: initialDateTime(),
     inputSelectedTime: initialTime,
+    shutdownIfVideoChanges: true,
 };
 
 export default (state = appReducerInitialState, action: Action): AppReducerState => {
@@ -70,6 +71,12 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
             return {
                 ...state,
                 platformType: action.data,
+            };
+        }
+        case AppActionTypeEnum.ToggleShutdownIfVideoChanges: {
+            return {
+                ...state,
+                shutdownIfVideoChanges: action.data,
             };
         }
         default:

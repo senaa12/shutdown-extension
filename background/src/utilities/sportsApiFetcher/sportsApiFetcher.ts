@@ -73,7 +73,7 @@ class SportsApiFetcher {
         await Promise.all(selectedLeagues!.map(async(league) => {
             const uri = `sports/${sportEndpointsMap[league.sport].baseEndpoint}/${[league.endpoint]}/scoreboard?dates=${dateQueryLabel}`;
 
-            const result = await this.executeRequest(uri);
+            const result = await this.executeRequest(uri, { events: [] });
             result.events
                     .filter((x) => x.status.type.state === this.matchInGameKeyWord)
                     .forEach((event) => {
@@ -115,20 +115,21 @@ class SportsApiFetcher {
         return dateString;
     }
 
-    private executeRequest = async(uri: string): Promise<any> => {
-        console.log(`${this.sportsApiEndpointBase}${uri}`);
-
+    private executeRequest = async(uri: string, defaultResponse?: any): Promise<any> => {
         const resp = await fetch(`${this.sportsApiEndpointBase}${uri}`);
 
         const data = await resp.json();
         if (resp.ok) {
-
-            console.log(data);
             return Promise.resolve(data);
         } else {
             if (resp.status === 429) {
                 this.isThrottled = true;
                 this.throttlingDate = new Date();
+            }
+
+            // bad gateway happends from time to time
+            if (resp.status === 502) {
+                return Promise.resolve(defaultResponse);
             }
 
             console.error(data);

@@ -21,6 +21,7 @@ export interface AppReducerState {
     shutdownEventScheduleData: number;
     /** shutdown function */
     shutdownEvent: any;
+    shutdownIfVideoChanges: boolean;
     inputSelectedTime: string;
     inputSelectedDateTimeString: string;
     platformType: PlatformEnum;
