@@ -15,9 +15,10 @@ import store from '.';
 import { changeInputSelectedTime, sendResultingTabState, triggerTooltipWithMessage } from './actions';
 
 export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFunction) => {
+    triggerTooltipWithMessage('', ActionResultEnum.None);
+
     const videoTag: Array<HTMLMediaElement> = Array.from(document.getElementsByTagName('video'));
     const currentState: TabState = getCurrentTabState();
-
     if (videoTag.length) {
         // page has video tag so we check duration
         if (!videoTag[0].duration || isNaN(videoTag[0].duration)) {

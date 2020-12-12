@@ -31,9 +31,8 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
 };
 
 export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdateProperties, tab: Tab) => {
-    const isPopupOpened = isPopupOpenWrapper();
     const isShutdownScheduled = isShutdownScheduledSelector(store.getState());
-    if (isPopupOpened && !isShutdownScheduled) {
+    if (!isShutdownScheduled) {
         // tslint:disable-next-line: no-string-literal
         if (changeInfo['status'] && changeInfo['status'] === 'loading') {
             store.dispatch({
