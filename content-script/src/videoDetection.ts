@@ -26,6 +26,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
         } else if (videoTag[0].duration.toString() === 'Infinity') {
             // if infinity => delay, possible bug
             setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
+            return;
         } else {
             let videoDuration: number;
             let videoSource: string;
@@ -64,8 +65,8 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
                 triggerTooltipWithMessage(actionResultsStrings.scanNow.noChanges, ActionResultEnum.Scan);
             }
 
+            return;
         }
-        return;
     }
 
     const iframeSourcesToIgnore = await sendMessageToBackgroundPage<Array<string>>({

@@ -5,7 +5,7 @@
  * saves it in storage local and while crawling web page fetches list and filters found iframes.
  */
 
-import { setStorageLocal, StorageLocalKeys } from 'common';
+import { getStorageLocal, setStorageLocal, StorageLocalKeys } from 'common';
 
 const adBlockPlusAdsSources = 'https://pgl.yoyo.org/as/serverlist.php?hostformat=adblockplus;showintro=0';
 
@@ -22,6 +22,7 @@ const additionalIframeSourcesToIgnore = [
     'twitter.com/widgets/',
     'facebook.com/common/referer_frame.php',
     'recaptcha/api',
+    'about:blank',
 ];
 
 export const fetchIframeAdsSources = async() => {
@@ -42,7 +43,10 @@ export const fetchIframeAdsSources = async() => {
             await setStorageLocal(StorageLocalKeys.IframeAdsSources, additionalIframeSourcesToIgnore);
         }
      } catch (ex) {
-        await setStorageLocal(StorageLocalKeys.IframeAdsSources, additionalIframeSourcesToIgnore);
+        const currentResult = await getStorageLocal<Array<string>>(StorageLocalKeys.IframeAdsSources);
+        if (!currentResult || !currentResult.length) {
+            await setStorageLocal(StorageLocalKeys.IframeAdsSources, additionalIframeSourcesToIgnore);
+        }
 
         console.error(ex);
      }

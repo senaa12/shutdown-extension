@@ -155,3 +155,7 @@ export function deepEqual<T>(object1: T, object2: T, byKey?: Array<keyof T>) {
 export function isObject(object) {
     return object != null && typeof object === 'object';
 }
+
+export function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms) );
+}
