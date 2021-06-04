@@ -25,8 +25,8 @@ export interface SnowfallProps {
 const snowfall = (props: SnowfallProps) => {
     const shouldShowSnowfall = React.useMemo(() => {
         const today = new Date();
-        const startDateString = '9/12';
-        const endDateString = '6/1';
+        const startDateString = '9/11';
+        const endDateString = '7/0';
 
         let startDate, endDate;
         if (today.getMonth() === 11) {

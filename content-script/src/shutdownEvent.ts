@@ -22,10 +22,10 @@ export const checkVideoForShutdown = (selectedTime: number, duration: number, vi
     let videoTag = Array.from(document.getElementsByTagName('video')).find((obj) =>
             obj.duration && obj.src === videoSrc) as HTMLMediaElement;
 
-    if (!videoTag) {
-        videoTag = Array.from(document.getElementsByTagName('video')).find((obj) =>
-            obj.duration && Math.round(obj.duration) === duration) as HTMLMediaElement;
-    }
+    // if (!videoTag) {
+    //     videoTag = Array.from(document.getElementsByTagName('video')).find((obj) =>
+    //         obj.duration && Math.round(obj.duration) === duration) as HTMLMediaElement;
+    // }
 
     if (!!videoTag) {
         if (videoTag.currentTime - 1 < selectedTime &&  videoTag.currentTime > selectedTime) {
