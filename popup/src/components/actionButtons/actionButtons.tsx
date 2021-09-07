@@ -76,17 +76,7 @@ const mapDispatchToProps = (dispatch: Dispatch): ActionButtonDispatchProps => {
 class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState> {
     constructor(props: ActionButtonProps) {
         super(props);
-
-        this.shutdownButtonRef = React.createRef();
-        this.cancelButtonRef = React.createRef();
-        this.scanNowButtonRef = React.createRef();
-        this.addSportButtonRef = React.createRef();
     }
-
-    private shutdownButtonRef: React.RefObject<any>;
-    private cancelButtonRef: React.RefObject<any>;
-    private scanNowButtonRef: React.RefObject<any>;
-    private addSportButtonRef: React.RefObject<any>;
 
     private baseClassName = 'action-button';
     private actionTooltipsBaseClassName = 'action-tooltips';
@@ -153,10 +143,8 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
                 isOpen={actionResultTooltip === ActionResultEnum.Shutdown}
                 trigger={'manual'}
                 tooltipClassname={tooltipClassName}
-                parentRef={this.shutdownButtonRef}
             >
                 <ButtonComponent
-                    ref={this.shutdownButtonRef}
                     className={this.baseClassName}
                     label={'Shutdown'}
                     onClick={onClick}
@@ -181,14 +169,12 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
 
         return(
             <SimpleTooltipComponent
-                parentRef={this.scanNowButtonRef}
                 content={actionResultTooltipContent}
                 isOpen={actionResultTooltip === ActionResultEnum.Scan && appMode === ApplicationModeEnum.VideoPlayer}
                 trigger={'manual'}
                 tooltipClassname={this.actionTooltipsBaseClassName}
             >
                 <ButtonComponent
-                    ref={this.scanNowButtonRef}
                     className={this.baseClassName}
                     label={'Scan now'}
                     onClick={onClick}
@@ -207,14 +193,12 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
         const tooltipClassName = classNames(this.actionTooltipsBaseClassName, 'sucess-tooltip');
         return (
             <SimpleTooltipComponent
-                parentRef={this.addSportButtonRef}
                 content={actionResultTooltipContent}
                 isOpen={actionResultTooltip === ActionResultEnum.Saved}
                 trigger={'manual'}
                 tooltipClassname={tooltipClassName}
             >
                 <ButtonComponent
-                    ref={this.addSportButtonRef}
                     className={this.baseClassName}
                     label={'Add sports'}
                     onClick={openSelectSportDialog}
@@ -246,14 +230,12 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
         });
         return (
             <SimpleTooltipComponent
-                parentRef={this.cancelButtonRef}
                 content={actionResultTooltipContent}
                 isOpen={actionResultTooltip === ActionResultEnum.Canceled}
                 trigger={'manual'}
                 tooltipClassname={'action-tooltips cancel error-tooltip'}
             >
                 <ButtonComponent
-                    ref={this.cancelButtonRef}
                     className={className}
                     label={'Cancel'}
                     onClick={onClick}

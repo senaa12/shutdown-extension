@@ -58,11 +58,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
             tabTitle: '',
             selectedTime: '00:00:00',
         };
-
-        this.checkboxRef = React.createRef();
     }
-
-    private checkboxRef: any;
 
     public componentDidMount() {
         if (this.props.subscribedTab) {
@@ -117,12 +113,10 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
                             label={`Computer will shut down at ${this.props.selectedTime}/${convertSecondsToTimeFormat(this.props.videoDuration, true)}`}
                         />
                         <SimpleTooltipComponent
-                            parentRef={this.checkboxRef}
                             content={this.tooltipMessage}
                             tooltipClassname={'video-shutdown-tooltip'}
                         >
                             <CheckBox
-                                ref={this.checkboxRef}
                                 checkboxClassname={'video-checkbox'}
                                 checked={shutdownIfVideoChanges}
                                 handleOnCheckboxChange={toggleShutdownIfVideoChangesAction}

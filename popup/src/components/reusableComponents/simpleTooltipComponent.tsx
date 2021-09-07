@@ -15,8 +15,6 @@ export interface TooltipComponentProps {
     position?: 'bottom' | 'top';
     /** in miliseconds, default is 1000, works only in Manual mode */
     tooltipHideAnimationDuration?: number;
-    /** reference where you want tooltip to show */
-    parentRef: React.RefObject<any>;
     /** on hover tooltip keep it visible */
     keepShowingTooltipOnHover?: boolean;
 }
@@ -34,8 +32,11 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
 
     const tooltipRef = useRef<HTMLDivElement>(null);
 
+    const child = React.Children.only(props.children);
+    const parentRef = useRef<HTMLElement>();
+
     const isMouseOverTooltip = useMouseHoverOverElement(tooltipRef);
-    const isMouseOverParentRef = useMouseHoverOverElement(props.parentRef);
+    const isMouseOverParentRef = useMouseHoverOverElement(parentRef as any);
 
     const setTransitionToFalse = useCallback(() => {
         setTransitionInProgress(false);
@@ -94,7 +95,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             pointerEvents: 'none',
         };
 
-        if (!tooltipRef.current || !props.parentRef || !props.parentRef.current) {
+        if (!tooltipRef.current || !parentRef || !parentRef.current) {
             // first render
             if (isOpen && !forceRerender) { disableRerender(true); }
 
@@ -102,7 +103,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
             return hidden;
         }
 
-        const parentPosition = props.parentRef.current.getBoundingClientRect();
+        const parentPosition = parentRef.current.getBoundingClientRect();
         const renderedTooltiop = tooltipRef.current.getBoundingClientRect();
         const currentStyle = tooltipRef.current.style;
 
@@ -159,7 +160,7 @@ const simpleTooltipComponent = (props: PropsWithChildren<TooltipComponentProps>)
     const className = classNames(tooltipClassName, 'flex-column', 'tooltip-base');
     return (
     <>
-        {props.children}
+        {React.cloneElement(child as any, {ref: parentRef})}
         {(isOpen || transitionInProgress) &&
             <div
                 ref={tooltipRef}

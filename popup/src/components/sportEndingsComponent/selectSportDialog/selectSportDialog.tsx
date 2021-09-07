@@ -174,7 +174,6 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
         );
     };
 
-    const closeButtonRef = React.useRef<any>();
     const customDialogFooter = () => {
         const { tooltipMessage, tooltipType } = props;
 
@@ -185,11 +184,9 @@ const selectSportDialog = (props: SelectSportDialogProps) => {
                     isOpen={false}
                     position={'top'}
                     trigger={tooltipType === ActionResultEnum.SelectLeagues ? 'hover' : 'manual'}
-                    parentRef={closeButtonRef}
                     tooltipClassname={'info-tooltip action-tooltips'}
                 >
                     <button
-                        ref={closeButtonRef}
                         onClick={closeDialog}
                         className={'button-base tile clickable override-button-style margin-left-auto'}
                     >close</button>
