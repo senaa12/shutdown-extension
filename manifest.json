@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Auto Shutdown Extension",
-    "version": "0.1.23",
+    "version": "0.1.24",
 
     "description": "Small and simple extension for automatic computer shutdown",
 
@@ -28,7 +28,6 @@
     },
 
     "permissions": [
-        "tabs",
         "activeTab",
         "nativeMessaging",
         "notifications",

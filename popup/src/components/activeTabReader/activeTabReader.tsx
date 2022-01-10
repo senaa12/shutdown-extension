@@ -7,7 +7,7 @@ export interface ActiveTabReaderInjectedProps {
 
 const activeTabReader: React.FC = (props) => {
     const [currentTab, setCurrentTab] = React.useState<undefined | number>(undefined);
-    chrome.tabs.getSelected((tab) => setCurrentTab(tab.id));
+    chrome.tabs.query({active: true}, (tab) => setCurrentTab(tab[0]?.id));
 
     if (!currentTab) {
         return <LoadingComponent />;

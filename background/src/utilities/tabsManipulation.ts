@@ -26,6 +26,9 @@ export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) 
                 message: actionResultsStrings.cancel.canceledInBackground,
             },
         } as Action);
+        store.dispatch({
+            type: TabsActionTypeEnum.ClearAndSetWaitingForFirstLoad
+        } as Action);
         changeIcon();
     }
 };
