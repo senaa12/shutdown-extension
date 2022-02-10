@@ -61,7 +61,7 @@
     "jest": "^25.5.4",
     "jest-webextension-mock": "^3.6.1",
     "mini-css-extract-plugin": "^0.8.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react-particles-js": "^3.4.0",
     "react-redux": "^7.2.1",
     "react-transition-group": "^4.4.1",
