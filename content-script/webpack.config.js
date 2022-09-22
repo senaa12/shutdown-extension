@@ -24,7 +24,7 @@ module.exports = {
              path.resolve(__dirname, 'src'), 
              path.resolve(__dirname, '../common')
           ],
-          loader: "awesome-typescript-loader"
+          loader: "ts-loader"
         }
       ]
     },

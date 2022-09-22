@@ -14,7 +14,7 @@ export default class StateBuilder {
 
     public create(initialStore: RecursivePartial<RootReducerState> = {}) {
         const store = new StateBuilder();
-        store.state = createStore(initialStore).getState();
+        store.state = {} as RootReducerState; // createStore(initialStore).getState();
 
         return store;
     }

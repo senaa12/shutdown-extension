@@ -110,4 +110,4 @@ export const actionResultsStrings = {
 
 export const initialTime = '00:00:00';
 export const initialDateTime = () => new Date().toString();
-export const isPopupOpenWrapper = () => chrome.extension.getViews({ type: 'popup' }).length > 0;
+export const isPopupOpenWrapper = () => true; // chrome.extension.getViews({ type: 'popup' }).length > 0;

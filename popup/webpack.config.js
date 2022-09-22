@@ -18,25 +18,27 @@ module.exports = {
         },
         extensions: ['.js', '.tsx', '.ts']
     },
-    optimization: {
-        runtimeChunk: 'single',
-        splitChunks: {
-            chunks: 'all' // vendor.js posebno izdvaja
-        }
-    },
+    devtool: 'cheap-module-source-map',
+    // optimization: {
+    //     runtimeChunk: 'single',
+    //     splitChunks: {
+    //         chunks: 'all' // vendor.js posebno izdvaja
+    //     }
+    // },
     module: {
         rules: [ 
             rules.styleProdLoader, 
             rules.typescriptLoader, 
             rules.svgLoader,
             rules.cssLoader,
-            rules.fileLoader
+            rules.fileLoader,
+            rules.babelLoader
         ]
     },
     plugins: [ 
         plugins.copyWebpackPlugin, 
-        plugins.miniCssExtractPlugin, 
-        plugins.hashedModulePlugin, 
+        // plugins.miniCssExtractPlugin, 
+        // plugins.hashedModulePlugin, 
         plugins.definePlugin(isProd), 
         plugins.htmlWebpackPlugin 
     ],

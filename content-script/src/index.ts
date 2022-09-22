@@ -3,8 +3,9 @@ import {
     ChromeApiMessage,
     ContentScriptMessageTypeEnum,
     logger,
-    MessageSender} from 'common';
-import { Store } from 'webext-redux';
+    MessageSender,
+    REACT_APP_REDUX_PORT} from 'common';
+import { Store } from '@eduardoac-skimlinks/webext-redux';
 import { removeShutdown, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 
@@ -30,9 +31,13 @@ const messageHandler = (
         }
 };
 
-const store = new Store();
-store.ready().then(() => {
+const proxyStore = new Store({
+	portName: REACT_APP_REDUX_PORT
+});
+
+proxyStore.ready().then(() => {
     // when tab opens register message handler
     chrome.runtime.onMessage.addListener(logger(messageHandler, isProduction));
 });
-export default store;
+
+export default proxyStore;

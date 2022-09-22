@@ -5,7 +5,7 @@ import {
     calculateSeconds,
     convertSecondsToTimeFormat,
     SportsApiRequestType} from 'common';
-import { store } from '..';
+import store from '..';
 import { changeIcon, changeSelectedTimeAction,
     removeScheduleShutdownAction, scheduleShutdownAction,
     triggerOneMinuteWarningNotification, triggerTooltipWithMessage } from './actions';

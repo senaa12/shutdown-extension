@@ -10,7 +10,7 @@ import {
     Tab,
     TabsActionTypeEnum,
     TabStateEnum} from 'common';
-import { store } from '..';
+import store from '..';
 import { changeIcon } from './actions';
 
 export const onRemoved = (tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) => {

@@ -1,6 +1,6 @@
 import { AppActionTypeEnum, nativeAppTitle, RootReducerState, shutdownCommands } from 'common';
 import { NativeMessage, NativeMessageTypeEnum } from 'common-native-client';
-import { store } from '../';
+import store from '../';
 
 export const connecToNativeApp = () => {
     const response = (resp: any) => {

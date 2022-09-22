@@ -1,5 +1,5 @@
 import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum } from 'common';
-import { store } from '..';
+import store from '..';
 
 /* #region Store actions */
 export const triggerTooltipWithMessage = (respMessage: string, action: ActionResultEnum) => {

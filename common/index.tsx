@@ -7,3 +7,4 @@ export * from './commands';
 export * from './sportApiModels';
 export * from './chromeApiPromises';
 export * from './logger';
+export * from './store';

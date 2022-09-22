@@ -1,5 +1,4 @@
 import { logger } from 'common';
-import { wrapStore } from 'webext-redux';
 import messageHandler from './messageHandler';
 import createStore, { getMiddleware } from './reducers/store';
 import { changeIcon, checkSystem } from './utilities/actions';
@@ -11,9 +10,9 @@ import { onHistoryStateUpdated, onRemoved, onUpdated } from './utilities/tabsMan
 const isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : false;
 
 const middleWare = getMiddleware(isProduction);
-export const store = createStore({}, middleWare);
+const store = await createStore();
 
-export default wrapStore(store);
+export default store;
 
 chrome.tabs.onUpdated.addListener(onUpdated);
 chrome.tabs.onRemoved.addListener(onRemoved);

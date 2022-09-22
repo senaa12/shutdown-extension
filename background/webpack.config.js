@@ -26,7 +26,7 @@ module.exports = {
              path.resolve(__dirname, '../common'),
              path.resolve(__dirname, '../common-native-client')
           ],
-          loader: "awesome-typescript-loader"
+          loader: "ts-loader"
         }
       ]
     },
@@ -36,5 +36,8 @@ module.exports = {
             PRODUCTION: JSON.stringify(isProd),
         }
       })
-    ]
+    ],
+    experiments: {
+      topLevelAwait: true
+    }
 }

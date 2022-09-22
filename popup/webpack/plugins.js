@@ -15,7 +15,7 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
     template: "popup/src/index.html"
 });
 
-const hashedModulePlugin = new webpack.HashedModuleIdsPlugin();
+const hashedModulePlugin = new webpack.ids.HashedModuleIdsPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
     filename: "[name].css",

@@ -1,16 +1,9 @@
 {
     "compilerOptions": {
-        "plugins": [
-            {
-                "name": "typescript-tslint-plugin",
-                "configFile": "./tslint.json",
-                "alwaysShowRuleFailuresAsWarnings": true,
-                "exclude": [ "node_modules" ]
-            }
-        ],
+        "target": "es2017",
         "sourceMap": true,
         "strictNullChecks": true,
-        "module": "ES2020",
+        "module": "esnext",
         "jsx": "react",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
