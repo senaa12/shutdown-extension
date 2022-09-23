@@ -1,0 +1,61 @@
+
+@function px-to-rem($value, $root-value: 14px) {
+  @return calc(1rem * ($value / $root-value));
+}
+
+// @include center(both) || @include center(horizontal) || @include center(vertical)
+@mixin center($position) {
+    position: absolute;
+    
+    @if $position == 'vertical' {
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+    @else if $position == 'horizontal' {
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      transform: translate(-50%);
+    }
+    @else if $position == 'both' {
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  }
+
+
+  /*
+  @include screen('tablet') {
+    width: 90%;
+  }
+  */
+  @mixin screen($size) {
+    $desktop: "(min-width: 1024px)";
+    $tablet: "(min-width: 768px) and (max-width: 1023px)";
+    $mobile: "(max-width: 767px)";
+    @if $size == desktop {
+      @media only screen and #{$desktop} {
+        @content;
+      }
+    }
+    @else if $size == tablet {
+      @media only screen and #{$tablet} {
+        @content;
+      }
+    }
+    @else if $size == mobile {
+      @media only screen and #{$mobile} {
+        @content;
+      }
+    }
+    @else {
+      @media only screen and #{$size} {
+        @content;
+      }
+    }
+  }

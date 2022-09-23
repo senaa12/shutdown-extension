@@ -1,0 +1,27 @@
+.timer-component {
+    height: 100%;
+    margin: 0 10px 15px 10px;
+
+    .input-style.current-time {
+        width: 102px;
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    }
+
+    .shutdownScheduled {
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    }
+    
+    .custom-time {
+        width: 200px;
+        font-size: var(--title-font-size);
+    }
+
+    .custom-date {
+        width: 200px;
+        margin-top: 1px !important; 
+    }
+}

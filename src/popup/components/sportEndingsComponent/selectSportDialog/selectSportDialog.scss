@@ -1,0 +1,49 @@
+.select-sport-input {
+    width: calc(100% - 20px);
+
+    &:focus {
+        text-shadow: initial !important;
+        color: var(--font-color);
+    }
+
+    &:hover {
+        cursor: text !important;
+    }
+}
+
+.sports-label-select-league-dialog {
+    font-weight: 700;
+    font-size: var(--big-font-size);
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.details {
+    & summary {
+        margin: 10px 0 15px 0;
+    }
+
+    &[open] summary {
+        margin: 10px 0 5px 0;
+    }
+}
+
+.info-tooltip {
+    width: 110px;
+}
+
+.select-sport-checkbox {
+    text-align: initial;
+}
+
+.hoverable {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.no-result {
+    font-size: var(--big-font-size);
+}

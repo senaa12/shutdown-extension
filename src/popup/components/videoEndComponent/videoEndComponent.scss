@@ -1,0 +1,25 @@
+.video-end-component {
+    height: 100%;
+    margin: 0 10px 15px 10px;
+
+    .small-label {
+        font-size: var(--small-font-size);
+    }
+
+    .read-more {
+        margin-top: auto;
+        margin-bottom: 10px;
+        font-size: var(--small-font-size);
+        .link {
+            margin: 0;
+        }
+    }
+
+    .video-checkbox {
+        margin: auto 0 10px 0;
+    }
+
+    .video-shutdown-tooltip {
+        max-width: 285px;
+    }
+}

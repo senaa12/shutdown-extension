@@ -1,0 +1,45 @@
+// **main** mixin => full color pallete
+@mixin color-pallete($color, $name) {
+  @include light-color-pallete($color, $name, $do-not-show-base: true);
+  @include dark-color-pallete($color, $name);
+  @include transperent-color-pallete($color, $name, $do-not-show-base: true);
+}
+
+// lighter part of color pallete for base
+@mixin light-color-pallete($color, $name, $do-not-show-base: false) {
+  @for $i from 8 to 0 {
+      --#{$name}-#{$i * 5}-light: #{lighten($color, percentage($i * 0.05))};
+  }
+  @if $do-not-show-base == false {
+    --#{$name}: #{$color};
+  }
+}
+
+// darker part of color palete for base
+@mixin dark-color-pallete($color, $name, $do-not-show-base: false) {
+  @if $do-not-show-base == false {
+    --#{$name}: #{$color};
+  }  
+  @for $i from 1 to 9 {
+    --#{$name}-#{$i * 5}-dark: #{darken($color, percentage($i * 0.05))};
+  }
+}
+
+// transperent colors from base
+@mixin transperent-color-pallete($color, $name, $do-not-show-base: false) {
+  @if $do-not-show-base == false {
+    --#{$name}: #{$color};
+  }  
+  @for $i from 1 to 10 {
+      --#{$name}-#{$i * 10}-transp: #{rgba($color, ($i * 0.1))}
+  }  
+}
+
+// pretty solid, use with rgba => #{opaquify-color(rgba($color, 0.n))}, n€<0,1>
+@function opaquify-color($color, $background-color: black) {
+  $opacity: alpha($color);
+  $red: $opacity * red($color) + (1 - $opacity) * red($background-color);
+  $green: $opacity * green($color) + (1 - $opacity) * green($background-color);
+  $blue: $opacity * blue($color) + (1 - $opacity) * blue($background-color);
+  @return rgb($red, $green, $blue);
+}

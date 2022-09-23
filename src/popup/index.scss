@@ -1,0 +1,264 @@
+@import "./assets/style/functions.scss";
+@import "./assets/style/variables.scss";
+@import "./assets/style/colors-generator.scss";
+
+/* FONT STUFF*/
+// @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap');
+// REPLACED WITH FILES IN PROJECT 
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('assets/font/Ubuntu-Regular.ttf'),
+         url('assets/font/Ubuntu-MediumItalic.ttf'),
+         url('assets/font/Ubuntu-Medium.ttf'),
+         url('assets/font/Ubuntu-LightItalic.ttf'),
+         url('assets/font/Ubuntu-Light.ttf'),
+         url('assets/font/Ubuntu-Italic.ttf'),
+         url('assets/font/Ubuntu-BoldItalic.ttf'),
+         url('assets/font/Ubuntu-Bold.ttf');
+}
+
+:root {
+    --small-font-size: #{px-to-rem(10px)};
+    --normal-font-size: #{px-to-rem(12px)};
+    --big-font-size: #{px-to-rem(14px)};
+    --title-font-size: #{px-to-rem(18px)};
+    --time-font-size: #{px-to-rem(25px)};
+
+    --background-color: var(--yellow-10-light);
+    --clickabile-color: var(--yellow-30-light);
+    --selected-tile-color: var(--yellow-15-dark);
+    --disabled-color: #{darken($yellow, percentage(0.02))};
+    --hover-color: var(--yellow-40-dark);
+    --border-color: var(--yellow-35-dark);
+    --box-shadow-color: var(--black-40-light);
+    --font-color: var(--black);
+
+    @include color-pallete($blue, "blue");
+    @include color-pallete($green, "green");
+    @include color-pallete($red, "red");
+    @include color-pallete($yellow, "yellow");
+    @include dark-color-pallete($white, "white");
+    @include light-color-pallete($black, "black");
+}    
+
+body { 
+    height: $extension-height;
+    width: $extension-width;
+    padding: 10px 5px;
+    margin: 0;
+    background-color: var(--background-color);
+    font-family: 'Ubuntu', sans-serif;
+    font-size: var(--normal-font-size);
+
+    // disable selection
+    -webkit-user-select: none;
+    -moz-user-select: none;   
+    -ms-user-select: none;    
+    user-select: none;
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .tile {
+        font-size: var(--normal-font-size);
+        width: fit-content;
+        max-width: 80%;
+        text-overflow: ellipsis;
+        margin: 10px 15px;
+        background-color: var(--background-color);
+        border: solid 1.5px var(--border-color);
+        border-radius: 14px;
+        padding: 5px 10px;;
+    }
+    
+    .link {
+        margin: 5px;
+        font-weight: 700;
+        text-overflow: ellipsis;
+        pointer-events: auto;
+        text-decoration: underline;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .clickable {
+        background-color: var(--clickabile-color);
+        border: solid 1.5px var(--border-color);
+        &:hover {
+            background-color: var(--clickabile-color);
+            border: solid 1.5px var(--border-color);
+            box-shadow: 0 0 8px 2px var(--box-shadow-color);
+            cursor: pointer;
+        }
+    }
+
+    .selected {
+        background-color: var(--selected-tile-color);
+        &:hover {
+            background-color: var(--selected-tile-color);
+        }
+    }
+
+    .disabled {
+        background-color: var(--disabled-color) !important;
+        user-select: none !important;
+        pointer-events: none !important;
+
+        &:hover {
+            cursor: default !important;
+            box-shadow: none;
+        }
+    }
+
+    .center-vertically {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .no-host-message{
+        padding: 10px;
+        text-align: center;
+        color: var(--white);
+        text-shadow: -1px 0 var(--black), 0 1px var(--black), 1px 0 var(--black), 0 -1px var(--black);
+    }
+
+    .shutdown-animation {
+        &-enter {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+
+          &-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+          }
+          
+          &-exit {
+            opacity: 1;
+            transform: scale(1);
+          }
+
+          &-exit-active {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 300ms, transform 300ms;
+          }
+    }
+
+    .scrollbar {
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 10px;
+            border: solid 0.1px var(--yellow-30-dark);
+            border-radius: 16px;
+        }
+
+        &::-webkit-scrollbar:hover {
+        }
+
+
+        &::-webkit-scrollbar-track {
+
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--disabled-color);
+            border: solid 1px var(--selected-tile-color);
+            border-radius: 16px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: var(--selected-tile-color);
+        }
+
+        &::-webkit-scrollbar-button {
+            display: none;
+        }
+    }
+
+    .input-style {
+        padding: 5px;
+        color: transparent;
+        text-shadow: 0 0 0 var(--font-color);
+        background-color: var(--background-color);
+        border: solid 1px var(--border-color);
+        border-radius: 8px;
+        font-family: 'Karla', sans-serif;
+        font-weight: 550;
+        text-align: center;
+        margin: 5px;
+
+        &:focus {
+            background-color: var(--background-color);
+            outline: none;
+            -webkit-appearance:none;
+        }
+    
+        &:hover {
+            cursor: pointer;
+        }
+    
+        &:disabled {
+            background: var(--disabled-color);
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            pointer-events: none;
+
+            &:hover {
+                cursor: default;
+                box-shadow: none;
+            }
+        }
+
+        &::placeholder {
+            font-weight: 400;
+            color: var(--black-40-light);
+        }
+
+        &::-webkit-datetime-edit-minute-field:focus,
+        &::-webkit-datetime-edit-hour-field:focus,
+        &::-webkit-datetime-edit-second-field:focus,
+        &::-webkit-datetime-edit-ampm-field:focus,
+        &::-webkit-datetime-edit-day-field:focus,
+        &::-webkit-datetime-edit-month-field:focus,
+        &::-webkit-datetime-edit-year-field:focus,
+        &::selection {
+            background-color: var(--background-color);
+            color: var(--red);
+        }
+    
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button,
+        &::-webkit-clear-button  {
+            display: none;
+        }
+    
+        &::-webkit-calendar-picker-indicator {
+            // transform: scale(1);
+            // transition: cubic-bezier(0.5, 1, 0.1, 1) .25s;
+            // transform-origin: 50% 50%;
+
+            &:hover {
+                // transform: scale(1.1);
+
+                cursor: pointer;
+                // background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAYAAAAGABh2xyWQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADCSURBVCiRjdKxTgJBGATg7yISTeg0EaUAmwu2PoVvZeCpfAqpoCFnQ6hoDbnGYDPgSS7hJtnM7uzMP1ssf6hQakeZ+xNm2OPQYe3xDjVGHZtGqItMeMMA3/hpCV017j+Ooc/wJRR4FXM/TygwjeElPI1exnc4hu6wwA2WMa3Dy+iL+E6hPsYxTdLwHJ5EH7c1rTKximkTrqKvzpuu8ZDJw/Dj2Rl6zdA9vnCLbRp24W30f6G6MfUSnuI3z6bLN6ox+wVJfEKbBguaAgAAAABJRU5ErkJggg==') no-repeat;
+                background-color: var(--background-color);
+            }
+
+            &:focus {
+                outline: none;
+                -webkit-appearance:none;
+            }
+        }
+    }
+}

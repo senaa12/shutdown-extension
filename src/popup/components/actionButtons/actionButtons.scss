@@ -1,0 +1,63 @@
+@import '../../assets/style/variables.scss';
+
+.action-buttons-container {
+    align-self: flex-end;
+    display: flex;
+    width: $extension-width;
+
+    .action-button {
+        width: 60px;
+        font-size: var(--small-font-size);
+    }
+}
+
+.right-buttons {
+    display: flex;
+    margin-left: auto;
+
+    .action-button {
+        position: absolute;
+        right: 9px;
+    }
+}
+
+.action-tooltips {
+    max-width: 82px;
+}
+
+.action-tooltips.cancel {
+    max-width: 130px;
+}
+
+.sucess-tooltip {
+    color: var(--white);
+    font-weight: 500;
+    .content { background-color: var(--green); }
+    .tooltip-arrow { fill: var(--green); }
+}
+
+.error-tooltip {
+    color: var(--white);
+    font-weight: 500;
+    .content { background-color: var(--red); }
+    .tooltip-arrow { fill: var(--red); }
+}
+
+.video-player-tooltip {
+    color: var(--white);
+}
+
+.cancel-hover {
+    &:hover {
+        color: var(--red);
+        .button-icon {
+            fill: var(--red);
+        }
+    }
+    &:hover.disabled{
+        color: var(--font-color);
+        .button-icon {
+            fill: var(--font-color);
+        }
+    }
+}

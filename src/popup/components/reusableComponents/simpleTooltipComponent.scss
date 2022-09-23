@@ -1,0 +1,21 @@
+.tooltip-base {
+    pointer-events: none;
+    transition: opacity .15s ease-out;
+    text-align: center;
+
+    .content {
+        background-color: var(--hover-color);
+        color: var(--white);
+        padding: 4px;
+        border-radius: 4px;
+    }
+
+    .tooltip-arrow {
+        fill: var(--hover-color);
+    }
+
+    .tooltip-bottom {
+        transform: rotate(180deg);
+        bottom: -4px;
+    }
+}

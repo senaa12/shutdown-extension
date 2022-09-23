@@ -1,36 +1,37 @@
 {
     "compilerOptions": {
-        "target": "es2017",
-        "sourceMap": true,
-        "strictNullChecks": true,
         "module": "esnext",
+        "target": "esnext",
+        "sourceMap": true,
         "jsx": "react",
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": false,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "baseUrl": "./src",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": false,
-        "moduleResolution": "Node",
-        "baseUrl": "./",
-        "esModuleInterop": true,
         "paths": {
-            "common": [ "./common/index" ],
-            "common-native-client": [ "./common-native-client/index" ],
-            "store-config": ["./background/src/reducers/store"]
+            "common": [ "common/index" ],
+            "common-native-client": [ "common-native-client/index" ]
         }
-    },
-    "include": [
-        "./background",
-        "./content-script",
-        "./popup",
-        "./common",
-        "./common-native-client"
-    ],
-    "exclude": [
+      },
+      "include": [
+        "./src/app",
+        "./src/background",
+        "./src/common",
+        "./src/common-native-client",
+        "./src/content-script",
+        "./src/popup",
+        "./test"
+      ],
+      "exclude": [
         "node_modules",
-        "./content-script/webpack.config.js",
-        "./background/webpack.config.js",
-        "./popup/webpack.config.js",
-        "./popup/webpack/plugins.js",
-        "./popup/webpack/rules.js",
-        "./popup/test/assetsTransformer.js"
-    ]
+        "./test/assetsTransformer.js"
+      ]
 }
