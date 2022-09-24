@@ -37,6 +37,7 @@ export default (state = appReducerInitialState, action: Action): AppReducerState
                     : initialTime,
                 selectedApplicationMode: state.selectedApplicationMode,
                 isHostAppActive: state.isHostAppActive,
+                platformType: state.platformType
             };
         }
         case AppActionTypeEnum.ChangeApplicationState: {

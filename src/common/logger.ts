@@ -25,7 +25,7 @@ export const wrapFunction = (
 
 export const logger = (func: FunctionType, isProduction: boolean) => {
     const log = (...args: any[]) => {
-        if (args.length && args.findIndex((x) => x.type === 'chromex.dispatch') > -1) {
+        if (args.length && args.findIndex((x) => x.type === 'chromex.dispatch' || x.type === 'chromex.fetch_state') > -1) {
             return;
         }
 
