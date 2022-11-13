@@ -41,3 +41,7 @@ Shutdown Extension triggers the native part of the extension that executes a com
 * Why do I need to navigate to IFrame when detecting video on specific sites?
 
 Some video streaming web sites do not want to expose video player directly or they don't have so they do it over IFrames. IFrame (or Inline Frame) is an HTML document embedded inside another HTML document (basically web page inside a web page); it is often used to insert content from another source. So basically if the video player is inside IFrame, it is located on a totally different address and javascript cannot reach it, that is why you have to navigate to the Iframe source when using Video Player mode.
+
+* Shutting down does not work on *MacOS*/*Linux*?
+
+You need to enable the execution of the shutdown command without the sudo privileges. To do that open the terminal and type `whoami` command to find out your username. After that run `sudo visudo` that will open a sudoers file, at the end of the file add `$username ALL=(ALL) NOPASSWD: /sbin/shutdown`.
