@@ -20,28 +20,30 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
 //     chunkFilename: "[name].css"
 // });
 
-const copyWebpackPlugin = new CopyPlugin([
-    { 
-        from: path.resolve(__dirname, "../../manifest.json"),
-        to: "manifest.json",
-    },
-    {
-        from: "resources/icon.png",
-        to: "icon.png"
-    },
-    {
-        from: "resources/icon-shutdown.png",
-        to: "icon-shutdown.png"
-    },
-    {
-        from: "resources/logo-48.png",
-        to: "logo-48.png"
-    },
-    {
-        from: "resources/logo-128.png",
-        to: "logo-128.png"
-    },
-]);
+const copyWebpackPlugin = new CopyPlugin({
+    patterns: [
+        { 
+            from: path.resolve(__dirname, "../../manifest.json"),
+            to: "manifest.json",
+        },
+        {
+            from: "resources/icon.png",
+            to: "icon.png"
+        },
+        {
+            from: "resources/icon-shutdown.png",
+            to: "icon-shutdown.png"
+        },
+        {
+            from: "resources/logo-48.png",
+            to: "logo-48.png"
+        },
+        {
+            from: "resources/logo-128.png",
+            to: "logo-128.png"
+        },
+    ]
+});
 
 const cssMinimizer = new CssMinimizerPlugin();
 
