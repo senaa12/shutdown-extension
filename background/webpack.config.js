@@ -4,6 +4,7 @@ const webpack = require("webpack");
 const isProd = process.env.ENV !== "dev";
 
 module.exports = {
+    mode: 'production',
     entry: './background/src/index.ts',
      output: {
         path: path.resolve('public'),
@@ -26,7 +27,7 @@ module.exports = {
              path.resolve(__dirname, '../common'),
              path.resolve(__dirname, '../common-native-client')
           ],
-          loader: "awesome-typescript-loader"
+          loader: "ts-loader"
         }
       ]
     },

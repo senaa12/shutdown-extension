@@ -4,6 +4,7 @@ const webpack = require("webpack");
 const isProd = process.env.ENV !== "dev";
 
 module.exports = {
+    mode: 'production',
     entry: './content-script/src/index.ts',
      output: {
         path: path.resolve('public'),
@@ -24,7 +25,7 @@ module.exports = {
              path.resolve(__dirname, 'src'), 
              path.resolve(__dirname, '../common')
           ],
-          loader: "awesome-typescript-loader"
+          loader: "ts-loader"
         }
       ]
     },

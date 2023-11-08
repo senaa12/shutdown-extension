@@ -28,8 +28,9 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
             setTimeout(() => checkVideoAvailability({ showResponse: true, ...data }), 1500);
             return;
         } else {
-            let videoDuration: number;
-            let videoSource: string;
+            let videoDuration: number | undefined;
+            let videoSource: string | undefined;
+
             // if there is video on tab and is already scaned iterate throught next
             if (!!currentState.videoDuration) {
                 // find it by duration and video source
@@ -37,8 +38,25 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
                                     obj.duration
                                     && Math.round(obj.duration) === currentState.videoDuration
                                     && obj.src === currentState.src);
-                videoDuration = videoTag[(index + 1) % videoTag.length].duration;
-                videoSource = videoTag[(index + 1) % videoTag.length].src;
+
+                let idx = 1;
+                while(idx < videoTag.length) {
+                    const potentialDuration = videoTag[(index + idx) % videoTag.length].duration;
+                    const potentialSrc = videoTag[(index + idx) % videoTag.length].src;
+
+                    if (!isNaN(potentialDuration)) {
+                        videoDuration = potentialDuration;
+                        videoSource = potentialSrc;
+                    }
+                    else {
+                        idx = idx+1;
+                    }
+                }
+
+                if (!videoDuration) {
+                    videoDuration = currentState.videoDuration;
+                    videoSource = currentState.src;
+                }
             } else {
                 videoDuration = videoTag[0].duration;
                 videoSource = videoTag[0].src;

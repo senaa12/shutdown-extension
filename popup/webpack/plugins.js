@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const definePlugin = (isProd) => new webpack.DefinePlugin({ 
     'process.env': { 
@@ -15,12 +15,10 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
     template: "popup/src/index.html"
 });
 
-const hashedModulePlugin = new webpack.HashedModuleIdsPlugin();
-
-const miniCssExtractPlugin = new MiniCssExtractPlugin({
-    filename: "[name].css",
-    chunkFilename: "[name].css"
-});
+// const miniCssExtractPlugin = new MiniCssExtractPlugin({
+//     filename: "[name].css",
+//     chunkFilename: "[name].css"
+// });
 
 const copyWebpackPlugin = new CopyPlugin([
     { 
@@ -45,10 +43,12 @@ const copyWebpackPlugin = new CopyPlugin([
     },
 ]);
 
+const cssMinimizer = new CssMinimizerPlugin();
+
 module.exports = {
     definePlugin: definePlugin,
     htmlWebpackPlugin: htmlWebpackPlugin,
-    hashedModulePlugin: hashedModulePlugin,
-    miniCssExtractPlugin: miniCssExtractPlugin,
-    copyWebpackPlugin: copyWebpackPlugin
+    //miniCssExtractPlugin: miniCssExtractPlugin,
+    copyWebpackPlugin: copyWebpackPlugin,
+    cssMinimizer
 }

@@ -80,7 +80,7 @@ export const groupBy = (array, key) => {
   };
 
 /** same as Equal function but for arrays, expensive operation */
-export function arrayDeepEqual<T>(object1: Array<T>, object2: Array<T>, byKey?: Array<keyof T>) {
+export function arrayDeepEqual<T extends {}>(object1: Array<T>, object2: Array<T>, byKey?: Array<keyof T>) {
     const compare = (obj1: T, obj2: T) => {
         const compareFunc = (a: T, b: T, keys: Array<keyof T>, iterator: number) => {
             if (a[keys[iterator]] < b[keys[iterator]]) {
@@ -126,7 +126,7 @@ export function arrayDeepEqual<T>(object1: Array<T>, object2: Array<T>, byKey?: 
     return true;
 }
 
-export function deepEqual<T>(object1: T, object2: T, byKey?: Array<keyof T>) {
+export function deepEqual<T extends {}>(object1: T, object2: T, byKey?: Array<keyof T>) {
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
 
