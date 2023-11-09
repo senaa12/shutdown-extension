@@ -7,6 +7,8 @@ export enum ContentScriptMessageTypeEnum {
     SubscribeToVideoEnd = 'SUBSCRIBE_TO_VIDEO_END',
     CheckVideoAvailability = 'CHECK_VIDEO_AVAILABILITY',
     RemoveVideoShutdownEvent = 'REMOVE_VIDEO_SHUTDOWN_EVENT',
+    FocusIframe = 'FOCUS_IFRAME',
+    BlurIframe = 'BLUR_IFRAME'
 }
 
 // => bacground messaging

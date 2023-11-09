@@ -4,10 +4,10 @@ import { CallbackFunction } from './actionModels';
 export const videoPlayerStrings = {
     notAvailable: 'This web page cannot use this extension, try clicking Scan now button to check again.',
     videoAvailable: 'Extension can be used on this web page because there is video tag available. Write at what time you want your computer to shut down.',
-    iframeAvailable: (onClick: CallbackFunction, hover: string | undefined) => (<div>
+    iframeAvailable: (onClick: CallbackFunction, hover: string | undefined, onMouseEnter: any, onMouseLeave: any) => (<div>
         This web page does not contain Video directly but does contain IFrame window
         <br />
-        <div className='link' onClick={onClick} title={hover}>CLICK HERE TO NAVIGATE TO IT</div>
+        <div className='link' onClick={onClick} title={hover} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>CLICK HERE TO NAVIGATE TO IT</div>
     </div>),
     shutdownSubscribed: {
         thisTab: (timer: string) => (<>

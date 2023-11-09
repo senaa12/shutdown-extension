@@ -1,5 +1,6 @@
-import React from 'react';
-import Particles from 'react-particles-js';
+import React, { useCallback } from 'react';
+import Particles from 'react-tsparticles';
+import { loadFull } from "tsparticles";
 
 import './snowfall.scss';
 
@@ -25,31 +26,17 @@ export interface SnowfallProps {
 const snowfall = (props: SnowfallProps) => {
     const shouldShowSnowfall = React.useMemo(() => {
         const today = new Date();
-        const startDateString = '9/11';
-        const endDateString = '7/0';
+        const startDateString = '9/12';
+        const startDate = new Date(`${new Date().getFullYear()}-${startDateString.split('/')[1]}-${startDateString.split('/')[0]}`);
 
-        let startDate, endDate;
-        if (today.getMonth() === 11) {
-            startDate = new Date(
-                today.getFullYear(),
-                parseInt(startDateString.split('/')[1]),
-                parseInt(startDateString.split('/')[0]));
-            endDate = new Date(
-                today.getFullYear() + 1,
-                parseInt(endDateString.split('/')[1]),
-                parseInt(endDateString.split('/')[0]));
-        } else {
-            startDate = new Date(
-                today.getFullYear() - 1,
-                parseInt(startDateString.split('/')[1]),
-                parseInt(startDateString.split('/')[0]));
-            endDate = new Date(
-                today.getFullYear(),
-                parseInt(endDateString.split('/')[1]),
-                parseInt(endDateString.split('/')[0]));
-        }
+        const endDateString = '7/1';
+        const endDate = new Date(`${new Date().getFullYear() + 1}-${endDateString.split('/')[1]}-${endDateString.split('/')[0]}`);
 
         return today.getTime() > startDate.getTime() && today.getTime() < endDate.getTime();
+    }, []);
+
+    const particlesInit = useCallback(async (engine: any) => {
+        await loadFull(engine);
     }, []);
 
     if (!shouldShowSnowfall) {
@@ -60,13 +47,14 @@ const snowfall = (props: SnowfallProps) => {
             <Particles
                 className='snowfall'
                 canvasClassName='snowfall-canvas'
-                params={{
+                init={particlesInit}
+                options={{
                     particles: {
                         number: {
                             value: props.density ?? SnowfallDensity.Normal,
                             density: {
                                 enable: true,
-                                value_area: 800,
+                                value_area: 850,
                             },
                         },
                         color: {
@@ -114,9 +102,9 @@ const snowfall = (props: SnowfallProps) => {
                             random: false,
                             out_mode: 'out',
                             attract: {
-                                enable: true,
-                                rotateX: 300,
-                                rotateY: 1200,
+                                enable: false,
+                                rotateX: 600,
+                                rotateY: 1200
                             },
                         },
                     },

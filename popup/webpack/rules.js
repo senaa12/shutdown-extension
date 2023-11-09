@@ -1,26 +1,27 @@
 const path = require("path");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const babelLoader = {
     test: /\.(js|jsx)$/,
     exclude: /node_modules/,
-    loader: "babel-loader"
+    use: "babel-loader"
 };
 
 const styleProdLoader = {
     test: /\.(s)css$/,
-    loader: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+    use: ["style-loader", "css-loader", "sass-loader"]
 };
 
 const cssLoader = {
     test: /\.css$/,
-    loader: ["css-loader"]
+    use: ["css-loader"]
 };
 
 const fileLoader = {
-    test: /\.(ttf|woff|woff2|png|jpe?g|gif)$/,
-    exclude: /node_modules/,
-    loader: 'file-loader'
+    test:  /\.(jpg|jpeg|png|woff|woff2|eot|ttf)$/,
+    type: 'asset/resource',
+    generator: {
+        filename: 'resources/[hash][ext]'
+    }
 }
 
 const typescriptLoader = {
@@ -29,13 +30,13 @@ const typescriptLoader = {
     include: [
         path.resolve(__dirname, '../src'), 
         path.resolve(__dirname, '../../common')
-     ],
-    loader: "awesome-typescript-loader"
+    ],
+    use: "ts-loader"
 };
 
 const svgLoader = {
     test: /\.svg$/,
-    loader: "svg-sprite-loader",
+    use: 'svg-sprite-loader',
     include: [path.resolve(__dirname, '../src/assets/icons')]
 }
 

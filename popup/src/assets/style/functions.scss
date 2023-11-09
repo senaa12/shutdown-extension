@@ -1,5 +1,5 @@
 @function px-to-rem($value, $root-value: 14px) {
-    @return 1rem * ($value / $root-value);
+    @return 1rem * calc($value / $root-value);
 }
 
 // @include center(both) || @include center(horizontal) || @include center(vertical)

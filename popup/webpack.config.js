@@ -7,6 +7,7 @@ const isProd = process.env.ENV != "dev";
 console.log(`Is prod: ${isProd}\n`);
 
 module.exports = {
+    mode: 'production',
     entry: "./popup/src/index.tsx",
     output: {
         path: path.resolve(__dirname, '../public'),
@@ -19,10 +20,13 @@ module.exports = {
         extensions: ['.js', '.tsx', '.ts']
     },
     optimization: {
-        runtimeChunk: 'single',
+        moduleIds: 'deterministic',
         splitChunks: {
             chunks: 'all' // vendor.js posebno izdvaja
-        }
+        },
+        minimizer: [
+            plugins.cssMinimizer
+        ]
     },
     module: {
         rules: [ 
@@ -35,8 +39,6 @@ module.exports = {
     },
     plugins: [ 
         plugins.copyWebpackPlugin, 
-        plugins.miniCssExtractPlugin, 
-        plugins.hashedModulePlugin, 
         plugins.definePlugin(isProd), 
         plugins.htmlWebpackPlugin 
     ],
