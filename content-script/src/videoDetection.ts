@@ -47,6 +47,7 @@ export const checkVideoAvailability = async(data: any, sendResponse?: CallbackFu
                     if (!isNaN(potentialDuration)) {
                         videoDuration = potentialDuration;
                         videoSource = potentialSrc;
+                        break;
                     }
                     else {
                         idx = idx+1;

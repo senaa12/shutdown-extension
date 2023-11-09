@@ -11,6 +11,9 @@ export const focusIframe = () => {
 
     const iframe = Array.from(document.getElementsByTagName('iframe'))
             .find((ifr) => ifr.src === currentTabState.src);
+    if (iframe === null) {
+        return;
+    }
 
     const boundingClientRect = iframe!.getBoundingClientRect();
 
