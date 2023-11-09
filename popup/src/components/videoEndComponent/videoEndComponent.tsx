@@ -1,5 +1,7 @@
 import {
     ActiveTabReducerState,
+    ChromeApiMessage,
+    ContentScriptMessageTypeEnum,
     convertSecondsToTimeFormat,
     links,
     RootReducerState,
@@ -7,7 +9,6 @@ import {
     videoPlayerStrings } from 'common';
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Dispatch } from 'redux';
 import { changeTimeSelected, toggleShutdownIfVideoChanges } from '../../actions/actions';
 import { ActiveTabReaderInjectedProps } from '../activeTabReader/activeTabReader';
@@ -15,6 +16,7 @@ import CheckBox from '../reusableComponents/checkboxComponent';
 import LoadingComponent from '../reusableComponents/loadingComponent';
 import SimpleTooltipComponent from '../reusableComponents/simpleTooltipComponent';
 import TimeDurationComponent from '../reusableComponents/timeDurationComponent';
+import communicationManager from '../../utilities/communicationManager';
 import './VideoEndComponent.scss';
 
 interface VideoEndComponentState {
@@ -78,6 +80,18 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
         </>
     );
 
+    private focusIframe = () => {
+        communicationManager.sendMessageToActiveTab({
+            type: ContentScriptMessageTypeEnum.FocusIframe,
+        } as ChromeApiMessage);
+    };
+    
+    private blurIframe = () => {
+        communicationManager.sendMessageToActiveTab({
+            type: ContentScriptMessageTypeEnum.BlurIframe,
+        } as ChromeApiMessage);
+    };
+
     private renderContent = () => {
         const {
             state,
@@ -129,7 +143,7 @@ class VideoEndComponent extends React.Component<VideoEndComponentProps, VideoEnd
             case TabStateEnum.PageContainsIFrameTag : {
                 return (
                     <>
-                        {videoPlayerStrings.iframeAvailable(this.navigateToIframeSource, src)}
+                        {videoPlayerStrings.iframeAvailable(this.navigateToIframeSource, src, this.focusIframe, this.blurIframe)}
                         <div className={'read-more'}>{videoPlayerStrings.readMore(this.readMoreAbout)}</div>
                     </>
                 );

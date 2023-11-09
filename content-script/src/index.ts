@@ -7,6 +7,7 @@ import {
 import { Store } from 'webext-redux';
 import { removeShutdown, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
+import { blurIframe, focusIframe } from './highlightIframe';
 
 const isProduction = process.env.PRODUCTION !== undefined ? JSON.parse(process.env.PRODUCTION) : false;
 
@@ -25,6 +26,14 @@ const messageHandler = (
             }
             case ContentScriptMessageTypeEnum.RemoveVideoShutdownEvent: {
                 removeShutdown();
+                break;
+            }
+            case ContentScriptMessageTypeEnum.FocusIframe: {
+                focusIframe();
+                break;
+            }
+            case ContentScriptMessageTypeEnum.BlurIframe: {
+                blurIframe();
                 break;
             }
         }
