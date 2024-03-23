@@ -1,5 +1,6 @@
 import { ActionResultActionTypeEnum, ActionResultEnum, AppActionTypeEnum } from 'common';
 import { store } from '..';
+import { generateClearNotificationsAlarmName } from '../alarms/handlers/clearNotifications';
 
 /* #region Store actions */
 export const triggerTooltipWithMessage = (respMessage: string, action: ActionResultEnum) => {
@@ -19,12 +20,11 @@ export const changeSelectedTimeAction = (newVal: string | undefined) => {
     });
 };
 
-export const scheduleShutdownAction = (isActionSuccess: boolean, eventFunc: any) => {
+export const scheduleShutdownAction = (isActionSuccess: boolean) => {
     store.dispatch({
         type: AppActionTypeEnum.ScheduleShutdown,
         data: {
             success: isActionSuccess,
-            event: eventFunc,
         },
     });
 };
@@ -46,9 +46,9 @@ export const setPlatformType = (type: string) => {
 /* #region  Chrome actions */
 export const changeIcon = (shutdownIcon: boolean = false) => {
     if (shutdownIcon) {
-        chrome.browserAction.setIcon({ path: '/icon-shutdown.png' });
+        chrome.action?.setIcon({ path: '/icon-shutdown.png' });
     } else {
-        chrome.browserAction.setIcon({ path: '/icon.png' });
+        chrome.action?.setIcon({ path: '/icon.png' });
     }
 };
 
@@ -69,7 +69,7 @@ export const triggerOneMinuteWarningNotification = () => {
             isClickable: false,
         },
         (notificationId: string) => {
-            setTimeout(() => chrome.notifications.clear(notificationId), 2500);
+            chrome.alarms.create(generateClearNotificationsAlarmName(notificationId), { when: new Date().getTime() + 2500 });
         },
     );
 };

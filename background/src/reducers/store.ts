@@ -2,7 +2,7 @@ import { RecursivePartial, RootReducerState } from 'common';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import logger from 'redux-logger';
 import actionsResultReducer, { actionsResultInitialState } from './actionsResultReducer';
-import activeTabReducer, { activeTabReducerInitialState } from './ActiveTabReducer';
+import activeTabReducer, { activeTabReducerInitialState } from './activeTabReducer';
 import appReducer, { appReducerInitialState } from './appReducer';
 import sportsModeReducer, { sportsModerReducerInitialState } from './sportsModeReducer';
 

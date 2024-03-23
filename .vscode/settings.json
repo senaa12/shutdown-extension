@@ -1,6 +1,6 @@
 {
     "editor.codeActionsOnSave": {
-        "source.fixAll.tslint": true 
+        "source.fixAll.tslint": "explicit"
     },
     "jestrunner.jestPath": "${workspaceRoot}/node_modules/jest/bin/jest.js",
     "jestrunner.configPath": "./jest.config.js"

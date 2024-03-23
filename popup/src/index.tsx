@@ -6,7 +6,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { applyMiddleware, Store } from 'webext-redux';
+import { applyMiddleware, Store } from '@eduardoac-skimlinks/webext-redux';
 import { toggleIsSportDialogOpen } from './actions/actions';
 import ActiveTabReader from './components/activeTabReader/activeTabReader';
 import App from './components/app';
