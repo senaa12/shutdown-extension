@@ -4,7 +4,7 @@ import {
     ContentScriptMessageTypeEnum,
     logger,
     MessageSender} from 'common';
-import { Store } from 'webext-redux';
+import { Store } from '@eduardoac-skimlinks/webext-redux';
 import { removeShutdown, SubscribeToVideoEnd } from './shutdownEvent';
 import { checkVideoAvailability } from './videoDetection';
 import { blurIframe, focusIframe } from './highlightIframe';

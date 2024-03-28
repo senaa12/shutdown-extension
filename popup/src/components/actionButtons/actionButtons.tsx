@@ -214,6 +214,8 @@ class ActionButtons extends React.Component<ActionButtonProps, ActionButtonState
         const { appMode, isCancelButtonDisabled, isShutdownEventScheduled, scheduledShutdownEventData,
             actionResultTooltip, actionResultTooltipContent } = this.props;
         const onClick = () => {
+            chrome.alarms.clearAll();
+
             if (appMode === ApplicationModeEnum.VideoPlayer) {
                 communicationManager.sendMessageToTab(scheduledShutdownEventData, {
                     type: ContentScriptMessageTypeEnum.RemoveVideoShutdownEvent,

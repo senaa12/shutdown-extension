@@ -5,7 +5,6 @@ import {
     actionResultsStrings,
     AppActionTypeEnum,
     ContentScriptMessageTypeEnum,
-    isPopupOpenWrapper,
     isShutdownScheduledSelector,
     Tab,
     TabsActionTypeEnum,
@@ -63,12 +62,23 @@ export const onUpdated = (tabId: number, changeInfo: chrome.tabs.UpdatePropertie
     }
 };
 
+let popupIsOpen = false;
+
+export const onConnectEventListener = (port) => {
+  if (port.name === "popupStatus") {
+    port.onDisconnect.addListener(() => {
+      popupIsOpen = false;
+    });
+    popupIsOpen = true;
+  }
+};
+
+
 export const onHistoryStateUpdated = (details: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
     const isShutdownScheduled = isShutdownScheduledSelector(store.getState());
-    const isPopupOpen = isPopupOpenWrapper();
 
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webNavigation/transitionQualifier
-    if (isPopupOpen && !isShutdownScheduled && details.transitionQualifiers.includes('forward_back')) {
+    if (popupIsOpen && !isShutdownScheduled && details.transitionQualifiers.includes('forward_back')) {
         store.dispatch({
             type: TabsActionTypeEnum.ClearAndSetWaitingForFirstLoad,
             _sender: {
